@@ -323,6 +323,37 @@ dt {
   }
 }
 
+.credit {
+  font-size: 12px;
+  font-family: 'OpenSansRegular', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  color: #696969;
+
+  &.left {
+    float: left;
+  }
+
+  &.right {
+    float: right;
+  }
+}
+
+.byline {
+  font-size: 12px;
+  font-family: 'OpenSansRegular', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  color: #696969;
+  margin-top: -15px;
+
+  &.left {
+    float: left;
+  }
+
+  &.right {
+    float: right;
+  }
+}
+
 section {
   max-width:650px;
   padding: 30px 0px 50px 0px;
@@ -333,25 +364,9 @@ section {
     .entry-content {
       padding-top: 20px;
     }
-
-    > .article > time {
-      font-size: 12px;
-      font-family: 'OpenSansRegular', "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-weight: normal;
-      color: #696969;
-      margin-top: -15px;
-
-      &.left {
-        float: left;
-      }
-
-      &.right {
-        float: right;
-      }
-    }
   }
 
-  #title {
+#title {
     border: 0;
     outline: none;
     margin: 0 0 50px 0;

@@ -11,9 +11,14 @@
       </div>
       
       {{ content | expand_urls: root_url }}
+ 
+      {% include footer.html %}
 
+      {% include after_footer.html %}
+    </section>
+
+    <section>
     </section>
   </div>
-  <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
-								  </body>
+</body>
 </html>

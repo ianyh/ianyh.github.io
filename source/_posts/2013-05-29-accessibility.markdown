@@ -7,8 +7,21 @@ categories:
 ---
 
 ```objective-c
-NSString *test = @"foo";
-NSString *otherString = @"This string is much longer";
+@interface Test : NSObject
+@property (nonatomic, strong) NSString *foo;
+@property (nonatomic, assign) CGFloat bar;
+@end
+
+@implementation Test
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        self.foo = @"some string";
+        self.bar = 2;
+    }
+    return self;
+}
 ```
 
 Amethyst
