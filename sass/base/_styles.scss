@@ -195,15 +195,17 @@ blockquote {
 }
 
 code {
+  max-width: 650px;
   font-family: 'Lucida Sans', Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal, monospace;
   color:#efefef;
-  font-size:13px;
+  font-size:10px;
   margin: 0 4px;
   padding: 4px 6px;
   @include border-radius(2px);
 }
 
 pre {
+  max-width: 650px;
   padding:8px 15px;
   background: #191919;
   @include border-radius(2px);
@@ -236,8 +238,7 @@ th {
 
 td {
   text-align:left;
-  padding:5px 10px;
-  border-bottom:1px solid #434343;
+  padding:5px 5px;
 }
 
 hr {
@@ -366,7 +367,7 @@ section {
     }
   }
 
-#title {
+  #title {
     border: 0;
     outline: none;
     margin: 0 0 50px 0;
@@ -387,14 +388,49 @@ section {
       text-align: center;
     }
   }
+
+  pre {
+    overflow: scroll;
+    overflow-y: auto;
+  }
+
+  table {
+    max-width: 650px;
+    td {
+      &.code {
+        max-width: 300px;
+      }
+    }
+  }
 }
 
 @media print, screen and (max-width: 720px) {
+  .credit {
+    &.left {
+     float: none;
+     display: block;
+    }
 
+    &.right {
+      float: none;
+      display: block;
+    }
+  }
+
+  .byline {
+    &.left {
+      float: none;
+      display: block;
+    }
+
+    &.right {
+      float: none;
+      display: block;
+    }
+  }
 }
 
 @media print, screen and (max-width: 480px) {
-
   section {
     margin-top: 65px;
   }
@@ -419,6 +455,30 @@ section {
         padding: 10px;
         width: 100%;
       }
+    }
+  }
+
+  .credit {
+    &.left {
+     float: none;
+     display: block;
+    }
+
+    &.right {
+      float: none;
+      display: block;
+    }
+  }
+
+  .byline {
+    &.left {
+      float: none;
+      display: block;
+    }
+
+    &.right {
+      float: none;
+      display: block;
     }
   }
 }

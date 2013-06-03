@@ -4,84 +4,139 @@ title: "Accessibility, Windows, and Spaces in OS X"
 date: 2013-05-29 20:50
 comments: true
 categories: 
+published: false
 ---
 
+A couple weeks ago I decided to sit down and write a tiling window manager. As a
+first and second pass it pretty much works, though there's definitely room for
+improvement. I'm calling it [Amethyst](https://github.com/ianyh/Amethyst). (It's
+a kind of quartz, you see. Get it? _Get it_?)
+
+The first pass dealt with multiple screens fairly well as I was implementing it
+at a desk with multiple screens and managing windows across screen is a simple
+matter of position. It wasn't until I started trying it out on my laptop that I
+realized that Spaces support was fairly key. There's just not enough room on
+this 13" screen. I spent a long time digging into moving windows between spaces
+and have some insights I couldn't find anywhere else and I thought I'd share
+them here.
+
+Spaces API
+==========
+
+It used to be the case that there was a public API for moving windows between
+spaces. They went private in 10.7, I think. There's a couple projects around
+that utilize the private APIs, but I didn't want to go that route. For one thing
+it might be nice to toss something into the AppStore, but it's mostly a
+stability problem in that I don't want to have to go back and entirely
+reimplement parts of the code due to radically shifting private APIs.
+
+In my searching I dug into a variety of possible paths. I eventually came upon a
+fascinating tidbit of information.
+
+> If the mouse has hold of a window, switching to a Space via Mission Control
+> will take the window to that Space.
+
+Intriguing! You can test it out if you like. Works like a charm when you do it
+manually. So how do we do it programmatically? Well, we manually post keyboard
+and mouse events!
+
+CGEvents
+========
+
+A quick overview of how `CGEvent` works. My use of it is mostly centered around
+the following method:
+
 ```objective-c
-@interface Test : NSObject
-@property (nonatomic, strong) NSString *foo;
-@property (nonatomic, assign) CGFloat bar;
-@end
+void CGEventPost(CGEventTapLocation tap, CGEventRef event)
+```
 
-@implementation Test
+This allows you to post events directly to the window server. Great. So that
+should let us post mouse events and keyboard events. So let's take a look at the
+parameters.
 
-- (id)init {
-    self = [super init];
-    if (self) {
-        self.foo = @"some string";
-        self.bar = 2;
-    }
-    return self;
+The first is the tap location, of which there are three possible values:
+
+```objective-c
+enum _CGEventTapLocation {
+   kCGHIDEventTap = 0,
+   kCGSessionEventTap,
+   kCGAnnotatedSessionEventTap
+};
+```
+
+`kCGHIDEventTap` is the one we want. From the documentation:
+
+> Specifies that an event tap is placed at the point where HID system events
+> enter the window server.
+
+`kCGSessionEventTap` includes remote control events and stuff, and
+`kCGAnnotatedSessionEventTap` is for sending events to specific applications.
+
+The second parameter is a `CGEventRef`, which describes things like keyboard
+modifier flags, mouse button, mouse state, mouse position, keyboard key codes,
+etc. There are a variety of methods that can be used to create `CGEvent`
+objects. The two we care about are `CGEventCreateMouseEvent` and
+`CGEventCreateKeyboardEvent`.
+
+CGEventCreateMouseEvent
+-----------------------
+
+```objective-c
+CGEventRef CGEventCreateMouseEvent(CGEventSourceRef source, CGEventType mouseType, CGPoint mouseCursorPosition, CGMouseButton mouseButton);
+```
+
+As the name implies this method is used to create mouse events. `source` is
+basically meaningless for our purposes as it used for generating new events from
+existing ones. `mouseCursorPosition` is pretty straightforward. It's the the
+point on the screen that the mouse event should happen at.
+
+There are a bunch of `CGEventType` values, which themselves are just proxies for
+values buried deep in the HID system. The ones we care about for mouse events
+are:
+
+```objective-c
+enum {
+  ...
+  kCGEventLeftMouseDown = NX_LMOUSEDOWN,
+  kCGEventLeftMouseUp = NX_LMOUSEUP,
+  kCGEventMouseMoved = NX_MOUSEMOVED,
+  ...
 }
 ```
 
-Amethyst
-========
+There are a couple `CGMouseButton` values as well:
 
-Tiling window manager for OS X similar to xmonad. Was originally written as an
-alternative to [fjolnir's](https://github.com/fjolnir) awesome
-[xnomad](https://github.com/fjolnir/xnomad) but written in pure
-Objective-C. It's expanded to include some more features like Spaces support not
-reliant on fragile private APIs.
+```objective-c
+enum {
+  kCGMouseButtonLeft = 0,
+  kCGMouseButtonRight = 1,
+  kCGMouseButtonCenter = 2
+};
+```
 
-![Screenshot](https://raw.github.com/ianyh/Amethyst/gh-pages/images/screenshot-small.png)
+To simulate a standard tap we just want `kCGMouseButtonLeft`. To actually
+simulate a tap we can do something like
 
-Credits
--------
+```objective-c
+CGPoint point = { .x = 0, .y = 0 };
+CGEventRef mouseMoveEvent = CGEventCreateMouseEvent(NULL, kCGEventMouseMoved, point, kCGMouseButtonLeft);
+CGEventRef mouseDownEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, point, kCGMouseButtonLeft);
+CGEventRef mouseUpEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseUp, point, kCGMouseButtonLeft);
 
-Credit goes to [fjolnir](https://github.com/fjolnir) for the bulk of the initial
-logic and structure.
+CGEventPost(mouseMoveEvent);
+CGEventPost(mouseDownEvent);
+CGEventPost(mouseUpEvent);
 
-Using Amethyst
-==============
+CFRelease(mouseMoveEvent);
+CFRelease(mouseDownEvent);
+CFRelease(mouseUpEvent);
+```
 
-The `Enable access for assistive devices` option on the Accessibility
-preferences pane must be enabled for Amethyst to function.
+to simulate a tap at (0, 0). Cool. Let's look at keyboard events.
 
-![Enable access for assistive devices](https://raw.github.com/ianyh/Amethyst/gh-pages/images/accessibility-window.png)
+CGEventCreateKeyboardEvent
+--------------------------
 
-Keyboard Shortcuts
-------------------
-
-Amethyst uses three modifier combinations.
-
-* `mod1` - `option + shift`
-* `mod2` - `ctrl + option + shift`
-* `mod3` - `ctrl + option`
-
-And defines the following commands.
-
-* `mod1 + space` — change layout
-* `mod1 + [n]` - focus the nth screen
-* `mod2 + [n]` - move focused window to nth screen
-* `mod3 + [n]` - move focused window to nth space
-* `mod1 + h` - shrink the main pane
-* `mod1 + l` - expand the main pane
-* `mod1 + ,` - increase the number of windows in the main pane
-* `mod1 + .` - decrease the number of windows in the main pane
-* `mod1 + j` - focus the next window counterclockwise
-* `mod1 + k` - focus the next window clockwise
-* `mod2 + j` - move the focused window one space counterclockwise
-* `mod2 + k` - move the focused window one space clockwise
-* `mod1 + return` - swap the focused window with the main window
-
-Setting Up Spaces Support
--------------------------
-
-Spaces are, unfortunately, not supported right out of the box. To enable it you
-must activate Mission Control's keyboard shortcuts for switching to specific
-Desktops, as Mac OS X calls them. This option is in the Keyboard Shortcuts tab
-of the Keyboard preferences pane. The shortcuts will be of the form `ctrl +
-[n]`. Amethyst is only able to send a window to the `n`th space if the shortcut
-`ctrl + n` is enabled.
-
-![Mission Control keyboard shortcuts](https://raw.github.com/ianyh/Amethyst/gh-pages/images/missioncontrol-shortcuts.png)
+```objective-c
+CGEventRef CGEventCreateKeyboardEvent(CGEventSourceRef source, CGKeyCode virtualKey, bool keyDown);
+```
