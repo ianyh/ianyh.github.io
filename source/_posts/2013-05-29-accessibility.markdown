@@ -19,6 +19,8 @@ this 13" screen. I spent a long time digging into moving windows between spaces
 and have some insights I couldn't find anywhere else and I thought I'd share
 them here.
 
+<!--more-->
+
 Spaces API
 ==========
 
