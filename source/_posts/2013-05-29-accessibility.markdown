@@ -1,10 +1,9 @@
 ---
 layout: post
 title: "Accessibility, Windows, and Spaces in OS X"
-date: 2013-05-29 20:50
+date: 2013-06-05 09:58
 comments: true
 categories: 
-published: false
 ---
 
 A couple weeks ago I decided to sit down and write a tiling window manager. As a
@@ -139,4 +138,138 @@ CGEventCreateKeyboardEvent
 
 ```objective-c
 CGEventRef CGEventCreateKeyboardEvent(CGEventSourceRef source, CGKeyCode virtualKey, bool keyDown);
+```
+
+`source` is about as useful here as it was for mouse events, and hopefully
+`keyDown` is self explanatory. The important thing to note is that to perform a
+keypress we actually need two events: one for `keyDown = true` followed by one
+for `keyDown = false`.
+
+`virtualKey` can probably take its values from a variety of places. I went with
+the virtual keycodes defined in the Carbon framework. It's
+`Carbon.framework/Frameworks/HIToolbox.framework/Events.h` if you want to look
+them up. Repeating them all here isn't particularly useful.
+
+So let's say we want to perform the standard keyboard shortcut for moving one
+space to the right (^ + Right Arrow). We could do
+
+```objective-c
+CGEventRef keyboardDownEvent = CGEventCreateKeyboardEvent(NULL, kVK_RightArrow, true);
+CGEventRef keyboardUpEvent = CGEventCreateKeyboardEvent(NULL, kVK_RightArrow, false);
+
+CGEventPost(keyboardDownEvent);
+CGEventPost(keyboardUpEvent);
+
+CFRelease(keyboardDownEvent);
+CFRelease(keyboardUpEvent);
+```
+
+But wait, what about the control key? Well, there's a method for that.
+
+```objective-c
+void CGEventSetFlags(CGEventRef event, CGEventFlags flags);
+```
+
+Where `flags` is some OR'd combination of possible flag values. The ones we care
+about here are
+
+```objective-c
+enum {
+  /* Device-independent modifier key bits. */
+  kCGEventFlagMaskAlphaShift =          NX_ALPHASHIFTMASK,
+  kCGEventFlagMaskShift =               NX_SHIFTMASK,
+  kCGEventFlagMaskControl =             NX_CONTROLMASK,
+  kCGEventFlagMaskAlternate =           NX_ALTERNATEMASK,
+  kCGEventFlagMaskCommand =             NX_COMMANDMASK,
+  ...
+};
+```
+
+So to fix the keyboard event code from above.
+
+```objective-c
+CGEventRef keyboardDownEvent = CGEventCreateKeyboardEvent(NULL, kVK_RightArrow, true);
+CGEventRef keyboardUpEvent = CGEventCreateKeyboardEvent(NULL, kVK_RightArrow, false);
+
+CGEventSetFlags(keyboardDownEvent, kCGEventFlagMaskControl);
+
+CGEventPost(keyboardDownEvent);
+CGEventPost(keyboardUpEvent);
+
+CFRelease(keyboardDownEvent);
+CFRelease(keyboardUpEvent);
+```
+
+Putting It All Together
+-----------------------
+
+So let's say you have an accessibility reference to a window and want to move it
+to a different space. There's an important question you need to answer first: at
+what point do you move the mouse to grab the window? Conceptually the answer is
+pretty straightforward. You move the mouse to the window's toolbar. In practice
+there's a couple unintuitive gotchas.
+
+My initial intuition for this was to take the min-y and mid-x of the window's
+frame, so the cursor ends up in the middle of the window's toolbar. Should work
+fine, should work with every window. But when I implemented that it would fail
+for some windows, namely Xcode. As best I can tell the middle of Xcode's toolbar
+as depicted below is grabbing mouse down events for something.
+
+{% img center /images/2013-05-29-accessibility/xcode-toolbar.png %}
+
+Okay, so what other point on the x-axis do all windows have in common? That
+little green zoom button!
+
+But Wait, What About Modifiers?
+-------------------------------
+
+There is one more point to consider. We are going to be executing this operation
+from an event handler triggered by a keyboard shortcut. Let's take an example
+shortcut `ctrl + option + right arrow` for taking the currently focused window
+and moving it one space right. You hit this keyboard shortcut and we go and
+create events and post them. There's a gotcha here. `CGEvent` create methods
+_start with the current modifiers unless otherwise specified_. Depending on the
+timing we could accidentally create a `ctrl + click` event instead of just a
+`click` event. Most windows don't care, but Xcode (why is it always Xcode?)
+does. We need to thus make sure that we clear out any modifier flags on keyboard
+and mouse events that we don't expect to have any modifiers.
+
+The Final Method
+----------------
+
+To avoid unnecessary details of the accessibility API the following code uses an
+`NSObject` wrapper.
+
+```objective-c
+AMAccessibilityElement *windowElement = [self window];
+AMAccessibilityElement *zoomButtonElement = [windowElement elementForKey:kAXZoomButtonAttribute];
+CGRect zoomButtonFrame = zoomButtonElement.frame;
+CGRect windowFrame = windowElement.frame;
+
+CGPoint mouseCursorPoint = { .x = CGRectGetMaxX(zoomButtonFrame) + 5.0, .y = windowFrame.origin.y + 5.0 };
+
+CGEventRef mouseMoveEvent = CGEventCreateMouseEvent(NULL, kCGEventMouseMoved, mouseCursorPoint, kCGMouseButtonLeft);
+CGEventRef mouseDownEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, mouseCursorPoint, kCGMouseButtonLeft);
+CGEventRef mouseUpEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseUp, mouseCursorPoint, kCGMouseButtonLeft);
+
+CGEventRef keyboardDownEvent = CGEventCreateKeyboardEvent(NULL, kVK_RightArrow, true);
+CGEventRef keyboardUpEvent = CGEventCreateKeyboardEvent(NULL, kVK_RightArrow, false);
+
+CGEventSetFlags(mouseMoveEvent, 0);
+CGEventSetFlags(mouseDownEvent, 0);
+CGEventSetFlags(mouseUpEvent, 0);
+CGEventSetFlags(keyboardDownEvent, kCGEventFlagMaskControl);
+CGEventSetFlags(keyboardUpEvent, 0);
+
+CGEventPost(kCGHIDEventTap, mouseMoveEvent);
+CGEventPost(kCGHIDEventTap, mouseDownEvent);
+CGEventPost(kCGHIDEventTap, keyboardDownEvent);
+CGEventPost(kCGHIDEventTap, keyboardUpEvent);
+CGEventPost(kCGHIDEventTap, mouseUpEvent);
+
+CFRelease(mouseMoveEvent);
+CFRelease(mouseDownEvent);
+CFRelease(mouseUpEvent);
+CFRelease(keyboardEvent);
+CFRelease(keyboardEventUp);							
 ```
