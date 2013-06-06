@@ -7,5 +7,5 @@
 {% capture was_updated %}{{ updated | size }}{% endcapture %}
 
 {% if has_date != '0' %}
-  {% capture time %}<time class="byline left" datetime="{{ date | datetime | date_to_xmlschema }}" pubdate{% if updated %} data-updated="true"{% endif %}>{{ date_formatted }}</time>{% endcapture %}
+  {% capture time %}<time class="byline{% if page.single %}{% else %} left{% endif %}" datetime="{{ date | datetime | date_to_xmlschema }}" pubdate{% if updated %} data-updated="true"{% endif %}>Posted on {{ date_formatted }}</time>{% endcapture %}
 {% endif %}
