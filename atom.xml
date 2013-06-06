@@ -4,7 +4,7 @@
   <title><![CDATA[Bias and Sandwiches]]></title>
   <link href="http://ianyh.github.io/atom.xml" rel="self"/>
   <link href="http://ianyh.github.io/"/>
-  <updated>2013-06-06T10:12:52-04:00</updated>
+  <updated>2013-06-06T10:14:33-04:00</updated>
   <id>http://ianyh.github.io/</id>
   <author>
     <name><![CDATA[Ian Ynda-Hummel]]></name>
@@ -30,6 +30,9 @@ realized that Spaces support was fairly key. There&rsquo;s just not enough room 
 this 13&#8221; screen. I spent a long time digging into moving windows between spaces
 and have some insights I couldn&rsquo;t find anywhere else and I thought I&rsquo;d share
 them here.</p>
+
+<!--more-->
+
 
 <h1>Spaces API</h1>
 
