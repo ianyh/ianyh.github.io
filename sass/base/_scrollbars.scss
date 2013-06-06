@@ -1,0 +1,33 @@
+@mixin scrollbars($width, $height, $bg-color, $fg-color) {
+  &::-webkit-scrollbar {
+    width: $width;
+    height: $height;
+  }
+
+  &::-webkit-scrollbar-button:start:decrement,
+  &::-webkit-scrollbar-button:end:increment {
+    display: block;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-button:vertical:increment {
+    background-color: $bg-color;
+  }
+
+  &::-webkit-scrollbar-track-piece {
+    background-color: $bg-color;
+    -webkit-border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:vertical {
+    height: 20px;
+    background-color: $fg-color;
+    -webkit-border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:horizontal {
+    width: 50px;
+    background-color: $fg-color;
+    -webkit-border-radius: 3px;
+  }
+}
