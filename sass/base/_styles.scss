@@ -89,6 +89,11 @@ section img {
   max-width: 100%;
 }
 
+.thin {
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
 blockquote {
   border-left:3px solid #ffcc00;
   margin:0;
@@ -340,6 +345,10 @@ section {
 @media print, screen and (max-width: 480px) {
   section {
     margin-top: 65px;
+  }
+
+  .thin {
+    padding: 0;
   }
 
   #header {
