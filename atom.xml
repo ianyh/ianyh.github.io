@@ -4,7 +4,7 @@
   <title><![CDATA[Bias and Sandwiches]]></title>
   <link href="http://ianyh.github.io/atom.xml" rel="self"/>
   <link href="http://ianyh.github.io/"/>
-  <updated>2013-08-18T16:24:52-04:00</updated>
+  <updated>2013-08-19T16:53:15-04:00</updated>
   <id>http://ianyh.github.io/</id>
   <author>
     <name><![CDATA[Ian Ynda-Hummel]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Amethyst 0.8]]></title>
+    <link href="http://ianyh.github.io/blog/2013/08/19/amethyst-0-dot-8/"/>
+    <updated>2013-08-19T16:43:00-04:00</updated>
+    <id>http://ianyh.github.io/blog/2013/08/19/amethyst-0-dot-8</id>
+    <content type="html"><![CDATA[<p>Released Amethyst version 0.8 yesterday. It has some significant improvements to
+stability as well as adding a few new features. There&rsquo;s a new column layout that
+tiles windows into full height columns and the addition of floating windows. It
+can be downloaded <a href="http://ianyh.com/Amethyst/versions/Amethyst-0.8.zip">here</a> or
+installed via <a href="https://github.com/phinze/homebrew-cask">homebrew cask</a>.</p>
+
+<!--more-->
+
+
+<h1>Floating Windows</h1>
+
+<p>I had a request for floating windows and it&rsquo;s now in the app. <code>mod1 + t</code> can be
+used to toggle whether a window is tiled or floating. A floating window will not
+be tiled, but will be part of the focus chain.</p>
+
+<p>Additionally, you can supply a list of bundle identifiers for which windows will
+be floating by default. They can be specified by defining an array of bundle
+identifier strings under the <code>floating</code> key in your <code>.amethyst</code> file. Any
+application matching a bundle identifier in the list will have its windows float
+by default, though use of <code>mod1 + t</code> will tile it if you want. I find this quite
+useful for windows that Amethyst generally can&rsquo;t resize or position correctly
+(e.g., Photoshop).</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Accessibility, Windows, and Spaces in OS X]]></title>

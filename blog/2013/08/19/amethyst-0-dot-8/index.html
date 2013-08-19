@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Bias and Sandwiches - Bias and Sandwiches</title>
+    <title>Amethyst 0.8 - Bias and Sandwiches</title>
     <meta name="author" content="Ian Ynda-Hummel">
 
     
@@ -18,7 +18,7 @@ stability as well as adding a few new features. There&rsquo;s a new &hellip;">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     
-    <link rel="canonical" href="http://ianyh.github.io/blog">
+    <link rel="canonical" href="http://ianyh.github.io/blog/2013/08/19/amethyst-0-dot-8">
     <link href="/favicon.png" rel="icon">
     <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
     <link href="/atom.xml" rel="alternate" title="Bias and Sandwiches" type="application/atom+xml">
@@ -48,23 +48,15 @@ stability as well as adding a few new features. There&rsquo;s a new &hellip;">
     
     <section>
       <div id="title">
-        <h1>Bias and Sandwiches</h1>
-        <p>I talk about things sometimes, I guess</p>
+        <h1>Amethyst 0.8</h1>
+        
       </div>
       
-      
-
-
-<article>
-  <div class="article">
+      <div>
+  <article class="hentry" role="article">
+    <div class="article">
   
   <h1>
-    
-    <h1><a href="/blog/2013/08/19/amethyst-0-dot-8/">Amethyst 0.8</a></h1>
-    
-    <hr>
-    
-    
 
 
 
@@ -75,8 +67,9 @@ stability as well as adding a few new features. There&rsquo;s a new &hellip;">
 
   
 
-<time class="byline left" datetime="2013-08-19T16:43:00-04:00" pubdate data-updated="true">Posted on Aug 19<span>th</span>, 2013</time>
-    
+<time class="byline" datetime="2013-08-19T16:43:00-04:00" pubdate data-updated="true">Posted on Aug 19<span>th</span>, 2013</time></h1>
+  <hr>
+  
     
     
     <div class="entry-content"><p>Released Amethyst version 0.8 yesterday. It has some significant improvements to
@@ -85,74 +78,53 @@ tiles windows into full height columns and the addition of floating windows. It
 can be downloaded <a href="http://ianyh.com/Amethyst/versions/Amethyst-0.8.zip">here</a> or
 installed via <a href="https://github.com/phinze/homebrew-cask">homebrew cask</a>.</p>
 
+<!--more-->
+
+
+<h1>Floating Windows</h1>
+
+<p>I had a request for floating windows and it&rsquo;s now in the app. <code>mod1 + t</code> can be
+used to toggle whether a window is tiled or floating. A floating window will not
+be tiled, but will be part of the focus chain.</p>
+
+<p>Additionally, you can supply a list of bundle identifiers for which windows will
+be floating by default. They can be specified by defining an array of bundle
+identifier strings under the <code>floating</code> key in your <code>.amethyst</code> file. Any
+application matching a bundle identifier in the list will have its windows float
+by default, though use of <code>mod1 + t</code> will tile it if you want. I find this quite
+useful for windows that Amethyst generally can&rsquo;t resize or position correctly
+(e.g., Photoshop).</p>
 </div>
     
     
+    <hr>
+</div>
+
     <footer>
-      <a rel="full-article" href="/blog/2013/08/19/amethyst-0-dot-8/">Read on &rarr;</a>
+      
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ianyh.github.io/blog/2013/08/19/amethyst-0-dot-8/" data-via="" data-counturl="http://ianyh.github.io/blog/2013/08/19/amethyst-0-dot-8/" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+      <p class="meta">
+	
+        <a class="basic-alignment left" href="/blog/2013/06/05/accessibility/" title="Previous Post: Accessibility, Windows, and Spaces in OS X">&laquo; Accessibility, Windows, and Spaces in OS X</a>
+	
+	
+      </p>
     </footer>
-    
-    
-    
-    <hr>
-</div>
-
-</article>
-
-
-<article>
-  <div class="article">
+  </article>
   
-  <h1>
-    
-    <h1><a href="/blog/2013/06/05/accessibility/">Accessibility, Windows, and Spaces in OS X</a></h1>
-    
-    <hr>
-    
-    
-
-
-
-
-
-
-
-
-  
-
-<time class="byline left" datetime="2013-06-05T09:58:00-04:00" pubdate data-updated="true">Posted on Jun 5<span>th</span>, 2013</time>
-    
-    
-    
-    <div class="entry-content"><p>A couple weeks ago I decided to sit down and write a tiling window manager. As a
-first and second pass it pretty much works, though there&rsquo;s definitely room for
-improvement. I&rsquo;m calling it <a href="https://github.com/ianyh/Amethyst">Amethyst</a>. (It&rsquo;s
-a kind of quartz, you see. Get it? <em>Get it</em>?)</p>
-
-<p>The first pass dealt with multiple screens fairly well as I was implementing it
-at a desk with multiple screens and managing windows across screen is a simple
-matter of position. It wasn&rsquo;t until I started trying it out on my laptop that I
-realized that Spaces support was fairly key. There&rsquo;s just not enough room on
-this 13&#8221; screen. I spent a long time digging into moving windows between spaces
-and have some insights I couldn&rsquo;t find anywhere else and I thought I&rsquo;d share
-them here.</p>
-
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-    
-    
-    <footer>
-      <a rel="full-article" href="/blog/2013/06/05/accessibility/">Read on &rarr;</a>
-    </footer>
-    
-    
-    
-    <hr>
-</div>
-
-</article>
-
-<div class="pagination">
-  
+  </section>
   
 </div>
 
@@ -173,7 +145,10 @@ them here.</p>
       var disqus_shortname = 'biasandsandwiches';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ianyh.github.io/blog/2013/08/19/amethyst-0-dot-8/';
+        var disqus_url = 'http://ianyh.github.io/blog/2013/08/19/amethyst-0-dot-8/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
