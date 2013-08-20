@@ -1,0 +1,203 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Amethyst - Bias and Sandwiches</title>
+    <meta name="author" content="Ian Ynda-Hummel">
+
+    
+    <meta name="description" content="Overview Tiling window manager for OS X similar to xmonad. Was originally written as an
+alternative to fjolnir&rsquo;s awesome
+xnomad but written in &hellip;">
+    
+
+    <!-- http://t.co/dKP3o1e -->
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <link rel="canonical" href="http://ianyh.github.io/amethyst">
+    <link href="/favicon.png" rel="icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/atom.xml" rel="alternate" title="Bias and Sandwiches" type="application/atom+xml">
+    <script src="/javascripts/modernizr-2.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="/javascripts/respond.js"></script>
+    <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+    <!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+    <!--[if lt IE 8]>
+	<link rel="stylesheet" href="stylesheets/ie.css">
+	<![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  </head>
+
+<body>
+  <div id="header">
+  <nav>
+    <li class="fork"><a href="/">Home</a></li>
+    <li class="downloads"><a href="/blog">Blog</a></li>
+    <li class="downloads"><a href="/assets/resume.pdf">Resume</a></li>
+  </nav>
+</div><!-- end header -->
+
+  <div class="wrapper">
+    
+    <section>
+      <div id="title">
+        <h1>Amethyst<img src="https://raw.github.com/ianyh/Amethyst/gh-pages/images/amethyst.png" /></h1>
+        <p>A tiling window manager for OS X</p>
+      </div>
+
+      <h1>Overview</h1>
+
+<p><a href="https://travis-ci.org/ianyh/Amethyst"><img src="https://travis-ci.org/ianyh/Amethyst.png?branch=master" alt="Build Status" /></a></p>
+
+<p>Tiling window manager for OS X similar to xmonad. Was originally written as an
+alternative to <a href="https://github.com/fjolnir">fjolnir&rsquo;s</a> awesome
+<a href="https://github.com/fjolnir/xnomad">xnomad</a> but written in pure
+Objective-C. It&rsquo;s expanded to include some more features like Spaces support not
+reliant on fragile private APIs.</p>
+
+<p><img src="https://raw.github.com/ianyh/Amethyst/gh-pages/images/screenshot-small.png" alt="Screenshot" /></p>
+
+<h2>Credits</h2>
+
+<p>Credit goes to <a href="https://github.com/fjolnir">fjolnir</a> for the bulk of the initial
+logic and structure.</p>
+
+<h1>Using Amethyst</h1>
+
+<p>The <code>Enable access for assistive devices</code> option on the Accessibility
+preferences pane must be enabled for Amethyst to function.</p>
+
+<p><img src="https://raw.github.com/ianyh/Amethyst/gh-pages/images/accessibility-window.png" alt="Enable access for assistive devices" /></p>
+
+<h2>Keyboard Shortcuts</h2>
+
+<p>Amethyst uses two modifier combinations.</p>
+
+<ul>
+<li><code>mod1</code> &ndash; <code>option + shift</code></li>
+<li><code>mod2</code> &ndash; <code>ctrl + option + shift</code></li>
+</ul>
+
+
+<p>And defines the following commands, mostly a mapping to xmonad key combinations.</p>
+
+<ul>
+<li><code>mod1 + space</code> — change layout</li>
+<li><code>mod1 + w</code> &ndash; focus 1st screen</li>
+<li><code>mod1 + e</code> &ndash; focus 2nd screen</li>
+<li><code>mod1 + r</code> &ndash; focus 3rd screen</li>
+<li><code>mod2 + w</code> &ndash; move focused window to 1st screen</li>
+<li><code>mod2 + e</code> &ndash; move focused window to 2nd screen</li>
+<li><code>mod2 + r</code> &ndash; move focused window to 3rd screen</li>
+<li><code>mod2 + [n]</code> &ndash; move focused window to nth space</li>
+<li><code>mod1 + h</code> &ndash; shrink the main pane</li>
+<li><code>mod1 + l</code> &ndash; expand the main pane</li>
+<li><code>mod1 + ,</code> &ndash; increase the number of windows in the main pane</li>
+<li><code>mod1 + .</code> &ndash; decrease the number of windows in the main pane</li>
+<li><code>mod1 + j</code> &ndash; focus the next window counterclockwise</li>
+<li><code>mod1 + k</code> &ndash; focus the next window clockwise</li>
+<li><code>mod2 + j</code> &ndash; move the focused window one space counterclockwise</li>
+<li><code>mod2 + k</code> &ndash; move the focused window one space clockwise</li>
+<li><code>mod1 + return</code> &ndash; swap the focused window with the main window</li>
+<li><code>mod1 + t</code> &ndash; toggle whether or not the focused window is floating</li>
+</ul>
+
+
+<h2>Setting Up Spaces Support</h2>
+
+<p>Spaces are, unfortunately, not supported right out of the box. To enable it you
+must activate Mission Control&rsquo;s keyboard shortcuts for switching to specific
+Desktops, as Mac OS X calls them. This option is in the Keyboard Shortcuts tab
+of the Keyboard preferences pane. The shortcuts will be of the form <code>ctrl +
+[n]</code>. Amethyst is only able to send a window to the <code>n</code>th space if the shortcut
+<code>ctrl + n</code> is enabled.</p>
+
+<p><img src="https://raw.github.com/ianyh/Amethyst/gh-pages/images/missioncontrol-shortcuts.png" alt="Mission Control keyboard shortcuts" /></p>
+
+<h2>Customization</h2>
+
+<p>Amethyst can be customized by creating a json file called <code>.amethyst</code> in your home directory. The structure and valid keys and whatnot are all defined in <code>Amethyst/default.amethyst</code>.</p>
+
+<h2>Building</h2>
+
+<ol>
+<li>Install the latest version of XCode</li>
+<li>Clone the project, then <code>cd</code> to the Amethyst directory.</li>
+<li>Install xctool
+
+<ul>
+<li><code>brew update &amp;&amp; brew install xctool</code></li>
+<li>you may need to accept all XCode licenses, e.g. <code>sudo xcodebuild -license</code></li>
+</ul>
+</li>
+<li>Install cocoapods
+
+<ul>
+<li><code>gem install cocoapods</code></li>
+<li>you may need to <code>exec zsh</code> or similar for this command to be found, if using rbenv.</li>
+</ul>
+</li>
+<li><code>rake install</code></li>
+<li><code>cp Amethyst/default.amethyst ~/.amethyst</code></li>
+</ol>
+
+
+ 
+      <p>
+  <span class="credit left">Copyright &copy; 2013 - Ian Ynda-Hummel</span>
+  <span class="credit right">
+    Powered by <a href="http://octopress.org">Octopress</a> -
+    Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a>
+  </span>
+</p>
+
+
+
+      
+
+<script type="text/javascript">
+      var disqus_shortname = 'biasandsandwiches';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+    </section>
+
+  </div>
+</body>
+</html>
