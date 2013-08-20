@@ -15,7 +15,7 @@ alternative to [fjolnir's](https://github.com/fjolnir) awesome
 Objective-C. It's expanded to include some more features like Spaces support not
 reliant on fragile private APIs.
 
-![Screenshot](https://raw.github.com/ianyh/Amethyst/gh-pages/images/screenshot-small.png)
+![Screenshot](./amethyst/images/screenshot-small.png)
 
 Credits
 -------
@@ -29,7 +29,7 @@ Using Amethyst
 The `Enable access for assistive devices` option on the Accessibility
 preferences pane must be enabled for Amethyst to function.
 
-![Enable access for assistive devices](https://raw.github.com/ianyh/Amethyst/gh-pages/images/accessibility-window.png)
+![Enable access for assistive devices](./amethyst/images/accessibility-window.png)
 
 Keyboard Shortcuts
 ------------------
@@ -70,7 +70,7 @@ of the Keyboard preferences pane. The shortcuts will be of the form `ctrl +
 [n]`. Amethyst is only able to send a window to the `n`th space if the shortcut
 `ctrl + n` is enabled.
 
-![Mission Control keyboard shortcuts](https://raw.github.com/ianyh/Amethyst/gh-pages/images/missioncontrol-shortcuts.png)
+![Mission Control keyboard shortcuts](./amethyst/images/missioncontrol-shortcuts.png)
 
 Customization
 -------------
