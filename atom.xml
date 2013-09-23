@@ -4,7 +4,7 @@
   <title><![CDATA[Bias and Sandwiches]]></title>
   <link href="http://ianyh.github.io/atom.xml" rel="self"/>
   <link href="http://ianyh.github.io/"/>
-  <updated>2013-09-23T12:35:12-04:00</updated>
+  <updated>2013-09-23T15:31:29-04:00</updated>
   <id>http://ianyh.github.io/</id>
   <author>
     <name><![CDATA[Ian Ynda-Hummel]]></name>
@@ -12,6 +12,23 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Amethyst 0.8.1]]></title>
+    <link href="http://ianyh.github.io/blog/2013/09/23/amethyst-0-dot-8-1/"/>
+    <updated>2013-09-23T15:25:00-04:00</updated>
+    <id>http://ianyh.github.io/blog/2013/09/23/amethyst-0-dot-8-1</id>
+    <content type="html"><![CDATA[<p>Released Amethyst version 0.8.1 yesterday. I figured out some significant
+improvements to its interactions with spaces. Moving windows between spaces
+would occasionally fail due to an unfortunate race conditions. That&rsquo;s been
+fixed. On top of that, each space now has its own set of layouts so no need to
+switch layouts and reset layout parameters when jumping between spaces.</p>
+
+<p>You can download it directly
+<a href="http://ianyh.com/amethyst/versions/Amethyst-0.8.1.zip">here</a> or install via
+<a href="https://github.com/phinze/homebrew-cask">homebrew cask</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Amethyst 0.8]]></title>
