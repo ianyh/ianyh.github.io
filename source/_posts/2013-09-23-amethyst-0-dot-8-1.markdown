@@ -1,0 +1,17 @@
+---
+layout: post
+title: "Amethyst 0.8.1"
+date: 2013-09-23 15:25
+comments: true
+categories: 
+---
+
+Released Amethyst version 0.8.1 yesterday. I figured out some significant
+improvements to its interactions with spaces. Moving windows between spaces
+would occasionally fail due to an unfortunate race conditions. That's been
+fixed. On top of that, each space now has its own set of layouts so no need to
+switch layouts and reset layout parameters when jumping between spaces.
+
+You can download it directly
+[here](http://ianyh.com/amethyst/versions/Amethyst-0.8.1.zip) or install via
+[homebrew cask](https://github.com/phinze/homebrew-cask).
