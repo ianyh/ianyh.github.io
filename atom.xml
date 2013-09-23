@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Bias and Sandwiches]]></title>
-  <link href="http://ianyh.github.io/atom.xml" rel="self"/>
-  <link href="http://ianyh.github.io/"/>
-  <updated>2013-09-23T15:31:29-04:00</updated>
-  <id>http://ianyh.github.io/</id>
+  <link href="http://ianyh.com/atom.xml" rel="self"/>
+  <link href="http://ianyh.com/"/>
+  <updated>2013-09-23T15:34:27-04:00</updated>
+  <id>http://ianyh.com/</id>
   <author>
     <name><![CDATA[Ian Ynda-Hummel]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Amethyst 0.8.1]]></title>
-    <link href="http://ianyh.github.io/blog/2013/09/23/amethyst-0-dot-8-1/"/>
+    <link href="http://ianyh.com/blog/2013/09/23/amethyst-0-dot-8-1/"/>
     <updated>2013-09-23T15:25:00-04:00</updated>
-    <id>http://ianyh.github.io/blog/2013/09/23/amethyst-0-dot-8-1</id>
+    <id>http://ianyh.com/blog/2013/09/23/amethyst-0-dot-8-1</id>
     <content type="html"><![CDATA[<p>Released Amethyst version 0.8.1 yesterday. I figured out some significant
 improvements to its interactions with spaces. Moving windows between spaces
 would occasionally fail due to an unfortunate race conditions. That&rsquo;s been
@@ -32,9 +32,9 @@ switch layouts and reset layout parameters when jumping between spaces.</p>
   
   <entry>
     <title type="html"><![CDATA[Amethyst 0.8]]></title>
-    <link href="http://ianyh.github.io/blog/2013/08/19/amethyst-0-dot-8/"/>
+    <link href="http://ianyh.com/blog/2013/08/19/amethyst-0-dot-8/"/>
     <updated>2013-08-19T16:43:00-04:00</updated>
-    <id>http://ianyh.github.io/blog/2013/08/19/amethyst-0-dot-8</id>
+    <id>http://ianyh.com/blog/2013/08/19/amethyst-0-dot-8</id>
     <content type="html"><![CDATA[<p>Released Amethyst version 0.8 yesterday. It has some significant improvements to
 stability as well as adding a few new features. There&rsquo;s a new column layout that
 tiles windows into full height columns and the addition of floating windows. It
@@ -62,9 +62,9 @@ useful for windows that Amethyst generally can&rsquo;t resize or position correc
   
   <entry>
     <title type="html"><![CDATA[Accessibility, Windows, and Spaces in OS X]]></title>
-    <link href="http://ianyh.github.io/blog/2013/06/05/accessibility/"/>
+    <link href="http://ianyh.com/blog/2013/06/05/accessibility/"/>
     <updated>2013-06-05T09:58:00-04:00</updated>
-    <id>http://ianyh.github.io/blog/2013/06/05/accessibility</id>
+    <id>http://ianyh.com/blog/2013/06/05/accessibility</id>
     <content type="html"><![CDATA[<p>A couple weeks ago I decided to sit down and write a tiling window manager. As a
 first and second pass it pretty much works, though there&rsquo;s definitely room for
 improvement. I&rsquo;m calling it <a href="https://github.com/ianyh/Amethyst">Amethyst</a>. (It&rsquo;s
@@ -332,7 +332,7 @@ fine, should work with every window. But when I implemented that it would fail
 for some windows, namely Xcode. As best I can tell the middle of Xcode&rsquo;s toolbar
 as depicted below is grabbing mouse down events for something.</p>
 
-<p><img class="center" src="http://ianyh.github.io/images/2013-05-29-accessibility/xcode-toolbar.png"></p>
+<p><img class="center" src="http://ianyh.com/images/2013-05-29-accessibility/xcode-toolbar.png"></p>
 
 <p>Okay, so what other point on the x-axis do all windows have in common? That
 little green zoom button!</p>
