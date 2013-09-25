@@ -1,10 +1,9 @@
 ---
 layout: post
 title: "Identifying Spaces in Mac OS X"
-date: 2013-09-24 10:48
+date: 2013-09-24 22:42
 comments: true
 categories:
-published: false
 ---
 
 I recently implemented a featured in [Amethyst](http://ianyh.com/amethyst/) that
