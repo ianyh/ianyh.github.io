@@ -26,7 +26,7 @@ logic and structure.
 Getting Amethyst
 ================
 
-Amethyst is available for direct download [here](http://ianyh.com/amethyst/versions/Amethyst-0.8.4.zip) or using [homebrew cask](https://github.com/phinze/homebrew-cask).
+Amethyst is available for direct download [here](http://ianyh.com/amethyst/versions/Amethyst-0.8.5.zip) or using [homebrew cask](https://github.com/phinze/homebrew-cask).
 
 ```
 brew cask install amethyst
@@ -37,7 +37,7 @@ Note: that Amethyst now is only supported on OS X 10.9. The last version that su
 Building
 --------
 
-0. Install the latest version of XCode
+0. Install the latest version of Xcode
 1. Clone the project, then `cd` to the Amethyst directory.
 2. Install xctool
     - `brew update && brew install xctool`
@@ -65,7 +65,8 @@ Amethyst uses two modifier combinations.
 
 And defines the following commands, mostly a mapping to xmonad key combinations.
 
-* `mod1 + space` — change layout
+* `mod1 + space` — cycle to next layout
+* `mod2 + space` - cycle to previous layout
 * `mod1 + w` - focus 1st screen
 * `mod1 + e` - focus 2nd screen
 * `mod1 + r` - focus 3rd screen
@@ -118,24 +119,49 @@ will restrict your layouts to the tall and fullscreen layouts. The available lay
 * **Wide** ("wide"): Defines a main area on the top and a secondary column on the right.
 * **Fullscreen** ("fullscreen"): All windows are sized to fill the screen.
 * **Column** ("column"): All windows are distributed in evenly sized in columns from left to right.
+* **Row** ("row"): All windows are distributed in evenly sized rows from top to bottom.
 * **Floating** ("floating"): All windows are floating. (Useful if you want a space dedicated to floating windows.)
+* **Widescreen Tall** ("widescreen-tall"): Like Tall, but the main area uses columns and the secondary area uses rows.
 
 ### Mouse Follows Focus
 
 This setting can be enabled by changing the following line
 
-```json
+```js
 "mouse-follows-focus": false,
 ```
 
 to
 
-```json
+```js
 "mouse-follows-focus": true,
 ```
 
 in your `.amethyst` file.
 
 
+### Always float an app
 
+You can set specific application to float by default, this can still be toggled by `mod1-t`
 
+```js
+"floating": [
+    "com.apple.systempreferences"
+],
+```
+
+Get the required string for the app `osascript -e 'id of app "Finder"'`. Just replace `Finder` with the name of your app
+
+### Layout HUD
+
+By default Amethyst pops up a HUD telling you the layout whenever the layout changes. You can disable it in your `.amethyst` file using the `enables-layout-hud` key. i.e.,
+
+```js
+"enables-layout-hud": false
+```
+
+By default the HUD will show when changing to a different space. You can disable the HUD during space changes, while still having it enabled when cycling or selecting a different layout, by using the `enables-layout-hud-on-space-change` key. i.e.,
+
+```js
+"enables-layout-hud-on-space-change": false
+```
