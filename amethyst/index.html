@@ -41,7 +41,7 @@ xnomad but written in &hellip;">
   <nav>
     <li class="fork"><a href="/">Home</a></li>
     <li class="downloads"><a href="http://github.com/ianyh/Amethyst">View in Github</a></li>
-    <li class="downloads"><a href="/amethyst/versions/Amethyst-0.8.4.zip">Download (v 0.8.4)</a></li>
+    <li class="downloads"><a href="/amethyst/versions/Amethyst-0.8.5.zip">Download (v 0.8.5)</a></li>
   </nav>
 </div><!-- end header -->
 
@@ -72,7 +72,7 @@ logic and structure.</p>
 
 <h1>Getting Amethyst</h1>
 
-<p>Amethyst is available for direct download <a href="http://ianyh.com/amethyst/versions/Amethyst-0.8.4.zip">here</a> or using <a href="https://github.com/phinze/homebrew-cask">homebrew cask</a>.</p>
+<p>Amethyst is available for direct download <a href="http://ianyh.com/amethyst/versions/Amethyst-0.8.5.zip">here</a> or using <a href="https://github.com/phinze/homebrew-cask">homebrew cask</a>.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>brew cask install amethyst</span></code></pre></td></tr></table></div></figure>
@@ -83,7 +83,7 @@ logic and structure.</p>
 <h2>Building</h2>
 
 <ol>
-<li>Install the latest version of XCode</li>
+<li>Install the latest version of Xcode</li>
 <li>Clone the project, then <code>cd</code> to the Amethyst directory.</li>
 <li>Install xctool
 
@@ -123,7 +123,8 @@ logic and structure.</p>
 <p>And defines the following commands, mostly a mapping to xmonad key combinations.</p>
 
 <ul>
-<li><code>mod1 + space</code> — change layout</li>
+<li><code>mod1 + space</code> — cycle to next layout</li>
+<li><code>mod2 + space</code> &ndash; cycle to previous layout</li>
 <li><code>mod1 + w</code> &ndash; focus 1st screen</li>
 <li><code>mod1 + e</code> &ndash; focus 2nd screen</li>
 <li><code>mod1 + r</code> &ndash; focus 3rd screen</li>
@@ -182,7 +183,9 @@ of the Keyboard preferences pane. The shortcuts will be of the form <code>ctrl +
 <li><strong>Wide</strong> (&ldquo;wide&rdquo;): Defines a main area on the top and a secondary column on the right.</li>
 <li><strong>Fullscreen</strong> (&ldquo;fullscreen&rdquo;): All windows are sized to fill the screen.</li>
 <li><strong>Column</strong> (&ldquo;column&rdquo;): All windows are distributed in evenly sized in columns from left to right.</li>
+<li><strong>Row</strong> (&ldquo;row&rdquo;): All windows are distributed in evenly sized rows from top to bottom.</li>
 <li><strong>Floating</strong> (&ldquo;floating&rdquo;): All windows are floating. (Useful if you want a space dedicated to floating windows.)</li>
+<li><strong>Widescreen Tall</strong> (&ldquo;widescreen-tall&rdquo;): Like Tall, but the main area uses columns and the secondary area uses rows.</li>
 </ul>
 
 
@@ -191,18 +194,49 @@ of the Keyboard preferences pane. The shortcuts will be of the form <code>ctrl +
 <p>This setting can be enabled by changing the following line</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="s2">&quot;mouse-follows-focus&quot;</span><span class="err">:</span> <span class="kc">false</span><span class="err">,</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="s2">&quot;mouse-follows-focus&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>to</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="s2">&quot;mouse-follows-focus&quot;</span><span class="err">:</span> <span class="kc">true</span><span class="err">,</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="s2">&quot;mouse-follows-focus&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>in your <code>.amethyst</code> file.</p>
+
+<h3>Always float an app</h3>
+
+<p>You can set specific application to float by default, this can still be toggled by <code>mod1-t</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="s2">&quot;floating&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s2">&quot;com.apple.systempreferences&quot;</span>
+</span><span class='line'><span class="p">],</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Get the required string for the app <code>osascript -e 'id of app "Finder"'</code>. Just replace <code>Finder</code> with the name of your app</p>
+
+<h3>Layout HUD</h3>
+
+<p>By default Amethyst pops up a HUD telling you the layout whenever the layout changes. You can disable it in your <code>.amethyst</code> file using the <code>enables-layout-hud</code> key. i.e.,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="s2">&quot;enables-layout-hud&quot;</span><span class="o">:</span> <span class="kc">false</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>By default the HUD will show when changing to a different space. You can disable the HUD during space changes, while still having it enabled when cycling or selecting a different layout, by using the <code>enables-layout-hud-on-space-change</code> key. i.e.,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="s2">&quot;enables-layout-hud-on-space-change&quot;</span><span class="o">:</span> <span class="kc">false</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
  
       <p>
