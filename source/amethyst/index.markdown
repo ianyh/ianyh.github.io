@@ -28,7 +28,7 @@ logic and structure.
 Getting Amethyst
 ================
 
-Amethyst is available for direct download [here](http://ianyh.com/amethyst/versions/Amethyst-0.8.5.zip) or using [homebrew cask](https://github.com/phinze/homebrew-cask).
+Amethyst is available for direct download [here](http://ianyh.com/amethyst/versions/Amethyst-0.8.5.1.zip) or using [homebrew cask](https://github.com/phinze/homebrew-cask).
 
 ```
 brew cask install amethyst
@@ -49,6 +49,16 @@ Building
     - you may need to `exec zsh` or similar for this command to be found, if using rbenv.
 7. `rake install`
 8. `cp Amethyst/default.amethyst ~/.amethyst`
+
+Contributing
+============
+
+If you'd like to contribute please branch off of the `development` branch. Otherwise just try to stick to the general style of the code.
+
+Contact
+=======
+
+If you have questions or feedback you can [email me](mailto:ianynda@gmail.com) or [drop by #amethyst on Freenode](http://webchat.freenode.net/?channels=amethyst).
 
 Using Amethyst
 ==============
