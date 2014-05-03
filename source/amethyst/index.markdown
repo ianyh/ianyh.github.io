@@ -28,7 +28,7 @@ logic and structure.
 Getting Amethyst
 ================
 
-Amethyst is available for direct download [here](http://ianyh.com/amethyst/versions/Amethyst-0.8.5.1.zip) or using [homebrew cask](https://github.com/phinze/homebrew-cask).
+Amethyst is available for direct download [here](http://ianyh.com/amethyst/versions/Amethyst-0.8.6.zip) or using [homebrew cask](https://github.com/phinze/homebrew-cask).
 
 ```
 brew cask install amethyst
@@ -113,7 +113,7 @@ of the Keyboard preferences pane. The shortcuts will be of the form `ctrl +
 Customization
 -------------
 
-Amethyst can be customized by creating a json file called `.amethyst` in your home directory. The structure and valid keys and whatnot are all defined in [default.amethyst](Amethyst/default.amethyst).
+Amethyst can be customized by creating a json file called `.amethyst` in your home directory. The structure and valid keys and whatnot are all defined in [default.amethyst](https://github.com/ianyh/Amethyst/blob/master/Amethyst/default.amethyst).
 
 ### Layouts
 
