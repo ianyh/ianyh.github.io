@@ -9,11 +9,7 @@ Overview
 
 [![Build Status](https://travis-ci.org/ianyh/Amethyst.png?branch=master)](https://travis-ci.org/ianyh/Amethyst)
 
-Tiling window manager for OS X similar to xmonad. Was originally written as an
-alternative to [fjolnir's](https://github.com/fjolnir) awesome
-[xnomad](https://github.com/fjolnir/xnomad) but written in pure
-Objective-C. It's expanded to include some more features like Spaces support not
-reliant on fragile private APIs.
+Tiling window manager for OS X similar to xmonad, written in pure Objective-C.
 
 ![Screenshot](http://ianyh.com/amethyst/images/screenshot-small.png)
 
@@ -96,6 +92,7 @@ And defines the following commands, mostly a mapping to xmonad key combinations.
 * `mod2 + k` - move the focused window one space clockwise
 * `mod1 + return` - swap the focused window with the main window
 * `mod1 + t` - toggle whether or not the focused window is floating
+* `mod2 + t` - toggle globally whether or not Amethyst tiles windows
 * `mod1 + i` - display the current layout for each screen
 
 Setting Up Spaces Support
@@ -113,7 +110,7 @@ of the Keyboard preferences pane. The shortcuts will be of the form `ctrl +
 Customization
 -------------
 
-Amethyst can be customized by creating a json file called `.amethyst` in your home directory. The structure and valid keys and whatnot are all defined in [default.amethyst](https://github.com/ianyh/Amethyst/blob/master/Amethyst/default.amethyst).
+Amethyst can be customized by creating a json file called `.amethyst` in your home directory. The structure and valid keys and whatnot are all defined in [default.amethyst](https://raw.githubusercontent.com/ianyh/Amethyst/master/Amethyst/default.amethyst).
 
 ### Layouts
 
