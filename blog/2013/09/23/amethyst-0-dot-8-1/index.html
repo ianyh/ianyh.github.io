@@ -4,13 +4,13 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Ian Ynda-Hummel - Bias and Sandwiches</title>
+    <title>Amethyst 0.8.1 - Bias and Sandwiches</title>
     <meta name="author" content="Ian Ynda-Hummel">
 
     
-    <meta name="description" content="I currently work at CO Everywhere writing a pretty cool iPhone app.
-I used to work at Twist writing a cool iPhone app.
-Years ago I got addicted to &hellip;">
+    <meta name="description" content="Released Amethyst version 0.8.1 yesterday. I
+figured out some significant improvements to its interactions with
+spaces. Moving windows between spaces &hellip;">
     
 
     <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@ Years ago I got addicted to &hellip;">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     
-    <link rel="canonical" href="http://ianyh.com">
+    <link rel="canonical" href="http://ianyh.com/blog/2013/09/23/amethyst-0-dot-8-1">
     <link href="/favicon.png" rel="icon">
     <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
     <link href="/atom.xml" rel="alternate" title="Bias and Sandwiches" type="application/atom+xml">
@@ -58,21 +58,75 @@ Years ago I got addicted to &hellip;">
     
     <section>
       <div id="title">
-        <h1>Ian Ynda-Hummel</h1>
-        <p>I like to make computers and phones do things.</p>
+        <h1>Amethyst 0.8.1</h1>
+        
       </div>
-
-      <div class="thin">
-      <ul>
-<li>I currently work at <a href="http://coeverywhere.com">CO Everywhere</a> writing a pretty cool <a href="http://get.coeverywhere.com">iPhone app</a>.</li>
-<li>I used to work at <a href="http://twist.com">Twist</a> writing a cool <a href="https://itunes.apple.com/app/twist/id449988837">iPhone app</a>.</li>
-<li>Years ago I got addicted to xmonad and I decided to implement an OS X window manager in the same vein. It&rsquo;s called <a href="http://ianyh.com/Amethyst">Amethyst</a>.</li>
-<li>I occasionally put (often unfinished) pet projects on <a href="https://github.com/ianyh">github</a>.</li>
-<li>Sometimes I write about things on a <a href="http://ianyh.com/blog">blog</a>.</li>
-</ul>
+      
+      <div>
+  <article class="hentry" role="article">
+    <div class="article">
+  
+  <h1>
 
 
-      </div>
+
+
+
+
+
+
+  
+
+<time class="byline" datetime="2013-09-23T15:25:00-04:00" pubdate data-updated="true">Posted on Sep 23<span>rd</span>, 2013</time></h1>
+  <hr>
+  
+    
+    
+    <div class="entry-content"><p>Released <a href="http://ianyh.com/amethyst">Amethyst</a> version 0.8.1 yesterday. I
+figured out some significant improvements to its interactions with
+spaces. Moving windows between spaces would occasionally fail due to an
+unfortunate race condition. That&rsquo;s been fixed. On top of that, each space now
+has its own set of layouts so no need to switch layouts and reset layout
+parameters all the time when jumping between spaces.</p>
+
+<p>You can download it directly
+<a href="http://ianyh.com/amethyst/versions/Amethyst-0.8.1.zip">here</a> or install via
+<a href="https://github.com/phinze/homebrew-cask">homebrew cask</a>.</p>
+</div>
+    
+
+</div>
+
+    <footer>
+      
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ianyh.com/blog/2013/09/23/amethyst-0-dot-8-1/" data-via="" data-counturl="http://ianyh.com/blog/2013/09/23/amethyst-0-dot-8-1/" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+      <p class="meta">
+	
+        <a class="basic-alignment left" href="/blog/2013/08/19/amethyst-0-dot-8/" title="Previous Post: Amethyst 0.8">&laquo; Amethyst 0.8</a>
+	
+	
+        <a class="basic-alignment right" href="/blog/2013/09/24/identifying-spaces-in-mac-os-x/" title="Next Post: Identifying Spaces in Mac OS X">Identifying Spaces in Mac OS X &raquo;</a>
+	
+      </p>
+    </footer>
+  </article>
+  
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+  
+</div>
+
  
       <p>
   <span class="credit left">Copyright &copy; 2014 - Ian Ynda-Hummel</span>
@@ -90,7 +144,10 @@ Years ago I got addicted to &hellip;">
       var disqus_shortname = 'biasandsandwiches';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ianyh.com/blog/2013/09/23/amethyst-0-dot-8-1/';
+        var disqus_url = 'http://ianyh.com/blog/2013/09/23/amethyst-0-dot-8-1/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
