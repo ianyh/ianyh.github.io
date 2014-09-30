@@ -142,8 +142,8 @@
       </description>
       <pubDate>Mon, 29 Sep 2014 20:14:00 +0000</pubDate>
       <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
-      <sparkle:releaseNotesLink>http://localhost:4000/amethyst/versions/Amethyst-0.8.6.html</sparkle:releaseNotesLink>
-      <enclosure url="http://localhost:4000/amethyst/versions/Amethyst-0.8.6.zip"
+      <sparkle:releaseNotesLink>http://ianyh.com/amethyst/versions/Amethyst-0.9.html</sparkle:releaseNotesLink>
+      <enclosure url="http://ianyh.com/amethyst/versions/Amethyst-0.9.zip"
                  sparkle:version="11"
                  sparkle:shortVersionString="0.9"
                  length="2148907"
