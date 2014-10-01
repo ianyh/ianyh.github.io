@@ -1,0 +1,524 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Accessibility, Windows, and Spaces in OS X - Bias and Sandwiches</title>
+    <meta name="author" content="Ian Ynda-Hummel">
+
+    
+    <meta name="description" content="A couple weeks ago I decided to sit down and write a tiling window manager. As a
+first and second pass it pretty much works, though there&rsquo;s &hellip;">
+    
+
+    <!-- http://t.co/dKP3o1e -->
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <link rel="canonical" href="http://ianyh.com/blog/2013/06/05/accessibility">
+    <link href="/favicon.png" rel="icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/atom.xml" rel="alternate" title="Bias and Sandwiches" type="application/atom+xml">
+    <script src="/javascripts/modernizr-2.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="/javascripts/respond.js"></script>
+    <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+    <!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+    <!--[if lt IE 8]>
+	<link rel="stylesheet" href="stylesheets/ie.css">
+	<![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-12247677-3', 'ianyh.com');
+      ga('send', 'pageview');
+    </script>
+  </head>
+
+<body>
+  <div id="header">
+  <nav>
+    <li class="fork"><a href="/">Home</a></li>
+    <li class="downloads"><a href="/blog">Blog</a></li>
+    <li class="downloads"><a href="/assets/resume.pdf">Resume</a></li>
+  </nav>
+</div><!-- end header -->
+
+  <div class="wrapper">
+    
+    <section>
+      <div id="title">
+        <h1>Accessibility, Windows, and Spaces in OS X</h1>
+        
+      </div>
+      
+      <div>
+  <article class="hentry" role="article">
+    <div class="article">
+  
+  <h1>
+
+
+
+
+
+
+
+
+  
+
+<time class="byline" datetime="2013-06-05T09:58:00-04:00" pubdate data-updated="true">Posted on Jun 5<span>th</span>, 2013</time></h1>
+  <hr>
+  
+    
+    
+    <div class="entry-content"><p>A couple weeks ago I decided to sit down and write a tiling window manager. As a
+first and second pass it pretty much works, though there&rsquo;s definitely room for
+improvement. I&rsquo;m calling it <a href="https://github.com/ianyh/Amethyst">Amethyst</a>. (It&rsquo;s
+a kind of quartz, you see. Get it? <em>Get it</em>?)</p>
+
+<p>The first pass dealt with multiple screens fairly well as I was implementing it
+at a desk with multiple screens and managing windows across screen is a simple
+matter of position. It wasn&rsquo;t until I started trying it out on my laptop that I
+realized that Spaces support was fairly key. There&rsquo;s just not enough room on
+this 13&#8221; screen. I spent a long time digging into moving windows between spaces
+and have some insights I couldn&rsquo;t find anywhere else and I thought I&rsquo;d share
+them here.</p>
+
+<!--more-->
+
+
+<h1>Spaces API</h1>
+
+<p>It used to be the case that there was a public API for moving windows between
+spaces. They went private in 10.7, I think. There&rsquo;s a couple projects around
+that utilize the private APIs, but I didn&rsquo;t want to go that route. For one thing
+it might be nice to toss something into the AppStore, but it&rsquo;s mostly a
+stability problem in that I don&rsquo;t want to have to go back and entirely
+reimplement parts of the code due to radically shifting private APIs.</p>
+
+<p>In my searching I dug into a variety of possible paths. I eventually came upon a
+fascinating tidbit of information.</p>
+
+<blockquote><p>If the mouse has hold of a window, switching to a Space via Mission Control
+will take the window to that Space.</p></blockquote>
+
+<p>Intriguing! You can test it out if you like. Works like a charm when you do it
+manually. So how do we do it programmatically? Well, we manually post keyboard
+and mouse events!</p>
+
+<h1>CGEvents</h1>
+
+<p>A quick overview of how <code>CGEvent</code> works. My use of it is mostly centered around
+the following method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="kt">void</span> <span class="n">CGEventPost</span><span class="p">(</span><span class="n">CGEventTapLocation</span> <span class="n">tap</span><span class="p">,</span> <span class="n">CGEventRef</span> <span class="n">event</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This allows you to post events directly to the window server. Great. So that
+should let us post mouse events and keyboard events. So let&rsquo;s take a look at the
+parameters.</p>
+
+<p>The first is the tap location, of which there are three possible values:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">enum</span> <span class="n">_CGEventTapLocation</span> <span class="p">{</span>
+</span><span class='line'>   <span class="n">kCGHIDEventTap</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">kCGSessionEventTap</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">kCGAnnotatedSessionEventTap</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>kCGHIDEventTap</code> is the one we want. From the documentation:</p>
+
+<blockquote><p>Specifies that an event tap is placed at the point where HID system events
+enter the window server.</p></blockquote>
+
+<p><code>kCGSessionEventTap</code> includes remote control events and stuff, and
+<code>kCGAnnotatedSessionEventTap</code> is for sending events to specific applications.</p>
+
+<p>The second parameter is a <code>CGEventRef</code>, which describes things like keyboard
+modifier flags, mouse button, mouse state, mouse position, keyboard key codes,
+etc. There are a variety of methods that can be used to create <code>CGEvent</code>
+objects. The two we care about are <code>CGEventCreateMouseEvent</code> and
+<code>CGEventCreateKeyboardEvent</code>.</p>
+
+<h2>CGEventCreateMouseEvent</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">CGEventRef</span> <span class="nf">CGEventCreateMouseEvent</span><span class="p">(</span><span class="n">CGEventSourceRef</span> <span class="n">source</span><span class="p">,</span> <span class="n">CGEventType</span> <span class="n">mouseType</span><span class="p">,</span> <span class="n">CGPoint</span> <span class="n">mouseCursorPosition</span><span class="p">,</span> <span class="n">CGMouseButton</span> <span class="n">mouseButton</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As the name implies this method is used to create mouse events. <code>source</code> is
+basically meaningless for our purposes as it used for generating new events from
+existing ones. <code>mouseCursorPosition</code> is pretty straightforward. It&rsquo;s the the
+point on the screen that the mouse event should happen at.</p>
+
+<p>There are a bunch of <code>CGEventType</code> values, which themselves are just proxies for
+values buried deep in the HID system. The ones we care about for mouse events
+are:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">enum</span> <span class="p">{</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'>  <span class="n">kCGEventLeftMouseDown</span> <span class="o">=</span> <span class="n">NX_LMOUSEDOWN</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">kCGEventLeftMouseUp</span> <span class="o">=</span> <span class="n">NX_LMOUSEUP</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">kCGEventMouseMoved</span> <span class="o">=</span> <span class="n">NX_MOUSEMOVED</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are a couple <code>CGMouseButton</code> values as well:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">enum</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">kCGMouseButtonLeft</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">kCGMouseButtonRight</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">kCGMouseButtonCenter</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To simulate a standard tap we just want <code>kCGMouseButtonLeft</code>. To actually
+simulate a tap we can do something like</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">CGPoint</span> <span class="n">point</span> <span class="o">=</span> <span class="p">{</span> <span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">};</span>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">mouseMoveEvent</span> <span class="o">=</span> <span class="n">CGEventCreateMouseEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kCGEventMouseMoved</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">kCGMouseButtonLeft</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">mouseDownEvent</span> <span class="o">=</span> <span class="n">CGEventCreateMouseEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kCGEventLeftMouseDown</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">kCGMouseButtonLeft</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">mouseUpEvent</span> <span class="o">=</span> <span class="n">CGEventCreateMouseEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kCGEventLeftMouseUp</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">kCGMouseButtonLeft</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">mouseMoveEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">mouseDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">mouseUpEvent</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">mouseMoveEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">mouseDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">mouseUpEvent</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>to simulate a tap at (0, 0). Cool. Let&rsquo;s look at keyboard events.</p>
+
+<h2>CGEventCreateKeyboardEvent</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">CGEventRef</span> <span class="nf">CGEventCreateKeyboardEvent</span><span class="p">(</span><span class="n">CGEventSourceRef</span> <span class="n">source</span><span class="p">,</span> <span class="n">CGKeyCode</span> <span class="n">virtualKey</span><span class="p">,</span> <span class="n">bool</span> <span class="n">keyDown</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>source</code> is about as useful here as it was for mouse events, and hopefully
+<code>keyDown</code> is self explanatory. The important thing to note is that to perform a
+keypress we actually need two events: one for <code>keyDown = true</code> followed by one
+for <code>keyDown = false</code>.</p>
+
+<p><code>virtualKey</code> can probably take its values from a variety of places. I went with
+the virtual keycodes defined in the Carbon framework. It&rsquo;s
+<code>Carbon.framework/Frameworks/HIToolbox.framework/Events.h</code> if you want to look
+them up. Repeating them all here isn&rsquo;t particularly useful.</p>
+
+<p>So let&rsquo;s say we want to perform the standard keyboard shortcut for moving one
+space to the right (^ + Right Arrow). We could do</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">CGEventRef</span> <span class="n">keyboardDownEvent</span> <span class="o">=</span> <span class="n">CGEventCreateKeyboardEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kVK_RightArrow</span><span class="p">,</span> <span class="n">true</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">keyboardUpEvent</span> <span class="o">=</span> <span class="n">CGEventCreateKeyboardEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kVK_RightArrow</span><span class="p">,</span> <span class="n">false</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">keyboardDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">keyboardUpEvent</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">keyboardDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">keyboardUpEvent</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But wait, what about the control key? Well, there&rsquo;s a method for that.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="kt">void</span> <span class="nf">CGEventSetFlags</span><span class="p">(</span><span class="n">CGEventRef</span> <span class="n">event</span><span class="p">,</span> <span class="n">CGEventFlags</span> <span class="n">flags</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Where <code>flags</code> is some OR&rsquo;d combination of possible flag values. The ones we care
+about here are</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">enum</span> <span class="p">{</span>
+</span><span class='line'>  <span class="cm">/* Device-independent modifier key bits. */</span>
+</span><span class='line'>  <span class="n">kCGEventFlagMaskAlphaShift</span> <span class="o">=</span>          <span class="n">NX_ALPHASHIFTMASK</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">kCGEventFlagMaskShift</span> <span class="o">=</span>               <span class="n">NX_SHIFTMASK</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">kCGEventFlagMaskControl</span> <span class="o">=</span>             <span class="n">NX_CONTROLMASK</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">kCGEventFlagMaskAlternate</span> <span class="o">=</span>           <span class="n">NX_ALTERNATEMASK</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">kCGEventFlagMaskCommand</span> <span class="o">=</span>             <span class="n">NX_COMMANDMASK</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So to fix the keyboard event code from above.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">CGEventRef</span> <span class="n">keyboardDownEvent</span> <span class="o">=</span> <span class="n">CGEventCreateKeyboardEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kVK_RightArrow</span><span class="p">,</span> <span class="n">true</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">keyboardUpEvent</span> <span class="o">=</span> <span class="n">CGEventCreateKeyboardEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kVK_RightArrow</span><span class="p">,</span> <span class="n">false</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGEventSetFlags</span><span class="p">(</span><span class="n">keyboardDownEvent</span><span class="p">,</span> <span class="n">kCGEventFlagMaskControl</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">keyboardDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">keyboardUpEvent</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">keyboardDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">keyboardUpEvent</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Putting It All Together</h2>
+
+<p>So let&rsquo;s say you have an accessibility reference to a window and want to move it
+to a different space. There&rsquo;s an important question you need to answer first: at
+what point do you move the mouse to grab the window? Conceptually the answer is
+pretty straightforward. You move the mouse to the window&rsquo;s toolbar. In practice
+there&rsquo;s a couple unintuitive gotchas.</p>
+
+<p>My initial intuition for this was to take the min-y and mid-x of the window&rsquo;s
+frame, so the cursor ends up in the middle of the window&rsquo;s toolbar. Should work
+fine, should work with every window. But when I implemented that it would fail
+for some windows, namely Xcode. As best I can tell the middle of Xcode&rsquo;s toolbar
+as depicted below is grabbing mouse down events for something.</p>
+
+<p><img class="center" src="/images/2013-05-29-accessibility/xcode-toolbar.png"></p>
+
+<p>Okay, so what other point on the x-axis do all windows have in common? That
+little green zoom button!</p>
+
+<h2>But Wait, What About Modifiers?</h2>
+
+<p>There is one more point to consider. We are going to be executing this operation
+from an event handler triggered by a keyboard shortcut. Let&rsquo;s take an example
+shortcut <code>ctrl + option + right arrow</code> for taking the currently focused window
+and moving it one space right. You hit this keyboard shortcut and we go and
+create events and post them. There&rsquo;s a gotcha here. <code>CGEvent</code> create methods
+<em>start with the current modifiers unless otherwise specified</em>. Depending on the
+timing we could accidentally create a <code>ctrl + click</code> event instead of just a
+<code>click</code> event. Most windows don&rsquo;t care, but Xcode (why is it always Xcode?)
+does. We need to thus make sure that we clear out any modifier flags on keyboard
+and mouse events that we don&rsquo;t expect to have any modifiers.</p>
+
+<h2>The Final Method</h2>
+
+<p>To avoid unnecessary details of the accessibility API the following code uses an
+<code>NSObject</code> wrapper.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">AMAccessibilityElement</span> <span class="o">*</span><span class="n">windowElement</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">window</span><span class="p">];</span>
+</span><span class='line'><span class="n">AMAccessibilityElement</span> <span class="o">*</span><span class="n">zoomButtonElement</span> <span class="o">=</span> <span class="p">[</span><span class="n">windowElement</span> <span class="nl">elementForKey:</span><span class="n">kAXZoomButtonAttribute</span><span class="p">];</span>
+</span><span class='line'><span class="n">CGRect</span> <span class="n">zoomButtonFrame</span> <span class="o">=</span> <span class="n">zoomButtonElement</span><span class="p">.</span><span class="n">frame</span><span class="p">;</span>
+</span><span class='line'><span class="n">CGRect</span> <span class="n">windowFrame</span> <span class="o">=</span> <span class="n">windowElement</span><span class="p">.</span><span class="n">frame</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGPoint</span> <span class="n">mouseCursorPoint</span> <span class="o">=</span> <span class="p">{</span> <span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">CGRectGetMaxX</span><span class="p">(</span><span class="n">zoomButtonFrame</span><span class="p">)</span> <span class="o">+</span> <span class="mf">5.0</span><span class="p">,</span> <span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">windowFrame</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="mf">5.0</span> <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">mouseMoveEvent</span> <span class="o">=</span> <span class="n">CGEventCreateMouseEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kCGEventMouseMoved</span><span class="p">,</span> <span class="n">mouseCursorPoint</span><span class="p">,</span> <span class="n">kCGMouseButtonLeft</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">mouseDownEvent</span> <span class="o">=</span> <span class="n">CGEventCreateMouseEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kCGEventLeftMouseDown</span><span class="p">,</span> <span class="n">mouseCursorPoint</span><span class="p">,</span> <span class="n">kCGMouseButtonLeft</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">mouseUpEvent</span> <span class="o">=</span> <span class="n">CGEventCreateMouseEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kCGEventLeftMouseUp</span><span class="p">,</span> <span class="n">mouseCursorPoint</span><span class="p">,</span> <span class="n">kCGMouseButtonLeft</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">keyboardDownEvent</span> <span class="o">=</span> <span class="n">CGEventCreateKeyboardEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kVK_RightArrow</span><span class="p">,</span> <span class="n">true</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">keyboardUpEvent</span> <span class="o">=</span> <span class="n">CGEventCreateKeyboardEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kVK_RightArrow</span><span class="p">,</span> <span class="n">false</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGEventSetFlags</span><span class="p">(</span><span class="n">mouseMoveEvent</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventSetFlags</span><span class="p">(</span><span class="n">mouseDownEvent</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventSetFlags</span><span class="p">(</span><span class="n">mouseUpEvent</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventSetFlags</span><span class="p">(</span><span class="n">keyboardDownEvent</span><span class="p">,</span> <span class="n">kCGEventFlagMaskControl</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventSetFlags</span><span class="p">(</span><span class="n">keyboardUpEvent</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">kCGHIDEventTap</span><span class="p">,</span> <span class="n">mouseMoveEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">kCGHIDEventTap</span><span class="p">,</span> <span class="n">mouseDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">kCGHIDEventTap</span><span class="p">,</span> <span class="n">keyboardDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">kCGHIDEventTap</span><span class="p">,</span> <span class="n">keyboardUpEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">kCGHIDEventTap</span><span class="p">,</span> <span class="n">mouseUpEvent</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">mouseMoveEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">mouseDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">mouseUpEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">keyboardEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">keyboardEventUp</span><span class="p">);</span>                           
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+    
+
+</div>
+
+    <footer>
+      
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ianyh.com/blog/2013/06/05/accessibility/" data-via="" data-counturl="http://ianyh.com/blog/2013/06/05/accessibility/" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+      <p class="meta">
+	
+	
+        <a class="basic-alignment right" href="/blog/2013/08/19/amethyst-0-dot-8/" title="Next Post: Amethyst 0.8">Amethyst 0.8 &raquo;</a>
+	
+      </p>
+    </footer>
+  </article>
+  
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+  
+</div>
+
+ 
+      <p>
+  <span class="credit left">Copyright &copy; 2014 - Ian Ynda-Hummel</span>
+  <span class="credit right">
+    Powered by <a href="http://octopress.org">Octopress</a> -
+    Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a>
+  </span>
+</p>
+
+
+
+      
+
+<script type="text/javascript">
+      var disqus_shortname = 'biasandsandwiches';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ianyh.com/blog/2013/06/05/accessibility/';
+        var disqus_url = 'http://ianyh.com/blog/2013/06/05/accessibility/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+    </section>
+
+  </div>
+</body>
+</html>

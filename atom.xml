@@ -1,0 +1,797 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Bias and Sandwiches]]></title>
+  <link href="http://ianyh.com/atom.xml" rel="self"/>
+  <link href="http://ianyh.com/"/>
+  <updated>2014-09-29T20:40:21-04:00</updated>
+  <id>http://ianyh.com/</id>
+  <author>
+    <name><![CDATA[Ian Ynda-Hummel]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Identifying Spaces in Mac OS X]]></title>
+    <link href="http://ianyh.com/blog/2013/09/24/identifying-spaces-in-mac-os-x/"/>
+    <updated>2013-09-24T22:42:00-04:00</updated>
+    <id>http://ianyh.com/blog/2013/09/24/identifying-spaces-in-mac-os-x</id>
+    <content type="html"><![CDATA[<p>I recently implemented a featured in <a href="http://ianyh.com/amethyst/">Amethyst</a> that
+allowed every space to have its own unique set of resources. In implementing
+this feature I ran into a problem: how do you determine which space you&rsquo;re
+currently on?</p>
+
+<p>One might think that this would be a sensible piece of information to expose,
+but alas and alack it is hidden behind private APIs. So what is a
+tiling-window-management-inclined programmer to do? Dig into a bunch of weird
+pieces of public information. The first being the preferences of spaces itself.</p>
+
+<!--more-->
+
+
+<h1>Preferences on OS X</h1>
+
+<p>The first piece of information to know is how preferences work. Here&rsquo;s a
+lightning overview. You may be familiar with <code>NSUserDefaults</code>. It is used to
+store application preferences. By default it accesses the application&rsquo;s
+preferences, which are backed by a file in <code>~/Library/Preferences</code> named using
+your application&rsquo;s bundle identifier. Amethyst, for example, has a file at
+<code>~/Library/Preferences/com.amethyst.Amethyst.plist</code>.</p>
+
+<p>Additionally, <code>NSUserDefaults</code> has an interesting method
+<code>-[NSUserDefaults addSuiteNamed:]</code>, which takes a single argument called
+<code>suiteName</code>. From the docs</p>
+
+<blockquote><p>The suiteName domain is similar to a bundle identifier string, but is not tied
+to a particular application or bundle. A suite can be used to hold preferences
+that are shared between multiple applications.</p></blockquote>
+
+<p>How does this help us? Well, you can look for yourself and note that
+<code>~/Library/Preferences/com.apple.spaces.plist</code> exists. You can read that file
+using the <code>defaults</code> command.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>defaults <span class="nb">read </span>com.apple.spaces
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There&rsquo;s a whole bunch of data. And if you try
+<code>[[NSUserDefaults standardUserDefaults] addSuiteNamed:@"com.apple.spaces"]</code> you
+will indeed have access to all of that data. Progress!</p>
+
+<h1>Spaces Preferences</h1>
+
+<p>So let&rsquo;s dig into what&rsquo;s actually in the preferences. There&rsquo;s a list of spaces:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">Spaces</span> <span class="o">=</span>                     <span class="p">(</span>
+</span><span class='line'>   <span class="p">{</span>
+</span><span class='line'>      <span class="n">id64</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">pid</span> <span class="o">=</span>                             <span class="p">(</span>
+</span><span class='line'>         <span class="mi">48173</span><span class="p">,</span>
+</span><span class='line'>         <span class="mi">218</span>
+</span><span class='line'>      <span class="p">);</span>
+</span><span class='line'>      <span class="n">type</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">uuid</span> <span class="o">=</span> <span class="n">dashboard</span><span class="p">;</span>
+</span><span class='line'>   <span class="p">},</span>
+</span><span class='line'>   <span class="p">{</span>
+</span><span class='line'>      <span class="n">id64</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">type</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">uuid</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">wsid</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>   <span class="p">},</span>
+</span><span class='line'>   <span class="p">{</span>
+</span><span class='line'>      <span class="n">id64</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">type</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">uuid</span> <span class="o">=</span> <span class="s">&quot;B8E129CC-DDDF-44D9-A583-6DE0FB39319E&quot;</span><span class="p">;</span>
+</span><span class='line'>   <span class="p">},</span>
+</span><span class='line'>   <span class="p">{</span>
+</span><span class='line'>      <span class="n">id64</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">type</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">uuid</span> <span class="o">=</span> <span class="s">&quot;21359712-DBFB-40AA-BAB5-87D1DDC6D442&quot;</span><span class="p">;</span>
+</span><span class='line'>   <span class="p">},</span>
+</span><span class='line'>   <span class="p">{</span>
+</span><span class='line'>      <span class="n">id64</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">type</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">uuid</span> <span class="o">=</span> <span class="s">&quot;956AEFA7-387D-463D-A90B-341E2137644A&quot;</span><span class="p">;</span>
+</span><span class='line'>   <span class="p">},</span>
+</span><span class='line'>   <span class="p">{</span>
+</span><span class='line'>      <span class="n">id64</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">type</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">uuid</span> <span class="o">=</span> <span class="s">&quot;599C0154-A9E1-4FD4-9489-54212240B3AE&quot;</span><span class="p">;</span>
+</span><span class='line'>   <span class="p">}</span>
+</span><span class='line'><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Great. They&rsquo;ve got uuids! We can use those as identifiers. And if we look
+closely there seems to even be a specific preference for the current space!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="s">&quot;Current Space&quot;</span> <span class="o">=</span>                     <span class="p">{</span>
+</span><span class='line'>   <span class="n">id64</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">type</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">uuid</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">wsid</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now just to confirm you can switch to a different space and read the defaults
+again and get:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="s">&quot;Current Space&quot;</span> <span class="o">=</span>                     <span class="p">{</span>
+</span><span class='line'>   <span class="n">id64</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">type</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">uuid</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">wsid</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Wait. The <code>uuid</code> didn&rsquo;t change at all. What the hell? Okay, well, it&rsquo;s not going
+to be that easy. So let&rsquo;s look at something else. There&rsquo;s a list of windows in
+each space, that&rsquo;s promising.</p>
+
+<p>Here&rsquo;s an excerpt of what it looks like on my machine right now for one of my
+spaces:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="p">{</span>
+</span><span class='line'>   <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">windows</span> <span class="o">=</span>                 <span class="p">(</span>
+</span><span class='line'>      <span class="mi">70</span><span class="p">,</span>
+</span><span class='line'>      <span class="mi">101</span><span class="p">,</span>
+</span><span class='line'>      <span class="mi">102</span><span class="p">,</span>
+</span><span class='line'>      <span class="mi">14747</span><span class="p">,</span>
+</span><span class='line'>      <span class="mi">48</span>
+</span><span class='line'>   <span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Okay, so we&rsquo;ve got a name which seems to be the space&rsquo;s uuid and a list of
+window numbers. That&rsquo;s useful. Maybe we can find the window numbers on the
+current space and use that to match up to a space identifier. So let&rsquo;s take a
+look at windows and window numbers.</p>
+
+<h1>Windows Of The Current Space</h1>
+
+<p>It turns out there is a public API for accessing all of the windows on the
+current space. It is done using the method</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">CFArrayRef</span> <span class="nf">CGWindowListCopyWindowInfo</span><span class="p">(</span><span class="n">CGWindowListOption</span> <span class="n">option</span><span class="p">,</span> <span class="n">CGWindowID</span> <span class="n">relativeToWindow</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The options for <code>option</code> are</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">enum</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>   <span class="n">kCGWindowListOptionAll</span>                 <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">kCGWindowListOptionOnScreenOnly</span>        <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span><span class="p">),</span>
+</span><span class='line'>   <span class="n">kCGWindowListOptionOnScreenAboveWindow</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">),</span>
+</span><span class='line'>   <span class="n">kCGWindowListOptionOnScreenBelowWindow</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">),</span>
+</span><span class='line'>   <span class="n">kCGWindowListOptionIncludingWindow</span>     <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span><span class="p">),</span>
+</span><span class='line'>   <span class="n">kCGWindowListExcludeDesktopElements</span>    <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can not specify a <code>relativeToWindow</code> ID and use the option
+<code>kCGWindowListOptionOnScreenOnly</code> to get all windows that are on the screen
+right now. That means all the windows in the current space, as any other windows
+are not on screen.</p>
+
+<p>It gives you a bunch of dictionaries that look like</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="p">{</span>
+</span><span class='line'>   <span class="n">kCGWindowAlpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">kCGWindowBounds</span> <span class="o">=</span>         <span class="p">{</span>
+</span><span class='line'>      <span class="n">Height</span> <span class="o">=</span> <span class="mi">22</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">Width</span> <span class="o">=</span> <span class="mi">212</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">X</span> <span class="o">=</span> <span class="mi">1662</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">Y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>   <span class="p">};</span>
+</span><span class='line'>   <span class="n">kCGWindowIsOnscreen</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">kCGWindowLayer</span> <span class="o">=</span> <span class="mi">25</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">kCGWindowMemoryUsage</span> <span class="o">=</span> <span class="mi">30104</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">kCGWindowName</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">kCGWindowNumber</span> <span class="o">=</span> <span class="mi">14</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">kCGWindowOwnerName</span> <span class="o">=</span> <span class="n">SystemUIServer</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">kCGWindowOwnerPID</span> <span class="o">=</span> <span class="mi">99</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">kCGWindowSharingState</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">kCGWindowStoreType</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>which conveniently has a window number under the key <code>kCGWindowNumber</code>.</p>
+
+<h1>Putting It All Together</h1>
+
+<p>Okay, so we can get a list of windows connected to space uuids and we can get a
+list of windows on the current space. We should be able to cross-reference the
+lists to figure out the uuid of the current space. Great.</p>
+
+<p>But there&rsquo;s one subtle problem here. Windows can be on many spaces. So we have
+to make sure to ignore any windows on more than one space.</p>
+
+<p>The final code looks like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">activeSpaceIdentifier</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">NSUserDefaults</span> <span class="n">standardUserDefaults</span><span class="p">]</span> <span class="nl">removeSuiteNamed:</span><span class="s">@&quot;com.apple.spaces&quot;</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">NSUserDefaults</span> <span class="n">standardUserDefaults</span><span class="p">]</span> <span class="nl">addSuiteNamed:</span><span class="s">@&quot;com.apple.spaces&quot;</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">NSArray</span> <span class="o">*</span><span class="n">spaceProperties</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSUserDefaults</span> <span class="n">standardUserDefaults</span><span class="p">]</span> <span class="nl">dictionaryForKey:</span><span class="s">@&quot;SpacesConfiguration&quot;</span><span class="p">][</span><span class="s">@&quot;Space Properties&quot;</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">NSMutableDictionary</span> <span class="o">*</span><span class="n">spaceIdentifiersByWindowNumber</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSMutableDictionary</span> <span class="n">dictionary</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="n">spaceDictionary</span> <span class="k">in</span> <span class="n">spaceProperties</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">NSArray</span> <span class="o">*</span><span class="n">windows</span> <span class="o">=</span> <span class="n">spaceDictionary</span><span class="p">[</span><span class="s">@&quot;windows&quot;</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">for</span> <span class="p">(</span><span class="n">NSNumber</span> <span class="o">*</span><span class="n">window</span> <span class="k">in</span> <span class="n">windows</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="n">spaceIdentifiersByWindowNumber</span><span class="p">[</span><span class="n">window</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">spaceIdentifiersByWindowNumber</span><span class="p">[</span><span class="n">window</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">spaceIdentifiersByWindowNumber</span><span class="p">[</span><span class="n">window</span><span class="p">]</span> <span class="nl">arrayByAddingObject:</span><span class="n">spaceDictionary</span><span class="p">[</span><span class="s">@&quot;name&quot;</span><span class="p">]];</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">spaceIdentifiersByWindowNumber</span><span class="p">[</span><span class="n">window</span><span class="p">]</span> <span class="o">=</span> <span class="err">@</span><span class="p">[</span> <span class="n">spaceDictionary</span><span class="p">[</span><span class="s">@&quot;name&quot;</span><span class="p">]</span> <span class="p">];</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CFArrayRef</span> <span class="n">windowDescriptions</span> <span class="o">=</span> <span class="n">CGWindowListCopyWindowInfo</span><span class="p">(</span><span class="n">kCGWindowListOptionOnScreenOnly</span><span class="p">,</span> <span class="n">kCGNullWindowID</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">NSString</span> <span class="o">*</span><span class="n">activeSpaceIdentifier</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="n">dictionary</span> <span class="k">in</span> <span class="p">(</span><span class="n">__bridge</span> <span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="n">windowDescriptions</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">NSNumber</span> <span class="o">*</span><span class="n">windowNumber</span> <span class="o">=</span> <span class="n">dictionary</span><span class="p">[(</span><span class="n">__bridge</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">kCGWindowNumber</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">NSArray</span> <span class="o">*</span><span class="n">spaceIdentifiers</span> <span class="o">=</span> <span class="n">spaceIdentifiersByWindowNumber</span><span class="p">[</span><span class="n">windowNumber</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">spaceIdentifiers</span><span class="p">.</span><span class="n">count</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">activeSpaceIdentifier</span> <span class="o">=</span> <span class="n">spaceIdentifiers</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CFRelease</span><span class="p">(</span><span class="n">windowDescriptions</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">activeSpaceIdentifier</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But wait! What if there&rsquo;s no windows in a space? Well, it turns out that unless
+you&rsquo;re doing something really weird there&rsquo;s always <em>something</em> in every space
+because the system has a bunch of hidden windows you never see. If you&rsquo;re doing
+something really weird and you actually encounter a space with no windows in it
+I would love to hear about it.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Amethyst 0.8.1]]></title>
+    <link href="http://ianyh.com/blog/2013/09/23/amethyst-0-dot-8-1/"/>
+    <updated>2013-09-23T15:25:00-04:00</updated>
+    <id>http://ianyh.com/blog/2013/09/23/amethyst-0-dot-8-1</id>
+    <content type="html"><![CDATA[<p>Released <a href="http://ianyh.com/amethyst">Amethyst</a> version 0.8.1 yesterday. I
+figured out some significant improvements to its interactions with
+spaces. Moving windows between spaces would occasionally fail due to an
+unfortunate race condition. That&rsquo;s been fixed. On top of that, each space now
+has its own set of layouts so no need to switch layouts and reset layout
+parameters all the time when jumping between spaces.</p>
+
+<p>You can download it directly
+<a href="http://ianyh.com/amethyst/versions/Amethyst-0.8.1.zip">here</a> or install via
+<a href="https://github.com/phinze/homebrew-cask">homebrew cask</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Amethyst 0.8]]></title>
+    <link href="http://ianyh.com/blog/2013/08/19/amethyst-0-dot-8/"/>
+    <updated>2013-08-19T16:43:00-04:00</updated>
+    <id>http://ianyh.com/blog/2013/08/19/amethyst-0-dot-8</id>
+    <content type="html"><![CDATA[<p>Released Amethyst version 0.8 yesterday. It has some significant improvements to
+stability as well as adding a few new features. There&rsquo;s a new column layout that
+tiles windows into full height columns and the addition of floating windows. It
+can be downloaded <a href="http://ianyh.com/Amethyst/versions/Amethyst-0.8.zip">here</a> or
+installed via <a href="https://github.com/phinze/homebrew-cask">homebrew cask</a>.</p>
+
+<!--more-->
+
+
+<h1>Floating Windows</h1>
+
+<p>I had a request for floating windows and it&rsquo;s now in the app. <code>mod1 + t</code> can be
+used to toggle whether a window is tiled or floating. A floating window will not
+be tiled, but will be part of the focus chain.</p>
+
+<p>Additionally, you can supply a list of bundle identifiers for which windows will
+be floating by default. They can be specified by defining an array of bundle
+identifier strings under the <code>floating</code> key in your <code>.amethyst</code> file. Any
+application matching a bundle identifier in the list will have its windows float
+by default, though use of <code>mod1 + t</code> will tile it if you want. I find this quite
+useful for windows that Amethyst generally can&rsquo;t resize or position correctly
+(e.g., Photoshop).</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Accessibility, Windows, and Spaces in OS X]]></title>
+    <link href="http://ianyh.com/blog/2013/06/05/accessibility/"/>
+    <updated>2013-06-05T09:58:00-04:00</updated>
+    <id>http://ianyh.com/blog/2013/06/05/accessibility</id>
+    <content type="html"><![CDATA[<p>A couple weeks ago I decided to sit down and write a tiling window manager. As a
+first and second pass it pretty much works, though there&rsquo;s definitely room for
+improvement. I&rsquo;m calling it <a href="https://github.com/ianyh/Amethyst">Amethyst</a>. (It&rsquo;s
+a kind of quartz, you see. Get it? <em>Get it</em>?)</p>
+
+<p>The first pass dealt with multiple screens fairly well as I was implementing it
+at a desk with multiple screens and managing windows across screen is a simple
+matter of position. It wasn&rsquo;t until I started trying it out on my laptop that I
+realized that Spaces support was fairly key. There&rsquo;s just not enough room on
+this 13&#8221; screen. I spent a long time digging into moving windows between spaces
+and have some insights I couldn&rsquo;t find anywhere else and I thought I&rsquo;d share
+them here.</p>
+
+<!--more-->
+
+
+<h1>Spaces API</h1>
+
+<p>It used to be the case that there was a public API for moving windows between
+spaces. They went private in 10.7, I think. There&rsquo;s a couple projects around
+that utilize the private APIs, but I didn&rsquo;t want to go that route. For one thing
+it might be nice to toss something into the AppStore, but it&rsquo;s mostly a
+stability problem in that I don&rsquo;t want to have to go back and entirely
+reimplement parts of the code due to radically shifting private APIs.</p>
+
+<p>In my searching I dug into a variety of possible paths. I eventually came upon a
+fascinating tidbit of information.</p>
+
+<blockquote><p>If the mouse has hold of a window, switching to a Space via Mission Control
+will take the window to that Space.</p></blockquote>
+
+<p>Intriguing! You can test it out if you like. Works like a charm when you do it
+manually. So how do we do it programmatically? Well, we manually post keyboard
+and mouse events!</p>
+
+<h1>CGEvents</h1>
+
+<p>A quick overview of how <code>CGEvent</code> works. My use of it is mostly centered around
+the following method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="kt">void</span> <span class="n">CGEventPost</span><span class="p">(</span><span class="n">CGEventTapLocation</span> <span class="n">tap</span><span class="p">,</span> <span class="n">CGEventRef</span> <span class="n">event</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This allows you to post events directly to the window server. Great. So that
+should let us post mouse events and keyboard events. So let&rsquo;s take a look at the
+parameters.</p>
+
+<p>The first is the tap location, of which there are three possible values:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">enum</span> <span class="n">_CGEventTapLocation</span> <span class="p">{</span>
+</span><span class='line'>   <span class="n">kCGHIDEventTap</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">kCGSessionEventTap</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">kCGAnnotatedSessionEventTap</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>kCGHIDEventTap</code> is the one we want. From the documentation:</p>
+
+<blockquote><p>Specifies that an event tap is placed at the point where HID system events
+enter the window server.</p></blockquote>
+
+<p><code>kCGSessionEventTap</code> includes remote control events and stuff, and
+<code>kCGAnnotatedSessionEventTap</code> is for sending events to specific applications.</p>
+
+<p>The second parameter is a <code>CGEventRef</code>, which describes things like keyboard
+modifier flags, mouse button, mouse state, mouse position, keyboard key codes,
+etc. There are a variety of methods that can be used to create <code>CGEvent</code>
+objects. The two we care about are <code>CGEventCreateMouseEvent</code> and
+<code>CGEventCreateKeyboardEvent</code>.</p>
+
+<h2>CGEventCreateMouseEvent</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">CGEventRef</span> <span class="nf">CGEventCreateMouseEvent</span><span class="p">(</span><span class="n">CGEventSourceRef</span> <span class="n">source</span><span class="p">,</span> <span class="n">CGEventType</span> <span class="n">mouseType</span><span class="p">,</span> <span class="n">CGPoint</span> <span class="n">mouseCursorPosition</span><span class="p">,</span> <span class="n">CGMouseButton</span> <span class="n">mouseButton</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As the name implies this method is used to create mouse events. <code>source</code> is
+basically meaningless for our purposes as it used for generating new events from
+existing ones. <code>mouseCursorPosition</code> is pretty straightforward. It&rsquo;s the the
+point on the screen that the mouse event should happen at.</p>
+
+<p>There are a bunch of <code>CGEventType</code> values, which themselves are just proxies for
+values buried deep in the HID system. The ones we care about for mouse events
+are:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">enum</span> <span class="p">{</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'>  <span class="n">kCGEventLeftMouseDown</span> <span class="o">=</span> <span class="n">NX_LMOUSEDOWN</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">kCGEventLeftMouseUp</span> <span class="o">=</span> <span class="n">NX_LMOUSEUP</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">kCGEventMouseMoved</span> <span class="o">=</span> <span class="n">NX_MOUSEMOVED</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are a couple <code>CGMouseButton</code> values as well:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">enum</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">kCGMouseButtonLeft</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">kCGMouseButtonRight</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">kCGMouseButtonCenter</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To simulate a standard tap we just want <code>kCGMouseButtonLeft</code>. To actually
+simulate a tap we can do something like</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">CGPoint</span> <span class="n">point</span> <span class="o">=</span> <span class="p">{</span> <span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">};</span>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">mouseMoveEvent</span> <span class="o">=</span> <span class="n">CGEventCreateMouseEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kCGEventMouseMoved</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">kCGMouseButtonLeft</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">mouseDownEvent</span> <span class="o">=</span> <span class="n">CGEventCreateMouseEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kCGEventLeftMouseDown</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">kCGMouseButtonLeft</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">mouseUpEvent</span> <span class="o">=</span> <span class="n">CGEventCreateMouseEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kCGEventLeftMouseUp</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">kCGMouseButtonLeft</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">mouseMoveEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">mouseDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">mouseUpEvent</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">mouseMoveEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">mouseDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">mouseUpEvent</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>to simulate a tap at (0, 0). Cool. Let&rsquo;s look at keyboard events.</p>
+
+<h2>CGEventCreateKeyboardEvent</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">CGEventRef</span> <span class="nf">CGEventCreateKeyboardEvent</span><span class="p">(</span><span class="n">CGEventSourceRef</span> <span class="n">source</span><span class="p">,</span> <span class="n">CGKeyCode</span> <span class="n">virtualKey</span><span class="p">,</span> <span class="n">bool</span> <span class="n">keyDown</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>source</code> is about as useful here as it was for mouse events, and hopefully
+<code>keyDown</code> is self explanatory. The important thing to note is that to perform a
+keypress we actually need two events: one for <code>keyDown = true</code> followed by one
+for <code>keyDown = false</code>.</p>
+
+<p><code>virtualKey</code> can probably take its values from a variety of places. I went with
+the virtual keycodes defined in the Carbon framework. It&rsquo;s
+<code>Carbon.framework/Frameworks/HIToolbox.framework/Events.h</code> if you want to look
+them up. Repeating them all here isn&rsquo;t particularly useful.</p>
+
+<p>So let&rsquo;s say we want to perform the standard keyboard shortcut for moving one
+space to the right (^ + Right Arrow). We could do</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">CGEventRef</span> <span class="n">keyboardDownEvent</span> <span class="o">=</span> <span class="n">CGEventCreateKeyboardEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kVK_RightArrow</span><span class="p">,</span> <span class="n">true</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">keyboardUpEvent</span> <span class="o">=</span> <span class="n">CGEventCreateKeyboardEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kVK_RightArrow</span><span class="p">,</span> <span class="n">false</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">keyboardDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">keyboardUpEvent</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">keyboardDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">keyboardUpEvent</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But wait, what about the control key? Well, there&rsquo;s a method for that.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="kt">void</span> <span class="nf">CGEventSetFlags</span><span class="p">(</span><span class="n">CGEventRef</span> <span class="n">event</span><span class="p">,</span> <span class="n">CGEventFlags</span> <span class="n">flags</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Where <code>flags</code> is some OR&rsquo;d combination of possible flag values. The ones we care
+about here are</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">enum</span> <span class="p">{</span>
+</span><span class='line'>  <span class="cm">/* Device-independent modifier key bits. */</span>
+</span><span class='line'>  <span class="n">kCGEventFlagMaskAlphaShift</span> <span class="o">=</span>          <span class="n">NX_ALPHASHIFTMASK</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">kCGEventFlagMaskShift</span> <span class="o">=</span>               <span class="n">NX_SHIFTMASK</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">kCGEventFlagMaskControl</span> <span class="o">=</span>             <span class="n">NX_CONTROLMASK</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">kCGEventFlagMaskAlternate</span> <span class="o">=</span>           <span class="n">NX_ALTERNATEMASK</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">kCGEventFlagMaskCommand</span> <span class="o">=</span>             <span class="n">NX_COMMANDMASK</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So to fix the keyboard event code from above.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">CGEventRef</span> <span class="n">keyboardDownEvent</span> <span class="o">=</span> <span class="n">CGEventCreateKeyboardEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kVK_RightArrow</span><span class="p">,</span> <span class="n">true</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">keyboardUpEvent</span> <span class="o">=</span> <span class="n">CGEventCreateKeyboardEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kVK_RightArrow</span><span class="p">,</span> <span class="n">false</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGEventSetFlags</span><span class="p">(</span><span class="n">keyboardDownEvent</span><span class="p">,</span> <span class="n">kCGEventFlagMaskControl</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">keyboardDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">keyboardUpEvent</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">keyboardDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">keyboardUpEvent</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Putting It All Together</h2>
+
+<p>So let&rsquo;s say you have an accessibility reference to a window and want to move it
+to a different space. There&rsquo;s an important question you need to answer first: at
+what point do you move the mouse to grab the window? Conceptually the answer is
+pretty straightforward. You move the mouse to the window&rsquo;s toolbar. In practice
+there&rsquo;s a couple unintuitive gotchas.</p>
+
+<p>My initial intuition for this was to take the min-y and mid-x of the window&rsquo;s
+frame, so the cursor ends up in the middle of the window&rsquo;s toolbar. Should work
+fine, should work with every window. But when I implemented that it would fail
+for some windows, namely Xcode. As best I can tell the middle of Xcode&rsquo;s toolbar
+as depicted below is grabbing mouse down events for something.</p>
+
+<p><img class="center" src="http://ianyh.com/images/2013-05-29-accessibility/xcode-toolbar.png"></p>
+
+<p>Okay, so what other point on the x-axis do all windows have in common? That
+little green zoom button!</p>
+
+<h2>But Wait, What About Modifiers?</h2>
+
+<p>There is one more point to consider. We are going to be executing this operation
+from an event handler triggered by a keyboard shortcut. Let&rsquo;s take an example
+shortcut <code>ctrl + option + right arrow</code> for taking the currently focused window
+and moving it one space right. You hit this keyboard shortcut and we go and
+create events and post them. There&rsquo;s a gotcha here. <code>CGEvent</code> create methods
+<em>start with the current modifiers unless otherwise specified</em>. Depending on the
+timing we could accidentally create a <code>ctrl + click</code> event instead of just a
+<code>click</code> event. Most windows don&rsquo;t care, but Xcode (why is it always Xcode?)
+does. We need to thus make sure that we clear out any modifier flags on keyboard
+and mouse events that we don&rsquo;t expect to have any modifiers.</p>
+
+<h2>The Final Method</h2>
+
+<p>To avoid unnecessary details of the accessibility API the following code uses an
+<code>NSObject</code> wrapper.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="n">AMAccessibilityElement</span> <span class="o">*</span><span class="n">windowElement</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">window</span><span class="p">];</span>
+</span><span class='line'><span class="n">AMAccessibilityElement</span> <span class="o">*</span><span class="n">zoomButtonElement</span> <span class="o">=</span> <span class="p">[</span><span class="n">windowElement</span> <span class="nl">elementForKey:</span><span class="n">kAXZoomButtonAttribute</span><span class="p">];</span>
+</span><span class='line'><span class="n">CGRect</span> <span class="n">zoomButtonFrame</span> <span class="o">=</span> <span class="n">zoomButtonElement</span><span class="p">.</span><span class="n">frame</span><span class="p">;</span>
+</span><span class='line'><span class="n">CGRect</span> <span class="n">windowFrame</span> <span class="o">=</span> <span class="n">windowElement</span><span class="p">.</span><span class="n">frame</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGPoint</span> <span class="n">mouseCursorPoint</span> <span class="o">=</span> <span class="p">{</span> <span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">CGRectGetMaxX</span><span class="p">(</span><span class="n">zoomButtonFrame</span><span class="p">)</span> <span class="o">+</span> <span class="mf">5.0</span><span class="p">,</span> <span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">windowFrame</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="mf">5.0</span> <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">mouseMoveEvent</span> <span class="o">=</span> <span class="n">CGEventCreateMouseEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kCGEventMouseMoved</span><span class="p">,</span> <span class="n">mouseCursorPoint</span><span class="p">,</span> <span class="n">kCGMouseButtonLeft</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">mouseDownEvent</span> <span class="o">=</span> <span class="n">CGEventCreateMouseEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kCGEventLeftMouseDown</span><span class="p">,</span> <span class="n">mouseCursorPoint</span><span class="p">,</span> <span class="n">kCGMouseButtonLeft</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">mouseUpEvent</span> <span class="o">=</span> <span class="n">CGEventCreateMouseEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kCGEventLeftMouseUp</span><span class="p">,</span> <span class="n">mouseCursorPoint</span><span class="p">,</span> <span class="n">kCGMouseButtonLeft</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">keyboardDownEvent</span> <span class="o">=</span> <span class="n">CGEventCreateKeyboardEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kVK_RightArrow</span><span class="p">,</span> <span class="n">true</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventRef</span> <span class="n">keyboardUpEvent</span> <span class="o">=</span> <span class="n">CGEventCreateKeyboardEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">kVK_RightArrow</span><span class="p">,</span> <span class="n">false</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGEventSetFlags</span><span class="p">(</span><span class="n">mouseMoveEvent</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventSetFlags</span><span class="p">(</span><span class="n">mouseDownEvent</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventSetFlags</span><span class="p">(</span><span class="n">mouseUpEvent</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventSetFlags</span><span class="p">(</span><span class="n">keyboardDownEvent</span><span class="p">,</span> <span class="n">kCGEventFlagMaskControl</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventSetFlags</span><span class="p">(</span><span class="n">keyboardUpEvent</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">kCGHIDEventTap</span><span class="p">,</span> <span class="n">mouseMoveEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">kCGHIDEventTap</span><span class="p">,</span> <span class="n">mouseDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">kCGHIDEventTap</span><span class="p">,</span> <span class="n">keyboardDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">kCGHIDEventTap</span><span class="p">,</span> <span class="n">keyboardUpEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGEventPost</span><span class="p">(</span><span class="n">kCGHIDEventTap</span><span class="p">,</span> <span class="n">mouseUpEvent</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">mouseMoveEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">mouseDownEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">mouseUpEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">keyboardEvent</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRelease</span><span class="p">(</span><span class="n">keyboardEventUp</span><span class="p">);</span>                           
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+</feed>
