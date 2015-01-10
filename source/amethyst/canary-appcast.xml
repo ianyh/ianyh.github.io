@@ -264,7 +264,7 @@
         <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
         <sparkle:releaseNotesLink>http://ianyh.com/amethyst/versions/Amethyst-0.9.5b3.html</sparkle:releaseNotesLink>
         <enclosure url="http://ianyh.com/amethyst/versions/Amethyst-0.9.5b3.zip"
-        sparkle:version="18"
+        sparkle:version="19"
         sparkle:shortVersionString="0.9.5b3"
         length="1717824"
         type="application/octet-stream"
