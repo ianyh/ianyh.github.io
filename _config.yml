@@ -11,7 +11,8 @@ description:
 
 markdown: rdiscount
 
-gem: [jekyll-compass]
+gem:
+ - jekyll-compass
 
 paginate: 10          # Posts per page on the blog index
 pagination_dir: blog  # Directory base for pagination URLs eg. /blog/page/2/
