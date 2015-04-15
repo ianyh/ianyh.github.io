@@ -3,7 +3,7 @@
 .sass-cache
 .gist-cache
 .pygments-cache
-_site
+_site*
 vendor
 node_modules
 css
