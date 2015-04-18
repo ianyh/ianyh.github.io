@@ -217,7 +217,7 @@ fine, should work with every window. But when I implemented that it would fail
 for some windows, namely Xcode. As best I can tell the middle of Xcode's toolbar
 as depicted below is grabbing mouse down events for something.
 
-{% img center /images/2013-05-29-accessibility/xcode-toolbar.png %}
+![toolbar](/images/2013-05-29-accessibility/xcode-toolbar.png)
 
 Okay, so what other point on the x-axis do all windows have in common? That
 little green zoom button!
