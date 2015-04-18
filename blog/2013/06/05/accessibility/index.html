@@ -4,23 +4,15 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Bias and Sandwiches - Bias and Sandwiches</title>
+    <title>Accessibility, Windows, and Spaces in OS X - Bias and Sandwiches</title>
     <meta name="author" content="Ian Ynda-Hummel">
 
     
     <meta name="description" content="
-
-
-
-  
-  
   
     
-    Identifying Spaces in Mac OS X
-    
-    
-    
-    
+  
+  
 
 
 
@@ -31,11 +23,12 @@
 
   
 
-Posted on September 24, 2013
+Posted on June 05, 2013
+  
+  
     
     
-    
-    I recently imp...">
+    A couple weeks ago I decided to sit down and write a tiling window manager. ...">
     
 
     <!-- http://t.co/dKP3o1e -->
@@ -44,7 +37,7 @@ Posted on September 24, 2013
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     
-    <link rel="canonical" href="http://ianyh.com/blog/">
+    <link rel="canonical" href="http://ianyh.com/blog/2013/06/05/accessibility/">
     <link href="/favicon.png" rel="icon">
     <link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
     <link href="" rel="alternate" title="Bias and Sandwiches" type="application/atom+xml">
@@ -83,23 +76,15 @@ Posted on September 24, 2013
     
     <section>
       <div id="title">
-        <h1>Bias and Sandwiches</h1>
-        <p>I talk about things sometimes, I guess</p>
+        <h1>Accessibility, Windows, and Spaces in OS X</h1>
+        
       </div>
       
-      
-
-
-<article>
-  <div class="article">
+      <div>
+  <article class="hentry" role="article">
+    <div class="article">
   
   <h1>
-    
-    <h1><a href="/blog/2013/09/24/identifying-spaces-in-mac-os-x/">Identifying Spaces in Mac OS X</a></h1>
-    
-    <hr>
-    
-    
 
 
 
@@ -110,374 +95,9 @@ Posted on September 24, 2013
 
   
 
-<time class="byline left" datetime="2013-09-24T22:42:00-04:00" pubdate data-updated="true">Posted on September 24, 2013</time>
-    
-    
-    
-    <div class="entry-content"><p>I recently implemented a featured in <a href="http://ianyh.com/amethyst/">Amethyst</a> that
-allowed every space to have its own unique set of resources. In implementing
-this feature I ran into a problem: how do you determine which space you're
-currently on?</p>
-
-<p>One might think that this would be a sensible piece of information to expose,
-but alas and alack it is hidden behind private APIs. So what is a
-tiling-window-management-inclined programmer to do? Dig into a bunch of weird
-pieces of public information. The first being the preferences of spaces itself.</p>
-
-<!--more-->
-
-
-<h1>Preferences on OS X</h1>
-
-<p>The first piece of information to know is how preferences work. Here's a
-lightning overview. You may be familiar with <code>NSUserDefaults</code>. It is used to
-store application preferences. By default it accesses the application's
-preferences, which are backed by a file in <code>~/Library/Preferences</code> named using
-your application's bundle identifier. Amethyst, for example, has a file at
-<code>~/Library/Preferences/com.amethyst.Amethyst.plist</code>.</p>
-
-<p>Additionally, <code>NSUserDefaults</code> has an interesting method
-<code>-[NSUserDefaults addSuiteNamed:]</code>, which takes a single argument called
-<code>suiteName</code>. From the docs</p>
-
-<blockquote><p>The suiteName domain is similar to a bundle identifier string, but is not tied
-to a particular application or bundle. A suite can be used to hold preferences
-that are shared between multiple applications.</p></blockquote>
-
-<p>How does this help us? Well, you can look for yourself and note that
-<code>~/Library/Preferences/com.apple.spaces.plist</code> exists. You can read that file
-using the <code>defaults</code> command.</p>
-
-<pre><code class="bash">$ defaults read com.apple.spaces
-</code></pre>
-
-<p>There's a whole bunch of data. And if you try
-<code>[[NSUserDefaults standardUserDefaults] addSuiteNamed:@"com.apple.spaces"]</code> you
-will indeed have access to all of that data. Progress!</p>
-
-<h1>Spaces Preferences</h1>
-
-<p>So let's dig into what's actually in the preferences. There's a list of spaces:</p>
-
-<pre><code class="objective-c">Spaces =                     (
-   {
-      id64 = 4;
-      pid =                             (
-         48173,
-         218
-      );
-      type = 2;
-      uuid = dashboard;
-   },
-   {
-      id64 = 3;
-      type = 0;
-      uuid = "";
-      wsid = 1;
-   },
-   {
-      id64 = 5;
-      type = 0;
-      uuid = "B8E129CC-DDDF-44D9-A583-6DE0FB39319E";
-   },
-   {
-      id64 = 7;
-      type = 0;
-      uuid = "21359712-DBFB-40AA-BAB5-87D1DDC6D442";
-   },
-   {
-      id64 = 6;
-      type = 0;
-      uuid = "956AEFA7-387D-463D-A90B-341E2137644A";
-   },
-   {
-      id64 = 8;
-      type = 0;
-      uuid = "599C0154-A9E1-4FD4-9489-54212240B3AE";
-   }
-)
-</code></pre>
-
-<p>Great. They've got uuids! We can use those as identifiers. And if we look
-closely there seems to even be a specific preference for the current space!</p>
-
-<pre><code class="objective-c">"Current Space" =                     {
-   id64 = 3;
-   type = 0;
-   uuid = "";
-   wsid = 1;
-};
-</code></pre>
-
-<p>Now just to confirm you can switch to a different space and read the defaults
-again and get:</p>
-
-<pre><code class="objective-c">"Current Space" =                     {
-   id64 = 3;
-   type = 0;
-   uuid = "";
-   wsid = 1;
-};
-</code></pre>
-
-<p>Wait. The <code>uuid</code> didn't change at all. What the hell? Okay, well, it's not going
-to be that easy. So let's look at something else. There's a list of windows in
-each space, that's promising.</p>
-
-<p>Here's an excerpt of what it looks like on my machine right now for one of my
-spaces:</p>
-
-<pre><code class="objective-c">{
-   name = "";
-   windows =                 (
-      70,
-      101,
-      102,
-      14747,
-      48
-   );
-}
-</code></pre>
-
-<p>Okay, so we've got a name which seems to be the space's uuid and a list of
-window numbers. That's useful. Maybe we can find the window numbers on the
-current space and use that to match up to a space identifier. So let's take a
-look at windows and window numbers.</p>
-
-<h1>Windows Of The Current Space</h1>
-
-<p>It turns out there is a public API for accessing all of the windows on the
-current space. It is done using the method</p>
-
-<pre><code class="objective-c">CFArrayRef CGWindowListCopyWindowInfo(CGWindowListOption option, CGWindowID relativeToWindow);
-</code></pre>
-
-<p>The options for <code>option</code> are</p>
-
-<pre><code class="objective-c">enum
-{
-   kCGWindowListOptionAll                 = 0,
-   kCGWindowListOptionOnScreenOnly        = (1 &lt;&lt; 0),
-   kCGWindowListOptionOnScreenAboveWindow = (1 &lt;&lt; 1),
-   kCGWindowListOptionOnScreenBelowWindow = (1 &lt;&lt; 2),
-   kCGWindowListOptionIncludingWindow     = (1 &lt;&lt; 3),
-   kCGWindowListExcludeDesktopElements    = (1 &lt;&lt; 4)
-}
-</code></pre>
-
-<p>We can not specify a <code>relativeToWindow</code> ID and use the option
-<code>kCGWindowListOptionOnScreenOnly</code> to get all windows that are on the screen
-right now. That means all the windows in the current space, as any other windows
-are not on screen.</p>
-
-<p>It gives you a bunch of dictionaries that look like</p>
-
-<pre><code class="objective-c">{
-   kCGWindowAlpha = 1;
-   kCGWindowBounds =         {
-      Height = 22;
-      Width = 212;
-      X = 1662;
-      Y = 0;
-   };
-   kCGWindowIsOnscreen = 1;
-   kCGWindowLayer = 25;
-   kCGWindowMemoryUsage = 30104;
-   kCGWindowName = "";
-   kCGWindowNumber = 14;
-   kCGWindowOwnerName = SystemUIServer;
-   kCGWindowOwnerPID = 99;
-   kCGWindowSharingState = 1;
-   kCGWindowStoreType = 2;
-}
-</code></pre>
-
-<p>which conveniently has a window number under the key <code>kCGWindowNumber</code>.</p>
-
-<h1>Putting It All Together</h1>
-
-<p>Okay, so we can get a list of windows connected to space uuids and we can get a
-list of windows on the current space. We should be able to cross-reference the
-lists to figure out the uuid of the current space. Great.</p>
-
-<p>But there's one subtle problem here. Windows can be on many spaces. So we have
-to make sure to ignore any windows on more than one space.</p>
-
-<p>The final code looks like:</p>
-
-<pre><code class="objective-c">- (NSString *)activeSpaceIdentifier {
-    [[NSUserDefaults standardUserDefaults] removeSuiteNamed:@"com.apple.spaces"];
-    [[NSUserDefaults standardUserDefaults] addSuiteNamed:@"com.apple.spaces"];
-
-    NSArray *spaceProperties = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"SpacesConfiguration"][@"Space Properties"];
-    NSMutableDictionary *spaceIdentifiersByWindowNumber = [NSMutableDictionary dictionary];
-    for (NSDictionary *spaceDictionary in spaceProperties) {
-        NSArray *windows = spaceDictionary[@"windows"];
-        for (NSNumber *window in windows) {
-            if (spaceIdentifiersByWindowNumber[window]) {
-                spaceIdentifiersByWindowNumber[window] = [spaceIdentifiersByWindowNumber[window] arrayByAddingObject:spaceDictionary[@"name"]];
-            } else {
-                spaceIdentifiersByWindowNumber[window] = @[ spaceDictionary[@"name"] ];
-            }
-        }
-    }
-
-    CFArrayRef windowDescriptions = CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID);
-    NSString *activeSpaceIdentifier = nil;
-
-    for (NSDictionary *dictionary in (__bridge NSArray *)windowDescriptions) {
-        NSNumber *windowNumber = dictionary[(__bridge NSString *)kCGWindowNumber];
-        NSArray *spaceIdentifiers = spaceIdentifiersByWindowNumber[windowNumber];
-
-        if (spaceIdentifiers.count == 1) {
-            activeSpaceIdentifier = spaceIdentifiers[0];
-            break;
-        }
-    }
-
-    CFRelease(windowDescriptions);
-
-    return activeSpaceIdentifier;
-}
-</code></pre>
-
-<p>But wait! What if there's no windows in a space? Well, it turns out that unless
-you're doing something really weird there's always <em>something</em> in every space
-because the system has a bunch of hidden windows you never see. If you're doing
-something really weird and you actually encounter a space with no windows in it
-I would love to hear about it.</p>
-</div>
-    
-    
-    
-
-</div>
-
-</article>
-
-
-<article>
-  <div class="article">
+<time class="byline" datetime="2013-06-05T09:58:00-04:00" pubdate data-updated="true">Posted on June 05, 2013</time></h1>
+  <hr>
   
-  <h1>
-    
-    <h1><a href="/blog/2013/09/23/amethyst-0-dot-8-1/">Amethyst 0.8.1</a></h1>
-    
-    <hr>
-    
-    
-
-
-
-
-
-
-
-
-  
-
-<time class="byline left" datetime="2013-09-23T15:25:00-04:00" pubdate data-updated="true">Posted on September 23, 2013</time>
-    
-    
-    
-    <div class="entry-content"><p>Released <a href="http://ianyh.com/amethyst">Amethyst</a> version 0.8.1 yesterday. I
-figured out some significant improvements to its interactions with
-spaces. Moving windows between spaces would occasionally fail due to an
-unfortunate race condition. That's been fixed. On top of that, each space now
-has its own set of layouts so no need to switch layouts and reset layout
-parameters all the time when jumping between spaces.</p>
-
-<p>You can download it directly
-<a href="http://ianyh.com/amethyst/versions/Amethyst-0.8.1.zip">here</a> or install via
-<a href="https://github.com/phinze/homebrew-cask">homebrew cask</a>.</p>
-</div>
-    
-    
-    
-
-</div>
-
-</article>
-
-
-<article>
-  <div class="article">
-  
-  <h1>
-    
-    <h1><a href="/blog/2013/08/19/amethyst-0-dot-8/">Amethyst 0.8</a></h1>
-    
-    <hr>
-    
-    
-
-
-
-
-
-
-
-
-  
-
-<time class="byline left" datetime="2013-08-19T16:43:00-04:00" pubdate data-updated="true">Posted on August 19, 2013</time>
-    
-    
-    
-    <div class="entry-content"><p>Released Amethyst version 0.8 yesterday. It has some significant improvements to
-stability as well as adding a few new features. There's a new column layout that
-tiles windows into full height columns and the addition of floating windows. It
-can be downloaded <a href="http://ianyh.com/Amethyst/versions/Amethyst-0.8.zip">here</a> or
-installed via <a href="https://github.com/phinze/homebrew-cask">homebrew cask</a>.</p>
-
-<!--more-->
-
-
-<h1>Floating Windows</h1>
-
-<p>I had a request for floating windows and it's now in the app. <code>mod1 + t</code> can be
-used to toggle whether a window is tiled or floating. A floating window will not
-be tiled, but will be part of the focus chain.</p>
-
-<p>Additionally, you can supply a list of bundle identifiers for which windows will
-be floating by default. They can be specified by defining an array of bundle
-identifier strings under the <code>floating</code> key in your <code>.amethyst</code> file. Any
-application matching a bundle identifier in the list will have its windows float
-by default, though use of <code>mod1 + t</code> will tile it if you want. I find this quite
-useful for windows that Amethyst generally can't resize or position correctly
-(e.g., Photoshop).</p>
-</div>
-    
-    
-    
-
-</div>
-
-</article>
-
-
-<article>
-  <div class="article">
-  
-  <h1>
-    
-    <h1><a href="/blog/2013/06/05/accessibility/">Accessibility, Windows, and Spaces in OS X</a></h1>
-    
-    <hr>
-    
-    
-
-
-
-
-
-
-
-
-  
-
-<time class="byline left" datetime="2013-06-05T09:58:00-04:00" pubdate data-updated="true">Posted on June 05, 2013</time>
-    
     
     
     <div class="entry-content"><p>A couple weeks ago I decided to sit down and write a tiling window manager. As a
@@ -733,15 +353,26 @@ CFRelease(keyboardEventUp);
 </code></pre>
 </div>
     
-    
-    
 
 </div>
 
-</article>
-
-<div class="pagination">
+    <footer>
+      
+      <div class="sharing">
   
+  
+  
+</div>
+
+      
+      <p class="meta">
+	
+	
+        <a class="basic-alignment right" href="/blog/2013/08/19/amethyst-0-dot-8/" title="Next Post: Amethyst 0.8">Amethyst 0.8 &raquo;</a>
+	
+      </p>
+    </footer>
+  </article>
   
 </div>
 

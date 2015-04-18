@@ -1,0 +1,388 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Identifying Spaces in Mac OS X - Bias and Sandwiches</title>
+    <meta name="author" content="Ian Ynda-Hummel">
+
+    
+    <meta name="description" content="
+  
+    
+  
+  
+
+
+
+
+
+
+
+
+  
+
+Posted on September 24, 2013
+  
+  
+    
+    
+    I recently implemented a featured in Amethyst that
+allowed every space ...">
+    
+
+    <!-- http://t.co/dKP3o1e -->
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <link rel="canonical" href="http://ianyh.com/blog/2013/09/24/identifying-spaces-in-mac-os-x/">
+    <link href="/favicon.png" rel="icon">
+    <link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="" rel="alternate" title="Bias and Sandwiches" type="application/atom+xml">
+    <script src="/javascripts/modernizr-2.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="/javascripts/respond.js"></script>
+    <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+    <!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+    <!--[if lt IE 8]>
+	<link rel="stylesheet" href="stylesheets/ie.css">
+	<![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-12247677-3', 'ianyh.com');
+      ga('send', 'pageview');
+    </script>
+  </head>
+
+<body>
+  <div id="header">
+  <nav>
+    <li class="fork"><a href="/">Home</a></li>
+    <li class="downloads"><a href="/blog">Blog</a></li>
+    <li class="downloads"><a href="/assets/resume.pdf">Resume</a></li>
+  </nav>
+</div><!-- end header -->
+
+  <div class="wrapper">
+    
+    <section>
+      <div id="title">
+        <h1>Identifying Spaces in Mac OS X</h1>
+        
+      </div>
+      
+      <div>
+  <article class="hentry" role="article">
+    <div class="article">
+  
+  <h1>
+
+
+
+
+
+
+
+
+  
+
+<time class="byline" datetime="2013-09-24T22:42:00-04:00" pubdate data-updated="true">Posted on September 24, 2013</time></h1>
+  <hr>
+  
+    
+    
+    <div class="entry-content"><p>I recently implemented a featured in <a href="http://ianyh.com/amethyst/">Amethyst</a> that
+allowed every space to have its own unique set of resources. In implementing
+this feature I ran into a problem: how do you determine which space you're
+currently on?</p>
+
+<p>One might think that this would be a sensible piece of information to expose,
+but alas and alack it is hidden behind private APIs. So what is a
+tiling-window-management-inclined programmer to do? Dig into a bunch of weird
+pieces of public information. The first being the preferences of spaces itself.</p>
+
+<!--more-->
+
+
+<h1>Preferences on OS X</h1>
+
+<p>The first piece of information to know is how preferences work. Here's a
+lightning overview. You may be familiar with <code>NSUserDefaults</code>. It is used to
+store application preferences. By default it accesses the application's
+preferences, which are backed by a file in <code>~/Library/Preferences</code> named using
+your application's bundle identifier. Amethyst, for example, has a file at
+<code>~/Library/Preferences/com.amethyst.Amethyst.plist</code>.</p>
+
+<p>Additionally, <code>NSUserDefaults</code> has an interesting method
+<code>-[NSUserDefaults addSuiteNamed:]</code>, which takes a single argument called
+<code>suiteName</code>. From the docs</p>
+
+<blockquote><p>The suiteName domain is similar to a bundle identifier string, but is not tied
+to a particular application or bundle. A suite can be used to hold preferences
+that are shared between multiple applications.</p></blockquote>
+
+<p>How does this help us? Well, you can look for yourself and note that
+<code>~/Library/Preferences/com.apple.spaces.plist</code> exists. You can read that file
+using the <code>defaults</code> command.</p>
+
+<pre><code class="bash">$ defaults read com.apple.spaces
+</code></pre>
+
+<p>There's a whole bunch of data. And if you try
+<code>[[NSUserDefaults standardUserDefaults] addSuiteNamed:@"com.apple.spaces"]</code> you
+will indeed have access to all of that data. Progress!</p>
+
+<h1>Spaces Preferences</h1>
+
+<p>So let's dig into what's actually in the preferences. There's a list of spaces:</p>
+
+<pre><code class="objective-c">Spaces =                     (
+   {
+      id64 = 4;
+      pid =                             (
+         48173,
+         218
+      );
+      type = 2;
+      uuid = dashboard;
+   },
+   {
+      id64 = 3;
+      type = 0;
+      uuid = "";
+      wsid = 1;
+   },
+   {
+      id64 = 5;
+      type = 0;
+      uuid = "B8E129CC-DDDF-44D9-A583-6DE0FB39319E";
+   },
+   {
+      id64 = 7;
+      type = 0;
+      uuid = "21359712-DBFB-40AA-BAB5-87D1DDC6D442";
+   },
+   {
+      id64 = 6;
+      type = 0;
+      uuid = "956AEFA7-387D-463D-A90B-341E2137644A";
+   },
+   {
+      id64 = 8;
+      type = 0;
+      uuid = "599C0154-A9E1-4FD4-9489-54212240B3AE";
+   }
+)
+</code></pre>
+
+<p>Great. They've got uuids! We can use those as identifiers. And if we look
+closely there seems to even be a specific preference for the current space!</p>
+
+<pre><code class="objective-c">"Current Space" =                     {
+   id64 = 3;
+   type = 0;
+   uuid = "";
+   wsid = 1;
+};
+</code></pre>
+
+<p>Now just to confirm you can switch to a different space and read the defaults
+again and get:</p>
+
+<pre><code class="objective-c">"Current Space" =                     {
+   id64 = 3;
+   type = 0;
+   uuid = "";
+   wsid = 1;
+};
+</code></pre>
+
+<p>Wait. The <code>uuid</code> didn't change at all. What the hell? Okay, well, it's not going
+to be that easy. So let's look at something else. There's a list of windows in
+each space, that's promising.</p>
+
+<p>Here's an excerpt of what it looks like on my machine right now for one of my
+spaces:</p>
+
+<pre><code class="objective-c">{
+   name = "";
+   windows =                 (
+      70,
+      101,
+      102,
+      14747,
+      48
+   );
+}
+</code></pre>
+
+<p>Okay, so we've got a name which seems to be the space's uuid and a list of
+window numbers. That's useful. Maybe we can find the window numbers on the
+current space and use that to match up to a space identifier. So let's take a
+look at windows and window numbers.</p>
+
+<h1>Windows Of The Current Space</h1>
+
+<p>It turns out there is a public API for accessing all of the windows on the
+current space. It is done using the method</p>
+
+<pre><code class="objective-c">CFArrayRef CGWindowListCopyWindowInfo(CGWindowListOption option, CGWindowID relativeToWindow);
+</code></pre>
+
+<p>The options for <code>option</code> are</p>
+
+<pre><code class="objective-c">enum
+{
+   kCGWindowListOptionAll                 = 0,
+   kCGWindowListOptionOnScreenOnly        = (1 &lt;&lt; 0),
+   kCGWindowListOptionOnScreenAboveWindow = (1 &lt;&lt; 1),
+   kCGWindowListOptionOnScreenBelowWindow = (1 &lt;&lt; 2),
+   kCGWindowListOptionIncludingWindow     = (1 &lt;&lt; 3),
+   kCGWindowListExcludeDesktopElements    = (1 &lt;&lt; 4)
+}
+</code></pre>
+
+<p>We can not specify a <code>relativeToWindow</code> ID and use the option
+<code>kCGWindowListOptionOnScreenOnly</code> to get all windows that are on the screen
+right now. That means all the windows in the current space, as any other windows
+are not on screen.</p>
+
+<p>It gives you a bunch of dictionaries that look like</p>
+
+<pre><code class="objective-c">{
+   kCGWindowAlpha = 1;
+   kCGWindowBounds =         {
+      Height = 22;
+      Width = 212;
+      X = 1662;
+      Y = 0;
+   };
+   kCGWindowIsOnscreen = 1;
+   kCGWindowLayer = 25;
+   kCGWindowMemoryUsage = 30104;
+   kCGWindowName = "";
+   kCGWindowNumber = 14;
+   kCGWindowOwnerName = SystemUIServer;
+   kCGWindowOwnerPID = 99;
+   kCGWindowSharingState = 1;
+   kCGWindowStoreType = 2;
+}
+</code></pre>
+
+<p>which conveniently has a window number under the key <code>kCGWindowNumber</code>.</p>
+
+<h1>Putting It All Together</h1>
+
+<p>Okay, so we can get a list of windows connected to space uuids and we can get a
+list of windows on the current space. We should be able to cross-reference the
+lists to figure out the uuid of the current space. Great.</p>
+
+<p>But there's one subtle problem here. Windows can be on many spaces. So we have
+to make sure to ignore any windows on more than one space.</p>
+
+<p>The final code looks like:</p>
+
+<pre><code class="objective-c">- (NSString *)activeSpaceIdentifier {
+    [[NSUserDefaults standardUserDefaults] removeSuiteNamed:@"com.apple.spaces"];
+    [[NSUserDefaults standardUserDefaults] addSuiteNamed:@"com.apple.spaces"];
+
+    NSArray *spaceProperties = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"SpacesConfiguration"][@"Space Properties"];
+    NSMutableDictionary *spaceIdentifiersByWindowNumber = [NSMutableDictionary dictionary];
+    for (NSDictionary *spaceDictionary in spaceProperties) {
+        NSArray *windows = spaceDictionary[@"windows"];
+        for (NSNumber *window in windows) {
+            if (spaceIdentifiersByWindowNumber[window]) {
+                spaceIdentifiersByWindowNumber[window] = [spaceIdentifiersByWindowNumber[window] arrayByAddingObject:spaceDictionary[@"name"]];
+            } else {
+                spaceIdentifiersByWindowNumber[window] = @[ spaceDictionary[@"name"] ];
+            }
+        }
+    }
+
+    CFArrayRef windowDescriptions = CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID);
+    NSString *activeSpaceIdentifier = nil;
+
+    for (NSDictionary *dictionary in (__bridge NSArray *)windowDescriptions) {
+        NSNumber *windowNumber = dictionary[(__bridge NSString *)kCGWindowNumber];
+        NSArray *spaceIdentifiers = spaceIdentifiersByWindowNumber[windowNumber];
+
+        if (spaceIdentifiers.count == 1) {
+            activeSpaceIdentifier = spaceIdentifiers[0];
+            break;
+        }
+    }
+
+    CFRelease(windowDescriptions);
+
+    return activeSpaceIdentifier;
+}
+</code></pre>
+
+<p>But wait! What if there's no windows in a space? Well, it turns out that unless
+you're doing something really weird there's always <em>something</em> in every space
+because the system has a bunch of hidden windows you never see. If you're doing
+something really weird and you actually encounter a space with no windows in it
+I would love to hear about it.</p>
+</div>
+    
+
+</div>
+
+    <footer>
+      
+      <div class="sharing">
+  
+  
+  
+</div>
+
+      
+      <p class="meta">
+	
+        <a class="basic-alignment left" href="/blog/2013/09/23/amethyst-0-dot-8-1/" title="Previous Post: Amethyst 0.8.1">&laquo; Amethyst 0.8.1</a>
+	
+	
+      </p>
+    </footer>
+  </article>
+  
+</div>
+
+ 
+      <p>
+  <span class="credit left">Copyright &copy; 2015 - Ian Ynda-Hummel</span>
+  <span class="credit right">
+    Powered by <a href="http://octopress.org">Octopress</a> -
+    Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a>
+  </span>
+</p>
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+    </section>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,298 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Amethyst - Bias and Sandwiches</title>
+    <meta name="author" content="Ian Ynda-Hummel">
+
+    
+    <meta name="description" content="Overview
+
+
+
+Tiling window manager for OS X similar to xmonad, written in pure Objective-C.
+
+
+
+A quick screencast of basic functionality can be foun...">
+    
+
+    <!-- http://t.co/dKP3o1e -->
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <link rel="canonical" href="http://ianyh.com/amethyst/">
+    <link href="/favicon.png" rel="icon">
+    <link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="" rel="alternate" title="Bias and Sandwiches" type="application/atom+xml">
+    <script src="/javascripts/modernizr-2.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="/javascripts/respond.js"></script>
+    <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+    <!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+    <!--[if lt IE 8]>
+	<link rel="stylesheet" href="stylesheets/ie.css">
+	<![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-12247677-3', 'ianyh.com');
+      ga('send', 'pageview');
+    </script>
+  </head>
+
+<body>
+  <div id="header">
+  <nav>
+    <li class="fork"><a href="/">Home</a></li>
+    <li class="downloads"><a href="http://github.com/ianyh/Amethyst">View in Github</a></li>
+    <li class="downloads"><a href="/amethyst/versions/Amethyst-0.9.4.zip">Download (v 0.9.4)</a></li>
+  </nav>
+</div><!-- end header -->
+
+  <div class="wrapper">
+    
+    <section>
+      <div id="title">
+        <h1>Amethyst<img src="http://ianyh.com/amethyst/images/amethyst.png" /></h1>
+        <p>A tiling window manager for OS X</p>
+      </div>
+
+      <h1>Overview</h1>
+
+<p><a href="https://travis-ci.org/ianyh/Amethyst"><img src="https://travis-ci.org/ianyh/Amethyst.png?branch=master" alt="Build Status" /></a></p>
+
+<p>Tiling window manager for OS X similar to xmonad, written in pure Objective-C.</p>
+
+<p><img src="http://ianyh.com/amethyst/images/screenshot-small.png" alt="Screenshot" /></p>
+
+<p>A quick screencast of basic functionality can be found <a href="http://youtu.be/9ayUdV1sfjA">here</a>. (It's rough, and I'd love to see a better one if someone has the skills and inclination to make one.)</p>
+
+<h1>Getting Amethyst</h1>
+
+<p>Amethyst is available for direct download <a href="http://ianyh.com/amethyst/versions/Amethyst-latest.zip">here</a> or using <a href="https://github.com/phinze/homebrew-cask">homebrew cask</a>.</p>
+
+<pre><code>brew cask install amethyst
+</code></pre>
+
+<p>Note: that Amethyst now is only supported on OS X 10.9+. The last version that supports 10.8 can be found <a href="http://ianyh.com/amethyst/versions/Amethyst-0.8.2.zip">here</a>.</p>
+
+<h1>Troubleshooting</h1>
+
+<h2>I can't update to 0.9.4.</h2>
+
+<p>There seems to be a issue with how 0.9+ was signed. You may need to download it
+directly and install it that way.</p>
+
+<h2>Amethyst stopped working.</h2>
+
+<p>Try disabling and reenabling Accessibility permissions for Amethyst and then
+relaunch it. I know, it's arcane and weird but frequently fixes issues arrising
+from code signature issues, which may be the cause here.</p>
+
+<h2>I tried that and 0.9.4 is still broken.</h2>
+
+<p>If you need to downgrade version 0.8.6 can be downloaded
+<a href="http://ianyh.com/amethyst/versions/Amethyst-0.8.6.zip">here</a>. Otherwise feel
+free to open an issue or email me.</p>
+
+<h1>Using Amethyst</h1>
+
+<p>Amethyst must be given permissions to use the accessibility APIs under the Privacy tab of the Security &amp; Privacy preferences pane as shown below.</p>
+
+<p><img src="http://ianyh.com/amethyst/images/accessibility-window.png" alt="Accessibility permissions" /></p>
+
+<h2>Keyboard Shortcuts</h2>
+
+<p>Amethyst uses two modifier combinations.</p>
+
+<ul>
+<li><code>mod1</code> - <code>option + shift</code></li>
+<li><code>mod2</code> - <code>ctrl + option + shift</code></li>
+</ul>
+
+
+<p>And defines the following commands, mostly a mapping to xmonad key combinations.</p>
+
+<ul>
+<li><code>mod1 + space</code> — cycle to next layout</li>
+<li><code>mod2 + space</code> - cycle to previous layout</li>
+<li><code>mod1 + w</code> - focus 1st screen</li>
+<li><code>mod1 + e</code> - focus 2nd screen</li>
+<li><code>mod1 + r</code> - focus 3rd screen</li>
+<li><code>mod2 + w</code> - move focused window to 1st screen</li>
+<li><code>mod2 + e</code> - move focused window to 2nd screen</li>
+<li><code>mod2 + r</code> - move focused window to 3rd screen</li>
+<li><code>mod2 + [n]</code> - move focused window to nth space</li>
+<li><code>mod1 + h</code> - shrink the main pane</li>
+<li><code>mod1 + l</code> - expand the main pane</li>
+<li><code>mod1 + ,</code> - increase the number of windows in the main pane</li>
+<li><code>mod1 + .</code> - decrease the number of windows in the main pane</li>
+<li><code>mod1 + j</code> - focus the next window counterclockwise</li>
+<li><code>mod1 + k</code> - focus the next window clockwise</li>
+<li><code>mod2 + j</code> - move the focused window one space counterclockwise</li>
+<li><code>mod2 + k</code> - move the focused window one space clockwise</li>
+<li><code>mod1 + return</code> - swap the focused window with the main window</li>
+<li><code>mod1 + t</code> - toggle whether or not the focused window is floating</li>
+<li><code>mod2 + t</code> - toggle globally whether or not Amethyst tiles windows</li>
+<li><code>mod1 + i</code> - display the current layout for each screen</li>
+</ul>
+
+
+<h2>Setting Up Spaces Support</h2>
+
+<p>Spaces are, unfortunately, not supported right out of the box. To enable it you
+must activate Mission Control's keyboard shortcuts for switching to specific
+Desktops, as Mac OS X calls them. This option is in the Keyboard Shortcuts tab
+of the Keyboard preferences pane. The shortcuts will be of the form <code>ctrl +
+[n]</code>. Amethyst is only able to send a window to the <code>n</code>th space if the shortcut
+<code>ctrl + n</code> is enabled.</p>
+
+<p><img src="http://ianyh.com/amethyst/images/missioncontrol-shortcuts.png" alt="Mission Control keyboard shortcuts" /></p>
+
+<h2>Customization</h2>
+
+<p>Amethyst can be customized by creating a json file called <code>.amethyst</code> in your home directory. The structure and valid keys and whatnot are all defined in <a href="https://raw.githubusercontent.com/ianyh/Amethyst/master/Amethyst/default.amethyst">default.amethyst</a>.</p>
+
+<h3>Layouts</h3>
+
+<p>You can set the layouts you want to use by supplying a list of layout names under the "layouts" key. For example,</p>
+
+<pre><code class="js">"layouts": [
+    "tall",
+    "fullscreen",
+],
+</code></pre>
+
+<p>will restrict your layouts to the tall and fullscreen layouts. The available layouts are as follows:</p>
+
+<ul>
+<li><strong>Tall</strong> ("tall"): Defines a main area on the left and a secondary area on the right.</li>
+<li><strong>Wide</strong> ("wide"): Defines a main area on the top and a secondary column on the right.</li>
+<li><strong>Fullscreen</strong> ("fullscreen"): All windows are sized to fill the screen.</li>
+<li><strong>Column</strong> ("column"): All windows are distributed in evenly sized in columns from left to right.</li>
+<li><strong>Row</strong> ("row"): All windows are distributed in evenly sized rows from top to bottom.</li>
+<li><strong>Floating</strong> ("floating"): All windows are floating. (Useful if you want a space dedicated to floating windows.)</li>
+<li><strong>Widescreen Tall</strong> ("widescreen-tall"): Like Tall, but the main area uses columns and the secondary area uses rows.</li>
+</ul>
+
+
+<h3>Mouse Follows Focus</h3>
+
+<p>This setting can be enabled by changing the following line</p>
+
+<pre><code class="js">"mouse-follows-focus": false,
+</code></pre>
+
+<p>to</p>
+
+<pre><code class="js">"mouse-follows-focus": true,
+</code></pre>
+
+<p>in your <code>.amethyst</code> file.</p>
+
+<h3>Always float an app</h3>
+
+<p>You can set specific application to float by default, this can still be toggled by <code>mod1-t</code></p>
+
+<pre><code class="js">"floating": [
+    "com.apple.systempreferences"
+],
+</code></pre>
+
+<p>Get the required string for the app <code>osascript -e 'id of app "Finder"'</code>. Just replace <code>Finder</code> with the name of your app</p>
+
+<h3>Layout HUD</h3>
+
+<p>By default Amethyst pops up a HUD telling you the layout whenever the layout changes. You can disable it in your <code>.amethyst</code> file using the <code>enables-layout-hud</code> key. i.e.,</p>
+
+<pre><code class="js">"enables-layout-hud": false
+</code></pre>
+
+<p>By default the HUD will show when changing to a different space. You can disable the HUD during space changes, while still having it enabled when cycling or selecting a different layout, by using the <code>enables-layout-hud-on-space-change</code> key. i.e.,</p>
+
+<pre><code class="js">"enables-layout-hud-on-space-change": false
+</code></pre>
+
+<h1>Contributing</h1>
+
+<p>If you would like to see features or particular bugs fixed check out the Trello board <a href="https://trello.com/b/cCg3xhlb/amethyst">here</a> and vote on things. It'll give me a better sense of what people want so I can prioritize.</p>
+
+<p>I love pull requests. If you'd like to contribute please branch off of the <code>development</code> branch and open pull requests against it rather than master. Otherwise just try to stick to the general style of the code.</p>
+
+<h1>Contact</h1>
+
+<p>If you have questions or feedback you can <a href="mailto:ianynda@gmail.com">email me</a> or <a href="http://webchat.freenode.net/?channels=amethyst">drop by #amethyst on Freenode</a>.</p>
+
+<h1>Donating</h1>
+
+<p>Amethyst is free and always will be. That said, a couple of people have expressed their desire to donate money in appreciation. If you are so inclined I've set up two options:</p>
+
+<ul>
+<li>You can find a Patreon page <a href="http://www.patreon.com/ianyh">here</a> if you would like to pledge money regularly for releases.</li>
+<li>If you would like to do a one-time donation there's a PayPal button below. If there's some other method of donating that you would prefer open an issue and I'll try to add it!</li>
+</ul>
+
+
+<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=ianynda%40gmail%2ecom&amp;lc=US&amp;item_name=Ian%20Ynda%2dHummel&amp;item_number=Amethyst&amp;currency_code=USD&amp;bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted"><img src="http://img.shields.io/paypal/donate.png?color=blue" alt="PayPal Donate" /></a></p>
+
+<p>If you are considering donating to me, you are more than welcome to. You should also consider donating that money to a charity in addition to or instead. Here's a very incomplete list of things that you might want to throw money at:</p>
+
+<ul>
+<li><a href="https://secure.freedomtomarry.org/pages/donatetowin?source=BSDAds_GoogleGrant_EOY2013_Freedom%20to%20Marry-GG_Freedom%20to%20Marry_freedomtomarry&amp;gclid=Cj0KEQjwq52iBRDEvrC12Jnz6coBEiQA2otXAsmb9ggRZp1ukDdxwvn7Y-1AN7mhTPZxcpC3dNokzY8aAmcl8P8HAQ">Freedom to Marry</a></li>
+<li><a href="https://donate.doctorswithoutborders.org/monthly.cfm?source=AZD140001D51&amp;utm_source=google&amp;utm_medium=ppc&amp;gclid=Cj0KEQjwq52iBRDEvrC12Jnz6coBEiQA2otXAt-jLIelzmFWTo9t3xnrXGnyjffRnHQ_Ug2o6C1PdvkaAqQt8P8HAQ">Doctors Without Borders</a></li>
+<li><a href="https://www.aclu.org/secure/our-civil-liberties-are-under-attack-3?s_src=UNW140001SEM&amp;ms=gad_SEM_Google_Search-Evergreen-ACLU%20Brand_ACLU%20Name%20Terms_DD_B2_aclu_e_53001180982">American Civil Liberties Union</a></li>
+<li><a href="http://www.heifer.org/what-you-can-do/index.html">Heifer International</a></li>
+</ul>
+
+
+<p>And a bunch of technology-oriented ones:</p>
+
+<ul>
+<li><a href="https://adainitiative.org/donate/">Ada Initiative</a></li>
+<li><a href="http://www.ncwit.org/donate">National Center for Women &amp; Information Technology</a></li>
+<li><a href="http://girlswhocode.com/get-involved/">girls who code</a></li>
+<li><a href="https://www.indiegogo.com/projects/mothercoders-a-giant-hack-for-moms-who-want-in">MotherCoders</a></li>
+<li><a href="http://www.transhack.org/support/">Trans*H4CK</a></li>
+<li><a href="http://www.blackgirlscode.com/">Black Girls CODE</a></li>
+</ul>
+
+
+ 
+      <p>
+  <span class="credit left">Copyright &copy; 2015 - Ian Ynda-Hummel</span>
+  <span class="credit right">
+    Powered by <a href="http://octopress.org">Octopress</a> -
+    Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a>
+  </span>
+</p>
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+    </section>
+
+  </div>
+</body>
+</html>
