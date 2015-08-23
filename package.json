@@ -1,0 +1,23 @@
+{
+  "name": "ianyh.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "metalsmith": "^2.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ianyh/ianyh.github.io.git"
+  },
+  "author": "Ian Ynda-Hummel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ianyh/ianyh.github.io/issues"
+  },
+  "homepage": "https://github.com/ianyh/ianyh.github.io#readme"
+}
