@@ -4,15 +4,24 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "jade": "^1.11.0",
     "metalsmith": "^2.0.1",
+    "metalsmith-branch": "0.0.4",
     "metalsmith-collections": "^0.7.0",
     "metalsmith-excerpts": "^1.0.0",
+    "metalsmith-markdown": "^0.2.1",
     "metalsmith-permalinks": "^0.4.0",
     "metalsmith-serve": "0.0.3",
     "metalsmith-templates": "^0.7.0",
+    "metalsmith-watch": "^1.0.1",
     "moment": "^2.10.6"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-eslint": "^4.0.10",
+    "eslint": "^1.2.1",
+    "eslint-config-airbnb": "0.0.8",
+    "eslint-plugin-react": "^3.2.3"
+  },
   "scripts": {
     "test": "test"
   },

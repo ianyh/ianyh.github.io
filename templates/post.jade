@@ -1,0 +1,7 @@
+extends layout
+
+block main
+	article#article
+		h1= title
+		.byline By #{author} | Published #{moment(publishDate).format('M.D.YYYY')}
+		.content!= contents
