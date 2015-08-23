@@ -4,6 +4,7 @@ const collections = require('metalsmith-collections');
 const excerpts = require('metalsmith-excerpts');
 const markdown = require('metalsmith-markdown');
 const permalinks = require('metalsmith-permalinks');
+const sass = require('metalsmith-sass');
 const serve = require('metalsmith-serve');
 const templates = require('metalsmith-templates');
 const watch = require('metalsmith-watch');
@@ -38,6 +39,11 @@ metalsmith(__dirname)
 			relative: false
 		})))
 	)
+	.use(sass({
+		includePaths: [
+			'./styles'
+		]
+	}))
 	.use(templates({
 		engine: 'jade',
 		moment: moment
