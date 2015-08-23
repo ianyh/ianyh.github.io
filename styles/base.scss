@@ -1,5 +1,12 @@
+@import 'normalize';
+@import 'skeleton';
+
 $background-color: #e6fafc;
 
 body {
 	background-color: $background-color;
+}
+
+.index-main {
+	padding: 50px;
 }

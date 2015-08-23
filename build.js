@@ -53,7 +53,11 @@ metalsmith(__dirname)
 		verbose: true
 	}))
 	.use(watch({
-		pattern: '**/*',
+		paths: {
+			'source/**/*': '**/*',
+			'templates/**/*': '**/*',
+			'styles/**/*': '**/*'
+		},
 		livereload: true
 	}))
 	.build(function build(err) {
