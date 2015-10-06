@@ -2,11 +2,23 @@
 @import 'skeleton';
 
 $background-color: #e6fafc;
+$header-color: #2e86ab;
+$color: #2f4858;
 
 body {
 	background-color: $background-color;
+	color: $color;
+}
+
+a {
+	color: $color;
 }
 
 .index-main {
-	padding: 50px;
+	margin: 50px;
+	// padding: 50px;
+	.username {
+		text-align: right;
+		padding: 10px;
+	}
 }
