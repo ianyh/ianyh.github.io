@@ -313,7 +313,7 @@
         type="application/octet-stream"
         />
     </item>
-    <!-- <item>
+    <item>
         <title>Version 0.9.5</title>
         <description>
         </description>
@@ -323,9 +323,9 @@
         <enclosure url="http://ianyh.com/amethyst/versions/Amethyst-0.9.5.zip"
         sparkle:version="23"
         sparkle:shortVersionString="0.9.5"
-        length="1836104"
+        length="1846954"
         type="application/octet-stream"
         />
-    </item> -->
+    </item>
   </channel>
 </rss>
