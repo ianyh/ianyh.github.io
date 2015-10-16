@@ -313,7 +313,7 @@
         type="application/octet-stream"
         />
     </item>
-    <item>
+    <!-- <item>
         <title>Version 0.9.5</title>
         <description>
         </description>
@@ -326,6 +326,6 @@
         length="1836104"
         type="application/octet-stream"
         />
-    </item>
+    </item> -->
   </channel>
 </rss>
