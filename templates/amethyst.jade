@@ -1,0 +1,21 @@
+extends layout
+
+block styles
+	link(href="https://fonts.googleapis.com/css?family=Open+Sans:400,300" rel="stylesheet" type="text/css")
+	link(href="/css/amethyst.css" rel="stylesheet" type="text/css")
+
+block js
+	script(src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js")
+
+block main
+	.row: .twelve.columns
+		header.header
+			.title
+				= title
+				img(src="/images/amethyst.png")
+			.subtitle= subtitle
+			.download
+				a.button.button-primary.button-download(href="/amethyst/versions/Amethyst-latest.zip")
+					| Download 0.9.6
+		section: article
+			.content!= contents

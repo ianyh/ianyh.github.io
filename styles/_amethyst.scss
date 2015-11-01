@@ -1,0 +1,99 @@
+@import 'base';
+@import 'hopscotch';
+
+$main-bg: #252525;
+
+body {
+	padding: 20px 0 20px 0;
+	margin: 0px;
+	font: 14px/1.5 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	color: #f0e7d5;
+	font-weight: normal;
+	background: $main-bg;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: #e8e8e8;
+	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-weight: normal;
+}
+
+p, ul, ol, table, pre, dl {
+	margin:0 0 20px;
+}
+
+h1, h2, h3 {
+	line-height:1.2;
+}
+
+.header {
+	color: #e8e8e8;
+	text-align: center;	
+	margin: 20px 0;
+}
+
+.title, .subtitle {
+	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-weight: 300;
+}
+
+.title {
+	font-size: 3.5rem;
+}
+
+.subtitle {
+	color: #d7cfbe;
+	font-size: 1.5rem;
+}
+
+a {
+	color: #ffcc00;
+	font-weight: 400;
+	text-decoration: none;
+
+	&:hover {
+		color: #ffeb9b;
+	}
+}
+
+strong {
+	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-weight: normal;
+}
+
+img {
+	max-width: 100%;
+}
+
+pre {
+	background: #191919;
+	overflow: scroll;
+	overflow-y: auto;
+	overflow-x: auto;
+	margin: 5px 5px 20px 5px;
+}
+
+code {
+	background: none;
+	border: 0;
+}
+
+section {
+	max-width: 650px;
+	padding: 30px 0px 0px 0px;
+	margin: auto;
+}
+
+.download {
+	margin: 40px 0 0 0;
+}
+
+.button.button-primary {
+	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	background-color: #93bd20;
+	border-color: #93bd20;
+	&:hover {
+		background-color: lighten(#93bd20, 5%);
+		border-color: lighten(#93bd20, 5%);
+	}
+}

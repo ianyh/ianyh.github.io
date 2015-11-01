@@ -8,6 +8,9 @@ const sass = require('metalsmith-sass');
 const serve = require('metalsmith-serve');
 const templates = require('metalsmith-templates');
 const watch = require('metalsmith-watch');
+const highlight = require('metalsmith-code-highlight');
+
+const bourbon = require('bourbon');
 const moment = require('moment');
 
 metalsmith(__dirname)
@@ -20,6 +23,9 @@ metalsmith(__dirname)
 	.source('./source')
 	.destination('./build')
 	.use(markdown())
+	.use(highlight({
+		languages: []
+	}))
 	.use(excerpts())
 	.use(collections({
 		posts: {
@@ -42,7 +48,8 @@ metalsmith(__dirname)
 	.use(sass({
 		includePaths: [
 			'./styles'
-		]
+		].concat(bourbon.includePaths),
+		outputStyle: 'expanded'
 	}))
 	.use(templates({
 		engine: 'jade',
