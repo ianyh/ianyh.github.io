@@ -1,0 +1,34 @@
+@import 'base';
+
+$color: #272D2D;
+$anchor-color: #3D5A6C;
+
+body {
+	color: $color;
+}
+
+a {
+	color: lighten($anchor-color, 30%);
+	text-decoration: none;
+	&:hover {
+		color: $anchor-color;
+	}
+}
+
+.index-main {
+	max-width: 500px;
+	margin: 50px auto;
+}
+
+.username {
+	font-family: 'Cardo', serif;
+	color: $color;
+	text-align: left;
+	padding: 0 10px 10px 0;
+}
+
+@media (min-width: 550px) {
+	.username {
+		text-align: right;
+	}
+}
