@@ -1,7 +1,17 @@
-extends layout
+extends main
 
 block main
-	article#article
-		h1= title
-		.byline By #{author} | Published #{moment(publishDate).format('M.D.YYYY')}
-		.content!= contents
+	.row.main: .twelve.columns
+		header
+			h1: a(href="/posts") Bias and Sandwiches
+
+		section
+			article#article
+				header
+					h1= title
+				section
+					.byline
+						time #{moment(publishDate).format('M.D.YYYY')}
+						span  by #{author}
+				section
+					.content!= contents

@@ -1,4 +1,5 @@
 @import 'base';
+@import 'hopscotch';
 
 $color: #272D2D;
 $anchor-color: #3D5A6C;
@@ -15,9 +16,34 @@ a {
 	}
 }
 
-.index-main {
-	max-width: 500px;
+pre {
+	background: #322931;
+}
+
+pre > code {
+	@extend .hljs;
+	background: none;
+	border: 0;
+}
+
+.main {
+	max-width: 800px;
 	margin: 50px auto;
+	&.index {
+		max-width: 500px;
+	}
+}
+
+.posts {
+	.byline {
+		padding-top: 0;
+	}
+	hr {
+		width: 75%;
+		&:last-child {
+			display: none;
+		}
+	}
 }
 
 .username {
@@ -25,6 +51,12 @@ a {
 	color: $color;
 	text-align: left;
 	padding: 0 10px 10px 0;
+}
+
+.byline {
+	opacity: 0.4;
+	font-size: 1.2rem;
+	padding: 10px 0;
 }
 
 @media (min-width: 550px) {
