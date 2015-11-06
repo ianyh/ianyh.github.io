@@ -29,18 +29,18 @@ metalsmith(__dirname)
 	.use(excerpts())
 	.use(collections({
 		posts: {
-			pattern: 'posts/**.html',
+			pattern: 'blog/**.html',
 			sortBy: 'publishDate',
 			reverse: true
 		}
 	}))
-	.use(branch('posts/**.html')
+	.use(branch('blog/**.html')
 		.use(permalinks({
-			pattern: 'posts/:title',
+			pattern: 'blog/:title',
 			relative: false
 		}))
 	)
-	.use(branch('!posts/**.html')
+	.use(branch('!blog/**.html')
 		.use(branch('!index.md').use(permalinks({
 			relative: false
 		})))

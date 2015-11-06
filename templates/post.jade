@@ -3,15 +3,14 @@ extends main
 block main
 	.row.main: .twelve.columns
 		header
-			h1: a(href="/posts") Bias and Sandwiches
+			h1: a(href="/blog") Bias and Sandwiches
 
 		section
 			article#article
 				header
-					h1= title
+					h1.title= title
 				section
 					.byline
 						time #{moment(publishDate).format('M.D.YYYY')}
-						span  by #{author}
 				section
 					.content!= contents
