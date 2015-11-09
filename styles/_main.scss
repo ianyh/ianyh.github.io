@@ -37,6 +37,13 @@ aside {
 	}
 }
 
+.pinned-aside {
+	display: none;
+	position: fixed;
+	top: 12px;
+	right: 15px;
+}
+
 .header {
 	text-align: center;
 	padding: 30px 0 0;
@@ -87,6 +94,12 @@ aside {
 @media (min-width: 550px) {
 	.main {
 		margin: 50px auto;
+	}
+	.pinned-aside {
+		display: block;
+	}
+	.relative-aside {
+		display: none;
 	}
 	.username {
 		text-align: right;
