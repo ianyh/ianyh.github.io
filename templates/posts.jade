@@ -11,7 +11,7 @@ block main
 	.row
 		.ten.columns
 			header.header
-				h2.title Bias and Sandwiches
+				h2.title: a(href="/blog") Bias and Sandwiches
 				h6.subtitle I say things sometimes, I guess
 	.row.main
 		.two.columns.u-pull-right
@@ -23,16 +23,17 @@ block main
 					a(href="https://twitter.com/ianyh"): i.fa.fa-twitter-square.fa-lg
 					a(href="https://github.com/ianyh"): i.fa.fa-github.fa-lg
 		.ten.columns
-			section
-				if collections.posts && collections.posts.length > 0
-					.posts
-						each post in collections.posts
-							article
-								header
-									h2.title: a(href="/"+post.path)!= post.title
-								section
-									.byline
-										time #{moment(post.publishDate).format('M.D.YYYY')}
-								section
-									.excerpt!= post.excerpt
-							hr
+			block postscontent
+				section
+					if collections.posts && collections.posts.length > 0
+						.posts
+							each post in collections.posts
+								article
+									header
+										h2.title: a(href="/"+post.path)!= post.title
+									section
+										.byline
+											time #{moment(post.publishDate).format('M.D.YYYY')}
+									section
+										.excerpt!= post.excerpt
+								hr

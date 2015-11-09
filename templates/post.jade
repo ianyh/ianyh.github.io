@@ -1,16 +1,13 @@
-extends main
+//- extends main
+extends posts
 
-block main
-	.row.main: .twelve.columns
-		header
-			h1: a(href="/blog") Bias and Sandwiches
-
-		section
-			article#article
-				header
-					h1.title= title
-				section
-					.byline
-						time #{moment(publishDate).format('M.D.YYYY')}
-				section
-					.content!= contents
+block postscontent
+	section
+		article#article
+			header
+				h1.title= title
+			section
+				.byline
+					time #{moment(publishDate).format('M.D.YYYY')}
+			section
+				.content!= contents
