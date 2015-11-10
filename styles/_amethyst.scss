@@ -76,6 +76,13 @@ pre {
 code {
 	background: none;
 	border: 0;
+	color: white;
+}
+
+pre > code {
+	@extend .hljs;
+	background: none;
+	border: 0;
 }
 
 section {
