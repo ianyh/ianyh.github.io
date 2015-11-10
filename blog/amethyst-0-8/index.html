@@ -1,0 +1,18 @@
+<!DOCTYPE html><html><head><title>Amethyst 0.8 | ianyh</title><link href="https://fonts.googleapis.com/css?family=Cardo|Raleway" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet"><link href="/css/main.css" rel="stylesheet" type="text/css"></head><body><div class="container"><aside class="pinned-aside"><h2 class="username"><a href="/">ianyh</a></h2><div class="social"><a href="mailto:ianynda@gmail.com"><i class="fa fa-envelope fa-lg"></i></a><a href="https://twitter.com/ianyh"><i class="fa fa-twitter-square fa-lg"></i></a><a href="https://github.com/ianyh"><i class="fa fa-github fa-lg"></i></a></div></aside><div class="row main"><div class="ten columns"><header class="header"><h2 class="title"><a href="/blog">Bias and Sandwiches</a></h2><h6 class="subtitle">I say things sometimes, I guess</h6></header></div></div><div class="row main posts"><div class="two columns u-pull-right"><aside class="relative-aside"><h2 class="username"><a href="/">ianyh</a></h2><div class="social"><a href="mailto:ianynda@gmail.com"><i class="fa fa-envelope fa-lg"></i></a><a href="https://twitter.com/ianyh"><i class="fa fa-twitter-square fa-lg"></i></a><a href="https://github.com/ianyh"><i class="fa fa-github fa-lg"></i></a></div></aside></div><div class="ten columns"><section><article id="article"><header><h1 class="title">Amethyst 0.8</h1></header><section><div class="byline"><time>8.18.2013</time></div></section><section><div class="content"><p>Released Amethyst version 0.8 yesterday. It has some significant improvements to
+stability as well as adding a few new features. There's a new column layout that
+tiles windows into full height columns and the addition of floating windows. It
+can be downloaded <a href="http://ianyh.com/Amethyst/versions/Amethyst-0.8.zip">here</a> or
+installed via <a href="https://github.com/phinze/homebrew-cask">homebrew cask</a>.</p>
+<!--more-->
+<h1 id="floating-windows">Floating Windows</h1>
+<p>I had a request for floating windows and it's now in the app. <code>mod1 + t</code> can be
+used to toggle whether a window is tiled or floating. A floating window will not
+be tiled, but will be part of the focus chain.</p>
+<p>Additionally, you can supply a list of bundle identifiers for which windows will
+be floating by default. They can be specified by defining an array of bundle
+identifier strings under the <code>floating</code> key in your <code>.amethyst</code> file. Any
+application matching a bundle identifier in the list will have its windows float
+by default, though use of <code>mod1 + t</code> will tile it if you want. I find this quite
+useful for windows that Amethyst generally can't resize or position correctly
+(e.g., Photoshop).</p>
+</div></section></article></section></div></div></div></body></html>

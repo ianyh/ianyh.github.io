@@ -1,0 +1,199 @@
+<!DOCTYPE html><html><head><title>Identifying Spaces in Mac OS X | ianyh</title><link href="https://fonts.googleapis.com/css?family=Cardo|Raleway" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet"><link href="/css/main.css" rel="stylesheet" type="text/css"></head><body><div class="container"><aside class="pinned-aside"><h2 class="username"><a href="/">ianyh</a></h2><div class="social"><a href="mailto:ianynda@gmail.com"><i class="fa fa-envelope fa-lg"></i></a><a href="https://twitter.com/ianyh"><i class="fa fa-twitter-square fa-lg"></i></a><a href="https://github.com/ianyh"><i class="fa fa-github fa-lg"></i></a></div></aside><div class="row main"><div class="ten columns"><header class="header"><h2 class="title"><a href="/blog">Bias and Sandwiches</a></h2><h6 class="subtitle">I say things sometimes, I guess</h6></header></div></div><div class="row main posts"><div class="two columns u-pull-right"><aside class="relative-aside"><h2 class="username"><a href="/">ianyh</a></h2><div class="social"><a href="mailto:ianynda@gmail.com"><i class="fa fa-envelope fa-lg"></i></a><a href="https://twitter.com/ianyh"><i class="fa fa-twitter-square fa-lg"></i></a><a href="https://github.com/ianyh"><i class="fa fa-github fa-lg"></i></a></div></aside></div><div class="ten columns"><section><article id="article"><header><h1 class="title">Identifying Spaces in Mac OS X</h1></header><section><div class="byline"><time>9.23.2013</time></div></section><section><div class="content"><p>I recently implemented a featured in <a href="http://ianyh.com/amethyst/">Amethyst</a> that
+allowed every space to have its own unique set of resources. In implementing
+this feature I ran into a problem: how do you determine which space you're
+currently on?</p>
+<p>One might think that this would be a sensible piece of information to expose,
+but alas and alack it is hidden behind private APIs. So what is a
+tiling-window-management-inclined programmer to do? Dig into a bunch of weird
+pieces of public information. The first being the preferences of spaces itself.</p>
+<!--more-->
+<h1 id="preferences-on-os-x">Preferences on OS X</h1>
+<p>The first piece of information to know is how preferences work. Here's a
+lightning overview. You may be familiar with <code>NSUserDefaults</code>. It is used to
+store application preferences. By default it accesses the application's
+preferences, which are backed by a file in <code>~/Library/Preferences</code> named using
+your application's bundle identifier. Amethyst, for example, has a file at
+<code>~/Library/Preferences/com.amethyst.Amethyst.plist</code>. </p>
+<p>Additionally, <code>NSUserDefaults</code> has an interesting method
+<code>-[NSUserDefaults addSuiteNamed:]</code>, which takes a single argument called
+<code>suiteName</code>. From the docs</p>
+<blockquote>
+<p>The suiteName domain is similar to a bundle identifier string, but is not tied
+to a particular application or bundle. A suite can be used to hold preferences
+that are shared between multiple applications.</p>
+</blockquote>
+<p>How does this help us? Well, you can look for yourself and note that
+<code>~/Library/Preferences/com.apple.spaces.plist</code> exists. You can read that file
+using the <code>defaults</code> command.</p>
+<pre><code class="lang-bash">$ defaults <span class="hljs-built_in">read</span> com.apple.spaces
+</code></pre>
+<p>There's a whole bunch of data. And if you try
+<code>[[NSUserDefaults standardUserDefaults] addSuiteNamed:@"com.apple.spaces"]</code> you
+will indeed have access to all of that data. Progress!</p>
+<h1 id="spaces-preferences">Spaces Preferences</h1>
+<p>So let's dig into what's actually in the preferences. There's a list of spaces:</p>
+<pre><code class="lang-objectivec">Spaces =                     (
+   {
+      id64 = <span class="hljs-number">4</span>;
+      pid =                             (
+         <span class="hljs-number">48173</span>,
+         <span class="hljs-number">218</span>
+      );
+      type = <span class="hljs-number">2</span>;
+      uuid = dashboard;
+   },
+   {
+      id64 = <span class="hljs-number">3</span>;
+      type = <span class="hljs-number">0</span>;
+      uuid = <span class="hljs-string">""</span>;
+      wsid = <span class="hljs-number">1</span>;
+   },
+   {
+      id64 = <span class="hljs-number">5</span>;
+      type = <span class="hljs-number">0</span>;
+      uuid = <span class="hljs-string">"B8E129CC-DDDF-44D9-A583-6DE0FB39319E"</span>;
+   },
+   {
+      id64 = <span class="hljs-number">7</span>;
+      type = <span class="hljs-number">0</span>;
+      uuid = <span class="hljs-string">"21359712-DBFB-40AA-BAB5-87D1DDC6D442"</span>;
+   },
+   {
+      id64 = <span class="hljs-number">6</span>;
+      type = <span class="hljs-number">0</span>;
+      uuid = <span class="hljs-string">"956AEFA7-387D-463D-A90B-341E2137644A"</span>;
+   },
+   {
+      id64 = <span class="hljs-number">8</span>;
+      type = <span class="hljs-number">0</span>;
+      uuid = <span class="hljs-string">"599C0154-A9E1-4FD4-9489-54212240B3AE"</span>;
+   }
+)
+</code></pre>
+<p>Great. They've got uuids! We can use those as identifiers. And if we look
+closely there seems to even be a specific preference for the current space!</p>
+<pre><code class="lang-objectivec"><span class="hljs-string">"Current Space"</span> =                     {
+   id64 = <span class="hljs-number">3</span>;
+   type = <span class="hljs-number">0</span>;
+   uuid = <span class="hljs-string">""</span>;
+   wsid = <span class="hljs-number">1</span>;
+};
+</code></pre>
+<p>Now just to confirm you can switch to a different space and read the defaults
+again and get:</p>
+<pre><code class="lang-objectivec"><span class="hljs-string">"Current Space"</span> =                     {
+   id64 = <span class="hljs-number">3</span>;
+   type = <span class="hljs-number">0</span>;
+   uuid = <span class="hljs-string">""</span>;
+   wsid = <span class="hljs-number">1</span>;
+};
+</code></pre>
+<p>Wait. The <code>uuid</code> didn't change at all. What the hell? Okay, well, it's not going
+to be that easy. So let's look at something else. There's a list of windows in
+each space, that's promising.</p>
+<p>Here's an excerpt of what it looks like on my machine right now for one of my
+spaces:</p>
+<pre><code class="lang-objectivec">{
+   name = <span class="hljs-string">""</span>;
+   windows =                 (
+      <span class="hljs-number">70</span>,
+      <span class="hljs-number">101</span>,
+      <span class="hljs-number">102</span>,
+      <span class="hljs-number">14747</span>,
+      <span class="hljs-number">48</span>
+   );
+}
+</code></pre>
+<p>Okay, so we've got a name which seems to be the space's uuid and a list of
+window numbers. That's useful. Maybe we can find the window numbers on the
+current space and use that to match up to a space identifier. So let's take a
+look at windows and window numbers.</p>
+<h1 id="windows-of-the-current-space">Windows Of The Current Space</h1>
+<p>It turns out there is a public API for accessing all of the windows on the
+current space. It is done using the method</p>
+<pre><code class="lang-objectivec"><span class="hljs-built_in">CFArrayRef</span> <span class="hljs-built_in">CGWindowListCopyWindowInfo</span>(<span class="hljs-built_in">CGWindowListOption</span> option, <span class="hljs-built_in">CGWindowID</span> relativeToWindow);
+</code></pre>
+<p>The options for <code>option</code> are</p>
+<pre><code class="lang-objectivec"><span class="hljs-keyword">enum</span>
+{
+   k<span class="hljs-built_in">CGWindowListOptionAll</span>                 = <span class="hljs-number">0</span>,
+   k<span class="hljs-built_in">CGWindowListOptionOnScreenOnly</span>        = (<span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">0</span>),
+   k<span class="hljs-built_in">CGWindowListOptionOnScreenAboveWindow</span> = (<span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">1</span>),
+   k<span class="hljs-built_in">CGWindowListOptionOnScreenBelowWindow</span> = (<span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">2</span>),
+   k<span class="hljs-built_in">CGWindowListOptionIncludingWindow</span>     = (<span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">3</span>),
+   k<span class="hljs-built_in">CGWindowListExcludeDesktopElements</span>    = (<span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">4</span>)
+}
+</code></pre>
+<p>We can not specify a <code>relativeToWindow</code> ID and use the option
+<code>kCGWindowListOptionOnScreenOnly</code> to get all windows that are on the screen
+right now. That means all the windows in the current space, as any other windows
+are not on screen.</p>
+<p>It gives you a bunch of dictionaries that look like</p>
+<pre><code class="lang-objectivec">{
+   k<span class="hljs-built_in">CGWindowAlpha</span> = <span class="hljs-number">1</span>;
+   k<span class="hljs-built_in">CGWindowBounds</span> =         {
+      Height = <span class="hljs-number">22</span>;
+      Width = <span class="hljs-number">212</span>;
+      X = <span class="hljs-number">1662</span>;
+      Y = <span class="hljs-number">0</span>;
+   };
+   k<span class="hljs-built_in">CGWindowIsOnscreen</span> = <span class="hljs-number">1</span>;
+   k<span class="hljs-built_in">CGWindowLayer</span> = <span class="hljs-number">25</span>;
+   k<span class="hljs-built_in">CGWindowMemoryUsage</span> = <span class="hljs-number">30104</span>;
+   k<span class="hljs-built_in">CGWindowName</span> = <span class="hljs-string">""</span>;
+   k<span class="hljs-built_in">CGWindowNumber</span> = <span class="hljs-number">14</span>;
+   k<span class="hljs-built_in">CGWindowOwnerName</span> = System<span class="hljs-built_in">UIServer</span>;
+   k<span class="hljs-built_in">CGWindowOwnerPID</span> = <span class="hljs-number">99</span>;
+   k<span class="hljs-built_in">CGWindowSharingState</span> = <span class="hljs-number">1</span>;
+   k<span class="hljs-built_in">CGWindowStoreType</span> = <span class="hljs-number">2</span>;
+}
+</code></pre>
+<p>which conveniently has a window number under the key <code>kCGWindowNumber</code>.</p>
+<h1 id="putting-it-all-together">Putting It All Together</h1>
+<p>Okay, so we can get a list of windows connected to space uuids and we can get a
+list of windows on the current space. We should be able to cross-reference the
+lists to figure out the uuid of the current space. Great.</p>
+<p>But there's one subtle problem here. Windows can be on many spaces. So we have
+to make sure to ignore any windows on more than one space.</p>
+<p>The final code looks like:</p>
+<pre><code class="lang-objectivec">- (<span class="hljs-built_in">NSString</span> *)activeSpaceIdentifier {
+    [[<span class="hljs-built_in">NSUserDefaults</span> standardUserDefaults] removeSuiteNamed:<span class="hljs-string">@"com.apple.spaces"</span>];
+    [[<span class="hljs-built_in">NSUserDefaults</span> standardUserDefaults] addSuiteNamed:<span class="hljs-string">@"com.apple.spaces"</span>];
+
+    <span class="hljs-built_in">NSArray</span> *spaceProperties = [[<span class="hljs-built_in">NSUserDefaults</span> standardUserDefaults] dictionaryForKey:<span class="hljs-string">@"SpacesConfiguration"</span>][<span class="hljs-string">@"Space Properties"</span>];
+    <span class="hljs-built_in">NSMutableDictionary</span> *spaceIdentifiersByWindowNumber = [<span class="hljs-built_in">NSMutableDictionary</span> dictionary];
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">NSDictionary</span> *spaceDictionary <span class="hljs-keyword">in</span> spaceProperties) {
+        <span class="hljs-built_in">NSArray</span> *windows = spaceDictionary[<span class="hljs-string">@"windows"</span>];
+        <span class="hljs-keyword">for</span> (<span class="hljs-built_in">NSNumber</span> *window <span class="hljs-keyword">in</span> windows) {
+            <span class="hljs-keyword">if</span> (spaceIdentifiersByWindowNumber[window]) {
+                spaceIdentifiersByWindowNumber[window] = [spaceIdentifiersByWindowNumber[window] arrayByAddingObject:spaceDictionary[<span class="hljs-string">@"name"</span>]];
+            } <span class="hljs-keyword">else</span> {
+                spaceIdentifiersByWindowNumber[window] = @[ spaceDictionary[<span class="hljs-string">@"name"</span>] ];
+            }
+        }
+    }
+
+    <span class="hljs-built_in">CFArrayRef</span> windowDescriptions = <span class="hljs-built_in">CGWindowListCopyWindowInfo</span>(k<span class="hljs-built_in">CGWindowListOptionOnScreenOnly</span>, k<span class="hljs-built_in">CGNullWindowID</span>);
+    <span class="hljs-built_in">NSString</span> *activeSpaceIdentifier = <span class="hljs-literal">nil</span>;
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">NSDictionary</span> *dictionary <span class="hljs-keyword">in</span> (__bridge <span class="hljs-built_in">NSArray</span> *)windowDescriptions) {
+        <span class="hljs-built_in">NSNumber</span> *windowNumber = dictionary[(__bridge <span class="hljs-built_in">NSString</span> *)k<span class="hljs-built_in">CGWindowNumber</span>];
+        <span class="hljs-built_in">NSArray</span> *spaceIdentifiers = spaceIdentifiersByWindowNumber[windowNumber];
+
+        <span class="hljs-keyword">if</span> (spaceIdentifiers<span class="hljs-variable">.count</span> == <span class="hljs-number">1</span>) {
+            activeSpaceIdentifier = spaceIdentifiers[<span class="hljs-number">0</span>];
+            <span class="hljs-keyword">break</span>;
+        }
+    }
+
+    <span class="hljs-built_in">CFRelease</span>(windowDescriptions);
+
+    <span class="hljs-keyword">return</span> activeSpaceIdentifier;
+}
+</code></pre>
+<p>But wait! What if there's no windows in a space? Well, it turns out that unless
+you're doing something really weird there's always <em>something</em> in every space
+because the system has a bunch of hidden windows you never see. If you're doing
+something really weird and you actually encounter a space with no windows in it
+I would love to hear about it.</p>
+</div></section></article></section></div></div></div></body></html>

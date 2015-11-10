@@ -1,0 +1,206 @@
+<!DOCTYPE html><html><head><title>Accessibility, Windows, and Spaces in OS X | ianyh</title><link href="https://fonts.googleapis.com/css?family=Cardo|Raleway" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet"><link href="/css/main.css" rel="stylesheet" type="text/css"></head><body><div class="container"><aside class="pinned-aside"><h2 class="username"><a href="/">ianyh</a></h2><div class="social"><a href="mailto:ianynda@gmail.com"><i class="fa fa-envelope fa-lg"></i></a><a href="https://twitter.com/ianyh"><i class="fa fa-twitter-square fa-lg"></i></a><a href="https://github.com/ianyh"><i class="fa fa-github fa-lg"></i></a></div></aside><div class="row main"><div class="ten columns"><header class="header"><h2 class="title"><a href="/blog">Bias and Sandwiches</a></h2><h6 class="subtitle">I say things sometimes, I guess</h6></header></div></div><div class="row main posts"><div class="two columns u-pull-right"><aside class="relative-aside"><h2 class="username"><a href="/">ianyh</a></h2><div class="social"><a href="mailto:ianynda@gmail.com"><i class="fa fa-envelope fa-lg"></i></a><a href="https://twitter.com/ianyh"><i class="fa fa-twitter-square fa-lg"></i></a><a href="https://github.com/ianyh"><i class="fa fa-github fa-lg"></i></a></div></aside></div><div class="ten columns"><section><article id="article"><header><h1 class="title">Accessibility, Windows, and Spaces in OS X</h1></header><section><div class="byline"><time>5.28.2013</time></div></section><section><div class="content"><p>A couple weeks ago I decided to sit down and write a tiling window manager. As a
+first and second pass it pretty much works, though there's definitely room for
+improvement. I'm calling it <a href="https://github.com/ianyh/Amethyst">Amethyst</a>. (It's
+a kind of quartz, you see. Get it? <em>Get it</em>?)</p>
+<p>The first pass dealt with multiple screens fairly well as I was implementing it
+at a desk with multiple screens and managing windows across screen is a simple
+matter of position. It wasn't until I started trying it out on my laptop that I
+realized that Spaces support was fairly key. There's just not enough room on
+this 13" screen. I spent a long time digging into moving windows between spaces
+and have some insights I couldn't find anywhere else and I thought I'd share
+them here.</p>
+<!--more-->
+<h1 id="spaces-api">Spaces API</h1>
+<p>It used to be the case that there was a public API for moving windows between
+spaces. They went private in 10.7, I think. There's a couple projects around
+that utilize the private APIs, but I didn't want to go that route. For one thing
+it might be nice to toss something into the AppStore, but it's mostly a
+stability problem in that I don't want to have to go back and entirely
+reimplement parts of the code due to radically shifting private APIs.</p>
+<p>In my searching I dug into a variety of possible paths. I eventually came upon a
+fascinating tidbit of information.</p>
+<blockquote>
+<p>If the mouse has hold of a window, switching to a Space via Mission Control
+will take the window to that Space.</p>
+</blockquote>
+<p>Intriguing! You can test it out if you like. Works like a charm when you do it
+manually. So how do we do it programmatically? Well, we manually post keyboard
+and mouse events!</p>
+<h1 id="cgevents">CGEvents</h1>
+<p>A quick overview of how <code>CGEvent</code> works. My use of it is mostly centered around
+the following method:</p>
+<pre><code class="lang-objectivec"><span class="hljs-keyword">void</span> <span class="hljs-built_in">CGEventPost</span>(<span class="hljs-built_in">CGEventTapLocation</span> tap, <span class="hljs-built_in">CGEventRef</span> event)
+</code></pre>
+<p>This allows you to post events directly to the window server. Great. So that
+should let us post mouse events and keyboard events. So let's take a look at the
+parameters.</p>
+<p>The first is the tap location, of which there are three possible values:</p>
+<pre><code class="lang-objectivec"><span class="hljs-keyword">enum</span> _<span class="hljs-built_in">CGEventTapLocation</span> {
+   k<span class="hljs-built_in">CGHIDEventTap</span> = <span class="hljs-number">0</span>,
+   k<span class="hljs-built_in">CGSessionEventTap</span>,
+   k<span class="hljs-built_in">CGAnnotatedSessionEventTap</span>
+};
+</code></pre>
+<p><code>kCGHIDEventTap</code> is the one we want. From the documentation:</p>
+<blockquote>
+<p>Specifies that an event tap is placed at the point where HID system events
+enter the window server.</p>
+</blockquote>
+<p><code>kCGSessionEventTap</code> includes remote control events and stuff, and
+<code>kCGAnnotatedSessionEventTap</code> is for sending events to specific applications.</p>
+<p>The second parameter is a <code>CGEventRef</code>, which describes things like keyboard
+modifier flags, mouse button, mouse state, mouse position, keyboard key codes,
+etc. There are a variety of methods that can be used to create <code>CGEvent</code>
+objects. The two we care about are <code>CGEventCreateMouseEvent</code> and
+<code>CGEventCreateKeyboardEvent</code>.</p>
+<h2 id="cgeventcreatemouseevent">CGEventCreateMouseEvent</h2>
+<pre><code class="lang-objectivec"><span class="hljs-built_in">CGEventRef</span> <span class="hljs-built_in">CGEventCreateMouseEvent</span>(<span class="hljs-built_in">CGEventSourceRef</span> source, <span class="hljs-built_in">CGEventType</span> mouseType, <span class="hljs-built_in">CGPoint</span> mouseCursorPosition, <span class="hljs-built_in">CGMouseButton</span> mouseButton);
+</code></pre>
+<p>As the name implies this method is used to create mouse events. <code>source</code> is
+basically meaningless for our purposes as it used for generating new events from
+existing ones. <code>mouseCursorPosition</code> is pretty straightforward. It's the the
+point on the screen that the mouse event should happen at.</p>
+<p>There are a bunch of <code>CGEventType</code> values, which themselves are just proxies for
+values buried deep in the HID system. The ones we care about for mouse events
+are:</p>
+<pre><code class="lang-objectivec"><span class="hljs-keyword">enum</span> {
+  ...
+  k<span class="hljs-built_in">CGEventLeftMouseDown</span> = NX_LMOUSEDOWN,
+  k<span class="hljs-built_in">CGEventLeftMouseUp</span> = NX_LMOUSEUP,
+  k<span class="hljs-built_in">CGEventMouseMoved</span> = NX_MOUSEMOVED,
+  ...
+}
+</code></pre>
+<p>There are a couple <code>CGMouseButton</code> values as well:</p>
+<pre><code class="lang-objectivec"><span class="hljs-keyword">enum</span> {
+  k<span class="hljs-built_in">CGMouseButtonLeft</span> = <span class="hljs-number">0</span>,
+  k<span class="hljs-built_in">CGMouseButtonRight</span> = <span class="hljs-number">1</span>,
+  k<span class="hljs-built_in">CGMouseButtonCenter</span> = <span class="hljs-number">2</span>
+};
+</code></pre>
+<p>To simulate a standard tap we just want <code>kCGMouseButtonLeft</code>. To actually
+simulate a tap we can do something like</p>
+<pre><code class="lang-objectivec"><span class="hljs-built_in">CGPoint</span> point = { <span class="hljs-variable">.x</span> = <span class="hljs-number">0</span>, <span class="hljs-variable">.y</span> = <span class="hljs-number">0</span> };
+<span class="hljs-built_in">CGEventRef</span> mouseMoveEvent = <span class="hljs-built_in">CGEventCreateMouseEvent</span>(<span class="hljs-literal">NULL</span>, k<span class="hljs-built_in">CGEventMouseMoved</span>, point, k<span class="hljs-built_in">CGMouseButtonLeft</span>);
+<span class="hljs-built_in">CGEventRef</span> mouseDownEvent = <span class="hljs-built_in">CGEventCreateMouseEvent</span>(<span class="hljs-literal">NULL</span>, k<span class="hljs-built_in">CGEventLeftMouseDown</span>, point, k<span class="hljs-built_in">CGMouseButtonLeft</span>);
+<span class="hljs-built_in">CGEventRef</span> mouseUpEvent = <span class="hljs-built_in">CGEventCreateMouseEvent</span>(<span class="hljs-literal">NULL</span>, k<span class="hljs-built_in">CGEventLeftMouseUp</span>, point, k<span class="hljs-built_in">CGMouseButtonLeft</span>);
+
+<span class="hljs-built_in">CGEventPost</span>(mouseMoveEvent);
+<span class="hljs-built_in">CGEventPost</span>(mouseDownEvent);
+<span class="hljs-built_in">CGEventPost</span>(mouseUpEvent);
+
+<span class="hljs-built_in">CFRelease</span>(mouseMoveEvent);
+<span class="hljs-built_in">CFRelease</span>(mouseDownEvent);
+<span class="hljs-built_in">CFRelease</span>(mouseUpEvent);
+</code></pre>
+<p>to simulate a tap at (0, 0). Cool. Let's look at keyboard events.</p>
+<h2 id="cgeventcreatekeyboardevent">CGEventCreateKeyboardEvent</h2>
+<pre><code class="lang-objectivec"><span class="hljs-built_in">CGEventRef</span> <span class="hljs-built_in">CGEventCreateKeyboardEvent</span>(<span class="hljs-built_in">CGEventSourceRef</span> source, <span class="hljs-built_in">CGKeyCode</span> virtualKey, <span class="hljs-keyword">bool</span> keyDown);
+</code></pre>
+<p><code>source</code> is about as useful here as it was for mouse events, and hopefully
+<code>keyDown</code> is self explanatory. The important thing to note is that to perform a
+keypress we actually need two events: one for <code>keyDown = true</code> followed by one
+for <code>keyDown = false</code>.</p>
+<p><code>virtualKey</code> can probably take its values from a variety of places. I went with
+the virtual keycodes defined in the Carbon framework. It's
+<code>Carbon.framework/Frameworks/HIToolbox.framework/Events.h</code> if you want to look
+them up. Repeating them all here isn't particularly useful.</p>
+<p>So let's say we want to perform the standard keyboard shortcut for moving one
+space to the right (^ + Right Arrow). We could do</p>
+<pre><code class="lang-objectivec"><span class="hljs-built_in">CGEventRef</span> keyboardDownEvent = <span class="hljs-built_in">CGEventCreateKeyboardEvent</span>(<span class="hljs-literal">NULL</span>, kVK_RightArrow, <span class="hljs-literal">true</span>);
+<span class="hljs-built_in">CGEventRef</span> keyboardUpEvent = <span class="hljs-built_in">CGEventCreateKeyboardEvent</span>(<span class="hljs-literal">NULL</span>, kVK_RightArrow, <span class="hljs-literal">false</span>);
+
+<span class="hljs-built_in">CGEventPost</span>(keyboardDownEvent);
+<span class="hljs-built_in">CGEventPost</span>(keyboardUpEvent);
+
+<span class="hljs-built_in">CFRelease</span>(keyboardDownEvent);
+<span class="hljs-built_in">CFRelease</span>(keyboardUpEvent);
+</code></pre>
+<p>But wait, what about the control key? Well, there's a method for that.</p>
+<pre><code class="lang-objectivec"><span class="hljs-keyword">void</span> <span class="hljs-built_in">CGEventSetFlags</span>(<span class="hljs-built_in">CGEventRef</span> event, <span class="hljs-built_in">CGEventFlags</span> flags);
+</code></pre>
+<p>Where <code>flags</code> is some OR'd combination of possible flag values. The ones we care
+about here are</p>
+<pre><code class="lang-objectivec"><span class="hljs-keyword">enum</span> {
+  <span class="hljs-comment">/* Device-independent modifier key bits. */</span>
+  k<span class="hljs-built_in">CGEventFlagMaskAlphaShift</span> =          NX_ALPHASHIFTMASK,
+  k<span class="hljs-built_in">CGEventFlagMaskShift</span> =               NX_SHIFTMASK,
+  k<span class="hljs-built_in">CGEventFlagMaskControl</span> =             NX_CONTROLMASK,
+  k<span class="hljs-built_in">CGEventFlagMaskAlternate</span> =           NX_ALTERNATEMASK,
+  k<span class="hljs-built_in">CGEventFlagMaskCommand</span> =             NX_COMMANDMASK,
+  ...
+};
+</code></pre>
+<p>So to fix the keyboard event code from above.</p>
+<pre><code class="lang-objectivec"><span class="hljs-built_in">CGEventRef</span> keyboardDownEvent = <span class="hljs-built_in">CGEventCreateKeyboardEvent</span>(<span class="hljs-literal">NULL</span>, kVK_RightArrow, <span class="hljs-literal">true</span>);
+<span class="hljs-built_in">CGEventRef</span> keyboardUpEvent = <span class="hljs-built_in">CGEventCreateKeyboardEvent</span>(<span class="hljs-literal">NULL</span>, kVK_RightArrow, <span class="hljs-literal">false</span>);
+
+<span class="hljs-built_in">CGEventSetFlags</span>(keyboardDownEvent, k<span class="hljs-built_in">CGEventFlagMaskControl</span>);
+
+<span class="hljs-built_in">CGEventPost</span>(keyboardDownEvent);
+<span class="hljs-built_in">CGEventPost</span>(keyboardUpEvent);
+
+<span class="hljs-built_in">CFRelease</span>(keyboardDownEvent);
+<span class="hljs-built_in">CFRelease</span>(keyboardUpEvent);
+</code></pre>
+<h2 id="putting-it-all-together">Putting It All Together</h2>
+<p>So let's say you have an accessibility reference to a window and want to move it
+to a different space. There's an important question you need to answer first: at
+what point do you move the mouse to grab the window? Conceptually the answer is
+pretty straightforward. You move the mouse to the window's toolbar. In practice
+there's a couple unintuitive gotchas.</p>
+<p>My initial intuition for this was to take the min-y and mid-x of the window's
+frame, so the cursor ends up in the middle of the window's toolbar. Should work
+fine, should work with every window. But when I implemented that it would fail
+for some windows, namely Xcode. As best I can tell the middle of Xcode's toolbar
+as depicted below is grabbing mouse down events for something.</p>
+<p><img src="/images/2013-05-29-accessibility/xcode-toolbar.png" alt="toolbar"></p>
+<p>Okay, so what other point on the x-axis do all windows have in common? That
+little green zoom button!</p>
+<h2 id="but-wait-what-about-modifiers-">But Wait, What About Modifiers?</h2>
+<p>There is one more point to consider. We are going to be executing this operation
+from an event handler triggered by a keyboard shortcut. Let's take an example
+shortcut <code>ctrl + option + right arrow</code> for taking the currently focused window
+and moving it one space right. You hit this keyboard shortcut and we go and
+create events and post them. There's a gotcha here. <code>CGEvent</code> create methods
+<em>start with the current modifiers unless otherwise specified</em>. Depending on the
+timing we could accidentally create a <code>ctrl + click</code> event instead of just a
+<code>click</code> event. Most windows don't care, but Xcode (why is it always Xcode?)
+does. We need to thus make sure that we clear out any modifier flags on keyboard
+and mouse events that we don't expect to have any modifiers.</p>
+<h2 id="the-final-method">The Final Method</h2>
+<p>To avoid unnecessary details of the accessibility API the following code uses an
+<code>NSObject</code> wrapper.</p>
+<pre><code class="lang-objectivec">AMAccessibilityElement *windowElement = [<span class="hljs-keyword">self</span> window];
+AMAccessibilityElement *zoomButtonElement = [windowElement elementForKey:kAXZoomButtonAttribute];
+<span class="hljs-built_in">CGRect</span> zoomButtonFrame = zoomButtonElement<span class="hljs-variable">.frame</span>;
+<span class="hljs-built_in">CGRect</span> windowFrame = windowElement<span class="hljs-variable">.frame</span>;
+
+<span class="hljs-built_in">CGPoint</span> mouseCursorPoint = { <span class="hljs-variable">.x</span> = <span class="hljs-built_in">CGRectGetMaxX</span>(zoomButtonFrame) + <span class="hljs-number">5.0</span>, <span class="hljs-variable">.y</span> = windowFrame<span class="hljs-variable">.origin</span><span class="hljs-variable">.y</span> + <span class="hljs-number">5.0</span> };
+
+<span class="hljs-built_in">CGEventRef</span> mouseMoveEvent = <span class="hljs-built_in">CGEventCreateMouseEvent</span>(<span class="hljs-literal">NULL</span>, k<span class="hljs-built_in">CGEventMouseMoved</span>, mouseCursorPoint, k<span class="hljs-built_in">CGMouseButtonLeft</span>);
+<span class="hljs-built_in">CGEventRef</span> mouseDownEvent = <span class="hljs-built_in">CGEventCreateMouseEvent</span>(<span class="hljs-literal">NULL</span>, k<span class="hljs-built_in">CGEventLeftMouseDown</span>, mouseCursorPoint, k<span class="hljs-built_in">CGMouseButtonLeft</span>);
+<span class="hljs-built_in">CGEventRef</span> mouseUpEvent = <span class="hljs-built_in">CGEventCreateMouseEvent</span>(<span class="hljs-literal">NULL</span>, k<span class="hljs-built_in">CGEventLeftMouseUp</span>, mouseCursorPoint, k<span class="hljs-built_in">CGMouseButtonLeft</span>);
+
+<span class="hljs-built_in">CGEventRef</span> keyboardDownEvent = <span class="hljs-built_in">CGEventCreateKeyboardEvent</span>(<span class="hljs-literal">NULL</span>, kVK_RightArrow, <span class="hljs-literal">true</span>);
+<span class="hljs-built_in">CGEventRef</span> keyboardUpEvent = <span class="hljs-built_in">CGEventCreateKeyboardEvent</span>(<span class="hljs-literal">NULL</span>, kVK_RightArrow, <span class="hljs-literal">false</span>);
+
+<span class="hljs-built_in">CGEventSetFlags</span>(mouseMoveEvent, <span class="hljs-number">0</span>);
+<span class="hljs-built_in">CGEventSetFlags</span>(mouseDownEvent, <span class="hljs-number">0</span>);
+<span class="hljs-built_in">CGEventSetFlags</span>(mouseUpEvent, <span class="hljs-number">0</span>);
+<span class="hljs-built_in">CGEventSetFlags</span>(keyboardDownEvent, k<span class="hljs-built_in">CGEventFlagMaskControl</span>);
+<span class="hljs-built_in">CGEventSetFlags</span>(keyboardUpEvent, <span class="hljs-number">0</span>);
+
+<span class="hljs-built_in">CGEventPost</span>(k<span class="hljs-built_in">CGHIDEventTap</span>, mouseMoveEvent);
+<span class="hljs-built_in">CGEventPost</span>(k<span class="hljs-built_in">CGHIDEventTap</span>, mouseDownEvent);
+<span class="hljs-built_in">CGEventPost</span>(k<span class="hljs-built_in">CGHIDEventTap</span>, keyboardDownEvent);
+<span class="hljs-built_in">CGEventPost</span>(k<span class="hljs-built_in">CGHIDEventTap</span>, keyboardUpEvent);
+<span class="hljs-built_in">CGEventPost</span>(k<span class="hljs-built_in">CGHIDEventTap</span>, mouseUpEvent);
+
+<span class="hljs-built_in">CFRelease</span>(mouseMoveEvent);
+<span class="hljs-built_in">CFRelease</span>(mouseDownEvent);
+<span class="hljs-built_in">CFRelease</span>(mouseUpEvent);
+<span class="hljs-built_in">CFRelease</span>(keyboardEvent);
+<span class="hljs-built_in">CFRelease</span>(keyboardEventUp);
+</code></pre>
+</div></section></article></section></div></div></div></body></html>
