@@ -1,0 +1,76 @@
+==================================================================
+https://keybase.io/ianyh
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://ianyh.com
+  * I am ianyh (https://keybase.io/ianyh) on keybase.
+  * I have a public key with fingerprint E429 860D C240 4973 FCE7  9ADE 205B 51F4 4E18 925F
+
+To claim this, I am signing this object:
+
+{
+    "body": {
+        "client": {
+            "name": "keybase.io node.js client",
+            "version": "0.7.2"
+        },
+        "key": {
+            "fingerprint": "e429860dc2404973fce79ade205b51f44e18925f",
+            "host": "keybase.io",
+            "key_id": "205B51F44E18925F",
+            "uid": "514b6c0fa56f63302ce5199bb19c1f00",
+            "username": "ianyh"
+        },
+        "merkle_root": {
+            "ctime": 1414196869,
+            "hash": "02eacb869408416768021d2a75be9329d33af15a2af452aef30a8cfc5659350d0b56e4b620fd0644286252e0cdd7e1cf6f3eca1e9353f0333dbf2479effcba05",
+            "seqno": 84604
+        },
+        "service": {
+            "hostname": "ianyh.com",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1414196951,
+    "expire_in": 157680000,
+    "prev": "ad4734925612455b7f44e444496cd07ce3efd26fa4cb4994274ce4ed8e82d9e6",
+    "seqno": 3,
+    "tag": "signature"
+}
+
+with the aforementioned key, yielding the PGP signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1
+
+owFVUm1oHEUYvou1kmKStlILfiWstaCm19nZmdndq4W22CKmH1BTRaxe5uOd3F4u
+u9fdS9premp/KBih9o8o/jJJDQSUUhsKaYm1ChFaMSiFiP6wiJEoR7EFq0IVZ0PE
+dubPzPs+7zPP875zvOWOTFP289meZTfll49kL/0iMt1PX50bskSkalZ+yJLlAMJq
+egp5P1h5qw9qgieQC6KOMFKQKyUdS5hOaxDiJIhCg0I5N4etemcKT4t1EPZCXImD
+lMsCgn2PISUxQcR3HS3B9bkCjKigtiYEbM/HVBvKYpRUb3vVWuQsBMpEDX4btXcQ
+sn0Rv8PkBhYT1CaCSaQ5ZZo5DsISqO37Qti+tDVCKTCBeMlSwMNaMRXbD3FfGQpx
+FC06ltUgzdvEbJ95zDdyeFJM7WHgUpgIQR6xmcs8hG2FuUsF+A72leNwbVOOuSYU
+c9AO4p7UkjLqOxQpJCgDIxEjrRAjBHsMUwxIKuWCLTXTDkhuGy7qaOQ4jhIaE9cH
+raXgiBr9CRwIIyvvEYZIPb3Gg4GEVHbaslud5WTUbwoqcVSNZFQ24WK1Wsmnhqu1
+Sgo7CKKwRDBeEEGozLRuHadtoLc3w6d2pwWHKkEMhSBF0LQHZqXvwKDh5Iq4DjFT
+YTYmlAo3HSsxy2dSIVeCA1phpjmRgvg+wS6RQEB54GHlA/vfomN08l5DmQS9Ia8O
+xGDV38g+sCyTbcosv7Mp/a+ZFc0r//vEr5+76+/VqybqJ0otteVnfw3G6puL7H3c
+M3lm+oXGPQvvRkfvzu1tHxq9euj85Pm5jpHhF2HDFzen/5yaSNCVn/aPX2It3536
+7MDoxtJU8fLuRw+33yve3JcXp8dGhpvtCyuu3xhtJa1/tU2ueuvDju/fo8XN4saV
+x3b2HP1t4swfPxxrnZttdL/T9ckzQePaqzM/37/n8JEn13U1fmzHJ0u7+K7nLs6N
+PD/T89FLX68ZPlU+d/Dh6mtrJr/BpQ82XlgIyw9ubXn8yKb+qdPNL+e/vTYvxKcz
+W+Z/b9q+v7F394bs7OptZ7+63ja+UM52v9330MBYfe0Tm44d/+e+ti1rn/r42a3T
+Jy/P9+3rWj9z8ZV/AQ==
+=BK9i
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/ianyh
+
+==================================================================
