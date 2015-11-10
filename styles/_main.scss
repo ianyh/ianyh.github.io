@@ -45,7 +45,6 @@ aside {
 }
 
 .header {
-	text-align: center;
 	padding: 30px 0 0;
 }
 
@@ -94,6 +93,9 @@ aside {
 @media (min-width: 550px) {
 	.main {
 		margin: 50px auto;
+		&.posts {
+			border-left: 1px solid lighten(#ccc, 10%);
+		}
 	}
 	.pinned-aside {
 		display: block;
