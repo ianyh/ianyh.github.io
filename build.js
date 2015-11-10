@@ -41,9 +41,11 @@ metalsmith(__dirname)
 		}))
 	)
 	.use(branch('!blog/**.html')
-		.use(branch('!index.md').use(permalinks({
-			relative: false
-		})))
+		.use(branch('!index.md').use(
+			branch('!amethyst/versions/**.html')
+				.use(permalinks({
+					relative: false
+				}))))
 	)
 	.use(sass({
 		includePaths: [
