@@ -5,27 +5,16 @@
 
 ga('create', 'UA-12247677-3', 'auto');
 ga('send', 'pageview');</script><script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script></head><body><div class="container"><div class="row"><div class="twelve columns"><header class="header"><div class="title">Amethyst<img src="/images/amethyst.png"></div><div class="subtitle">A tiling window manager for OS X</div><div class="download"><a href="/amethyst/versions/Amethyst-latest.zip" class="button button-primary button-download">Download 0.9.10</a></div></header><section><article><div class="content"><h4 id="overview">Overview</h4>
-<p><a href="https://travis-ci.org/ianyh/Amethyst"><img src="https://travis-ci.org/ianyh/Amethyst.png?branch=master" alt="Build Status"></a></p>
-<p>Tiling window manager for OS X similar to xmonad, written in pure Objective-C.</p>
-<p><img src="http://ianyh.com/amethyst/images/screenshot-small.png" alt="Screenshot"></p>
-<p>A quick screencast of basic functionality can be found <a href="http://youtu.be/9ayUdV1sfjA">here</a>. (It's rough, and I'd love to see a better one if someone has the skills and inclination to make one.)</p>
+<p><a href="https://gitter.im/ianyh/Amethyst?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/ianyh/Amethyst"></a>
+<a href="https://travis-ci.org/ianyh/Amethyst"><img src="https://api.travis-ci.org/ianyh/Amethyst.svg?branch=master" alt="Build Status"></a></p>
+<p>Tiling window manager for OS X along the lines of <a href="http://xmonad.org/">xmonad</a> and <a href="https://i3wm.org/">i3</a>.</p>
+<p><img src="http://ianyh.com/amethyst/images/example-1.gif" alt="Example 1"></p>
+<p>A quick screencast of basic functionality can be found <a href="https://youtu.be/boPilhScpkY">here</a>. (It's rough, and I'd love to see a better one if someone has the skills and inclination to make one.)</p>
 <h4 id="getting-amethyst">Getting Amethyst</h4>
 <p>Amethyst is available for direct download <a href="http://ianyh.com/amethyst/versions/Amethyst-latest.zip">here</a> or using <a href="https://github.com/phinze/homebrew-cask">homebrew cask</a>.</p>
 <pre><code class="lang-bash">brew cask install amethyst
 </code></pre>
 <p>Note: that Amethyst now is only supported on OS X 10.9+. The last version that supports 10.8 can be found <a href="http://ianyh.com/amethyst/versions/Amethyst-0.8.2.zip">here</a>.</p>
-<h4 id="troubleshooting">Troubleshooting</h4>
-<h5 id="i-can-t-update-to-0-9-4-">I can't update to 0.9.4.</h5>
-<p>There seems to be a issue with how 0.9+ was signed. You may need to download it
-directly and install it that way.</p>
-<h5 id="amethyst-stopped-working-">Amethyst stopped working.</h5>
-<p>Try disabling and reenabling Accessibility permissions for Amethyst and then
-relaunch it. I know, it's arcane and weird but frequently fixes issues arrising
-from code signature issues, which may be the cause here.</p>
-<h5 id="i-tried-that-and-0-9-4-is-still-broken-">I tried that and 0.9.4 is still broken.</h5>
-<p>If you need to downgrade version 0.8.6 can be downloaded
-<a href="http://ianyh.com/amethyst/versions/Amethyst-0.8.6.zip">here</a>. Otherwise feel
-free to open an issue or email me.</p>
 <h4 id="using-amethyst">Using Amethyst</h4>
 <p>Amethyst must be given permissions to use the accessibility APIs under the Privacy tab of the Security &amp; Privacy preferences pane as shown below.</p>
 <p><img src="http://ianyh.com/amethyst/images/accessibility-window.png" alt="Accessibility permissions"></p>
@@ -67,47 +56,6 @@ of the Keyboard preferences pane. The shortcuts will be of the form <code>ctrl +
 [n]</code>. Amethyst is only able to send a window to the <code>n</code>th space if the shortcut
 <code>ctrl + n</code> is enabled.</p>
 <p><img src="http://ianyh.com/amethyst/images/missioncontrol-shortcuts.png" alt="Mission Control keyboard shortcuts"></p>
-<h5 id="customization">Customization</h5>
-<p>Amethyst can be customized by creating a json file called <code>.amethyst</code> in your home directory. The structure and valid keys and whatnot are all defined in <a href="https://raw.githubusercontent.com/ianyh/Amethyst/master/Amethyst/default.amethyst">default.amethyst</a>.</p>
-<h5 id="layouts">Layouts</h5>
-<p>You can set the layouts you want to use by supplying a list of layout names under the "layouts" key. For example,</p>
-<pre><code class="lang-js"><span class="hljs-string">"layouts"</span>: [
-    <span class="hljs-string">"tall"</span>,
-    <span class="hljs-string">"fullscreen"</span>,
-],
-</code></pre>
-<p>will restrict your layouts to the tall and fullscreen layouts. The available layouts are as follows:</p>
-<ul>
-<li><strong>Tall</strong> ("tall"): Defines a main area on the left and a secondary area on the right.</li>
-<li><strong>Wide</strong> ("wide"): Defines a main area on the top and a secondary column on the right.</li>
-<li><strong>Fullscreen</strong> ("fullscreen"): All windows are sized to fill the screen.</li>
-<li><strong>Column</strong> ("column"): All windows are distributed in evenly sized in columns from left to right.</li>
-<li><strong>Row</strong> ("row"): All windows are distributed in evenly sized rows from top to bottom.</li>
-<li><strong>Floating</strong> ("floating"): All windows are floating. (Useful if you want a space dedicated to floating windows.)</li>
-<li><strong>Widescreen Tall</strong> ("widescreen-tall"): Like Tall, but the main area uses columns and the secondary area uses rows.</li>
-</ul>
-<h5 id="mouse-follows-focus">Mouse Follows Focus</h5>
-<p>This setting can be enabled by changing the following line</p>
-<pre><code class="lang-js"><span class="hljs-string">"mouse-follows-focus"</span>: <span class="hljs-literal">false</span>,
-</code></pre>
-<p>to</p>
-<pre><code class="lang-js"><span class="hljs-string">"mouse-follows-focus"</span>: <span class="hljs-literal">true</span>,
-</code></pre>
-<p>in your <code>.amethyst</code> file.</p>
-<h5 id="always-float-an-app">Always float an app</h5>
-<p>You can set specific application to float by default, this can still be toggled by <code>mod1-t</code></p>
-<pre><code class="lang-js"><span class="hljs-string">"floating"</span>: [
-    <span class="hljs-string">"com.apple.systempreferences"</span>
-],
-</code></pre>
-<p>Get the required string for the app <code>osascript -e 'id of app "Finder"'</code>. Just replace <code>Finder</code> with the name of your app</p>
-<h5 id="layout-hud">Layout HUD</h5>
-<p>By default Amethyst pops up a HUD telling you the layout whenever the layout changes. You can disable it in your <code>.amethyst</code> file using the <code>enables-layout-hud</code> key. i.e.,</p>
-<pre><code class="lang-js"><span class="hljs-string">"enables-layout-hud"</span>: <span class="hljs-literal">false</span>
-</code></pre>
-<p>By default the HUD will show when changing to a different space. You can disable the HUD during space changes, while still having it enabled when cycling or selecting a different layout, by using the <code>enables-layout-hud-on-space-change</code> key. i.e.,</p>
-<pre><code class="lang-js"><span class="hljs-string">"enables-layout-hud-on-space-change"</span>: <span class="hljs-literal">false</span>
-</code></pre>
 <h4 id="contributing">Contributing</h4>
 <p>If you would like to see features or particular bugs fixed check out the Trello board <a href="https://trello.com/b/cCg3xhlb/amethyst">here</a> and vote on things. It'll give me a better sense of what people want so I can prioritize.</p>
 <p>I love pull requests. If you'd like to contribute please branch off of the <code>development</code> branch and open pull requests against it rather than master. Otherwise just try to stick to the general style of the code.</p>
