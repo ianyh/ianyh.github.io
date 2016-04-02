@@ -3,7 +3,7 @@
 	<channel>
 		<title>Amethyst Changelog</title>
 		<link>http://ianyh.com/amethyst/appcast.xml</link>
-		<language>en</language>	  
+		<language>en</language>
 		<item>
 			<title>Version 0.7</title>
 			<description></description>
@@ -413,6 +413,19 @@
 				sparkle:version="34"
 				sparkle:shortVersionString="0.10b2"
 				length="3997913"
+				type="application/octet-stream"
+				/>
+		</item>
+		<item>
+			<title>Version 0.10b3</title>
+			<description></description>
+			<pubDate>Sat, 2 Apr 2016 15:20:00 +0000</pubDate>
+			<sparkle:minimumSystemVersion>10.10.0</sparkle:minimumSystemVersion>
+			<sparkle:releaseNotesLink>https://ianyh.com/amethyst/versions/Amethyst-0.10b3.html</sparkle:releaseNotesLink>
+			<enclosure url="https://ianyh.com/amethyst/versions/Amethyst-0.10b3.zip"
+				sparkle:version="35"
+				sparkle:shortVersionString="0.10b3"
+				length="4165311"
 				type="application/octet-stream"
 				/>
 		</item>
