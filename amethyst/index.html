@@ -4,14 +4,14 @@
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
 ga('create', 'UA-12247677-3', 'auto');
-ga('send', 'pageview');</script><script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script></head><body><div class="container"><div class="row"><div class="twelve columns"><header class="header"><div class="title">Amethyst<img src="/images/amethyst.png"></div><div class="subtitle">A tiling window manager for OS X</div><div class="download"><a href="/amethyst/versions/Amethyst-latest.zip" class="button button-primary button-download">Download 0.9.10</a></div></header><section><article><div class="content"><h4 id="overview">Overview</h4>
+ga('send', 'pageview');</script><script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script></head><body><div class="container"><div class="row"><div class="twelve columns"><header class="header"><div class="title">Amethyst<img src="/images/amethyst.png"></div><div class="subtitle">A tiling window manager for OS X</div><div class="download"><a href="/amethyst/versions/Amethyst-latest.zip" class="button button-primary button-download">Download 0.10</a></div></header><section><article><div class="content"><h4 id="overview">Overview</h4>
 <p><a href="https://gitter.im/ianyh/Amethyst?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/ianyh/Amethyst"></a>
 <a href="https://travis-ci.org/ianyh/Amethyst"><img src="https://api.travis-ci.org/ianyh/Amethyst.svg?branch=master" alt="Build Status"></a></p>
 <p>Tiling window manager for OS X along the lines of <a href="http://xmonad.org/">xmonad</a> and <a href="https://i3wm.org/">i3</a>.</p>
 <p><img src="http://ianyh.com/amethyst/images/example-1.gif" alt="Example 1"></p>
 <p>A quick screencast of basic functionality can be found <a href="https://youtu.be/boPilhScpkY">here</a>. (It's rough, and I'd love to see a better one if someone has the skills and inclination to make one.)</p>
 <h4 id="getting-amethyst">Getting Amethyst</h4>
-<p>Amethyst is available for direct download <a href="http://ianyh.com/amethyst/versions/Amethyst-latest.zip">here</a> or using <a href="https://github.com/phinze/homebrew-cask">homebrew cask</a>.</p>
+<p>Amethyst is available for direct download <a href="http://ianyh.com/amethyst/versions/Amethyst-latest.zip">here</a> or using <a href="https://github.com/caskroom/homebrew-cask">homebrew cask</a>.</p>
 <pre><code class="lang-bash">brew cask install amethyst
 </code></pre>
 <p>Note: that Amethyst now is only supported on OS X 10.9+. The last version that supports 10.8 can be found <a href="http://ianyh.com/amethyst/versions/Amethyst-0.8.2.zip">here</a>.</p>
@@ -59,15 +59,26 @@ of the Keyboard preferences pane. The shortcuts will be of the form <code>ctrl +
 <h4 id="contributing">Contributing</h4>
 <p>If you would like to see features or particular bugs fixed check out the Trello board <a href="https://trello.com/b/cCg3xhlb/amethyst">here</a> and vote on things. It'll give me a better sense of what people want so I can prioritize.</p>
 <p>I love pull requests. If you'd like to contribute please branch off of the <code>development</code> branch and open pull requests against it rather than master. Otherwise just try to stick to the general style of the code.</p>
+<p>In order to build Amethyst locally, you'll need to also perform the following steps after cloning the repo:</p>
+<ul>
+<li>Install <code>carthage</code> and <code>rbenv</code>.<ul>
+<li>These are not installed via the setup script so as to not casually pollute your global environment.</li>
+</ul>
+</li>
+<li>Run <code>rake setup</code>, which installs dependencies from Carthage and CocoaPods.<ul>
+<li>Note that by default CocoaPods will be installed and run via <code>bundler</code>. This restricts the version to get around some bugs in the current CocoaPods beta.</li>
+</ul>
+</li>
+</ul>
 <h4 id="contact">Contact</h4>
-<p>If you have questions or feedback you can <a href="mailto:ianynda@gmail.com">email me</a> or <a href="http://webchat.freenode.net/?channels=amethyst">drop by #amethyst on Freenode</a>.</p>
+<p>If you have questions or feedback you have a plethora of options. You can <a href="mailto:ianynda@gmail.com">email me</a>, <a href="https://twitter.com/ianyh">tweet at me</a>, or get on <a href="https://gitter.im/ianyh/Amethyst">gitter</a>. That last one is new and kind of experimental. You can <a href="http://webchat.freenode.net/?channels=amethyst">drop by #amethyst on Freenode</a>, as well, but I am on there fairly infrequently.</p>
 <h4 id="donating">Donating</h4>
 <p>Amethyst is free and always will be. That said, a couple of people have expressed their desire to donate money in appreciation. If you are so inclined I've set up two options:</p>
 <ul>
 <li>You can find a Patreon page <a href="http://www.patreon.com/ianyh">here</a> if you would like to pledge money regularly for releases.</li>
 <li>If you would like to do a one-time donation there's a PayPal button below. If there's some other method of donating that you would prefer open an issue and I'll try to add it!</li>
 </ul>
-<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=ianynda%40gmail%2ecom&amp;lc=US&amp;item_name=Ian%20Ynda%2dHummel&amp;item_number=Amethyst&amp;currency_code=USD&amp;bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted"><img src="http://img.shields.io/paypal/donate.png?color=blue" alt="PayPal Donate"></a></p>
+<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=ianynda%40gmail%2ecom&amp;lc=US&amp;item_name=Ian%20Ynda%2dHummel&amp;item_number=Amethyst&amp;currency_code=USD&amp;bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted"><img src="https://img.shields.io/badge/paypal-donate-blue.svg" alt="PayPal Donate"></a></p>
 <p>If you are considering donating to me, you are more than welcome to. You should also consider donating that money to a charity in addition to or instead. Here's a very incomplete list of things that you might want to throw money at:</p>
 <ul>
 <li><a href="https://secure.freedomtomarry.org/pages/donatetowin?source=BSDAds_GoogleGrant_EOY2013_Freedom%20to%20Marry-GG_Freedom%20to%20Marry_freedomtomarry&amp;gclid=Cj0KEQjwq52iBRDEvrC12Jnz6coBEiQA2otXAsmb9ggRZp1ukDdxwvn7Y-1AN7mhTPZxcpC3dNokzY8aAmcl8P8HAQ">Freedom to Marry</a></li>
@@ -78,7 +89,7 @@ of the Keyboard preferences pane. The shortcuts will be of the form <code>ctrl +
 <p>And a bunch of technology-oriented ones:</p>
 <ul>
 <li><a href="https://adainitiative.org/donate/">Ada Initiative</a></li>
-<li><a href="http://www.ncwit.org/donate">National Center for Women &amp; Information Technology</a></li>
+<li><a href="https://www.ncwit.org/donate">National Center for Women &amp; Information Technology</a></li>
 <li><a href="http://girlswhocode.com/get-involved/">girls who code</a></li>
 <li><a href="https://www.indiegogo.com/projects/mothercoders-a-giant-hack-for-moms-who-want-in">MotherCoders</a></li>
 <li><a href="http://www.transhack.org/support/">Trans*H4CK</a></li>
