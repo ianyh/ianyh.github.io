@@ -73,7 +73,6 @@ aside {
 	aside > & {
 		width: 100%;
 		padding: 0;
-		text-align: center;
 	}
 }
 
@@ -102,12 +101,6 @@ aside {
 	}
 	.relative-aside {
 		display: none;
-	}
-	.username {
-		text-align: right;
-	}
-	.social {
-		text-align: right;
 	}
 	aside > .username {
 		text-align: right;
