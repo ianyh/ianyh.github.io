@@ -1,10 +1,10 @@
-<!DOCTYPE html><html><head><title>Identifying Spaces in Mac OS X | ianyh</title><link href="https://fonts.googleapis.com/css?family=Cardo|Raleway" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet"><link href="/css/main.css" rel="stylesheet" type="text/css"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+<!DOCTYPE html><html><head><title>Identifying Spaces in Mac OS X | ianyh</title><link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"><link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="https://fonts.googleapis.com/css?family=Cardo|Raleway" rel="stylesheet" type="text/css"><link href="/css/main.css" rel="stylesheet" type="text/css"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
 ga('create', 'UA-12247677-3', 'auto');
-ga('send', 'pageview');</script></head><body><div class="container"><aside class="pinned-aside"><h2 class="username"><a href="/">ianyh</a></h2><div class="social"><a href="mailto:ianynda@gmail.com"><i class="fa fa-envelope fa-lg"></i></a><a href="https://twitter.com/ianyh"><i class="fa fa-twitter-square fa-lg"></i></a><a href="https://github.com/ianyh"><i class="fa fa-github fa-lg"></i></a></div></aside><div class="row main"><div class="ten columns"><header class="header"><h2 class="title"><a href="/blog">Bias and Sandwiches</a></h2><h6 class="subtitle">I say things sometimes, I guess</h6></header></div></div><div class="row main posts"><div class="two columns u-pull-right"><aside class="relative-aside"><h2 class="username"><a href="/">ianyh</a></h2><div class="social"><a href="mailto:ianynda@gmail.com"><i class="fa fa-envelope fa-lg"></i></a><a href="https://twitter.com/ianyh"><i class="fa fa-twitter-square fa-lg"></i></a><a href="https://github.com/ianyh"><i class="fa fa-github fa-lg"></i></a></div></aside></div><div class="ten columns"><section><article id="article"><header><h1 class="title">Identifying Spaces in Mac OS X</h1></header><section><div class="byline"><time>9.23.2013</time></div></section><section><div class="content"><p>I recently implemented a featured in <a href="http://ianyh.com/amethyst/">Amethyst</a> that
+ga('send', 'pageview');</script></head><body><div class="mdl-layout mdl-js-layout"><main class="mdl-layout__content"><div class="mdl-grid"><div class="mdl-cell mdl-cell--8-col mdl-cell--6-col-tablet mdl-cell--2-offset-desktop mdl-cell--1-offset-tablet"><header class="header"><h2 class="title"><a href="/blog">Bias and Sandwiches</a></h2><h6 class="subtitle">I say things sometimes, I guess</h6></header></div></div><div class="mdl-grid"><div class="mdl-cell mdl-cell--8-col mdl-cell--6-col-tablet mdl-cell--2-offset-desktop mdl-cell--1-offset-tablet"><section><article id="article"><header class="post-header"><h2 class="title">Identifying Spaces in Mac OS X</h2><span><time>9.23.2013</time></span></header><section><div class="contents"><p>I recently implemented a featured in <a href="http://ianyh.com/amethyst/">Amethyst</a> that
 allowed every space to have its own unique set of resources. In implementing
 this feature I ran into a problem: how do you determine which space you're
 currently on?</p>
@@ -13,13 +13,13 @@ but alas and alack it is hidden behind private APIs. So what is a
 tiling-window-management-inclined programmer to do? Dig into a bunch of weird
 pieces of public information. The first being the preferences of spaces itself.</p>
 <!--more-->
-<h1 id="preferences-on-os-x">Preferences on OS X</h1>
+<h4 id="preferences-on-os-x">Preferences on OS X</h4>
 <p>The first piece of information to know is how preferences work. Here's a
 lightning overview. You may be familiar with <code>NSUserDefaults</code>. It is used to
 store application preferences. By default it accesses the application's
 preferences, which are backed by a file in <code>~/Library/Preferences</code> named using
 your application's bundle identifier. Amethyst, for example, has a file at
-<code>~/Library/Preferences/com.amethyst.Amethyst.plist</code>. </p>
+<code>~/Library/Preferences/com.amethyst.Amethyst.plist</code>.</p>
 <p>Additionally, <code>NSUserDefaults</code> has an interesting method
 <code>-[NSUserDefaults addSuiteNamed:]</code>, which takes a single argument called
 <code>suiteName</code>. From the docs</p>
@@ -36,7 +36,7 @@ using the <code>defaults</code> command.</p>
 <p>There's a whole bunch of data. And if you try
 <code>[[NSUserDefaults standardUserDefaults] addSuiteNamed:@"com.apple.spaces"]</code> you
 will indeed have access to all of that data. Progress!</p>
-<h1 id="spaces-preferences">Spaces Preferences</h1>
+<h4 id="spaces-preferences">Spaces Preferences</h4>
 <p>So let's dig into what's actually in the preferences. There's a list of spaces:</p>
 <pre><code class="lang-objectivec">Spaces =                     (
    {
@@ -114,7 +114,7 @@ spaces:</p>
 window numbers. That's useful. Maybe we can find the window numbers on the
 current space and use that to match up to a space identifier. So let's take a
 look at windows and window numbers.</p>
-<h1 id="windows-of-the-current-space">Windows Of The Current Space</h1>
+<h4 id="windows-of-the-current-space">Windows Of The Current Space</h4>
 <p>It turns out there is a public API for accessing all of the windows on the
 current space. It is done using the method</p>
 <pre><code class="lang-objectivec"><span class="hljs-built_in">CFArrayRef</span> <span class="hljs-built_in">CGWindowListCopyWindowInfo</span>(<span class="hljs-built_in">CGWindowListOption</span> option, <span class="hljs-built_in">CGWindowID</span> relativeToWindow);
@@ -155,7 +155,7 @@ are not on screen.</p>
 }
 </code></pre>
 <p>which conveniently has a window number under the key <code>kCGWindowNumber</code>.</p>
-<h1 id="putting-it-all-together">Putting It All Together</h1>
+<h4 id="putting-it-all-together">Putting It All Together</h4>
 <p>Okay, so we can get a list of windows connected to space uuids and we can get a
 list of windows on the current space. We should be able to cross-reference the
 lists to figure out the uuid of the current space. Great.</p>
@@ -202,4 +202,4 @@ you're doing something really weird there's always <em>something</em> in every s
 because the system has a bunch of hidden windows you never see. If you're doing
 something really weird and you actually encounter a space with no windows in it
 I would love to hear about it.</p>
-</div></section></article></section></div></div></div></body></html>
+</div></section></article></section></div></div></main></div></body></html>
