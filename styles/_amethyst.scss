@@ -4,7 +4,6 @@
 $main-bg: #252525;
 
 body {
-	padding: 20px 0 20px 0;
 	margin: 0px;
 	font: 14px/1.5 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	color: #f0e7d5;
@@ -26,10 +25,14 @@ h1, h2, h3 {
 	line-height:1.2;
 }
 
-#github-corner {
-	position: absolute;
+.github-corner {
+	fill: #93bd20;
+	color:#fff;
+	position: fixed;
 	top: 0;
 	right: 0;
+	border: 0;
+	z-index: 999;
 }
 
 .header {
@@ -89,12 +92,6 @@ pre > code {
 	@extend .hljs;
 	background: none;
 	border: 0;
-}
-
-section {
-	max-width: 650px;
-	padding: 30px 0px 0px 0px;
-	margin: auto;
 }
 
 .download {
