@@ -13,8 +13,7 @@ installed via [homebrew cask](https://github.com/phinze/homebrew-cask).
 
 <!--more-->
 
-Floating Windows
-================
+#### Floating Windows
 
 I had a request for floating windows and it's now in the app. `mod1 + t` can be
 used to toggle whether a window is tiled or floating. A floating window will not

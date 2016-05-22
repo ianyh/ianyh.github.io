@@ -17,15 +17,14 @@ pieces of public information. The first being the preferences of spaces itself.
 
 <!--more-->
 
-Preferences on OS X
-===================
+#### Preferences on OS X
 
 The first piece of information to know is how preferences work. Here's a
 lightning overview. You may be familiar with `NSUserDefaults`. It is used to
 store application preferences. By default it accesses the application's
 preferences, which are backed by a file in `~/Library/Preferences` named using
 your application's bundle identifier. Amethyst, for example, has a file at
-`~/Library/Preferences/com.amethyst.Amethyst.plist`. 
+`~/Library/Preferences/com.amethyst.Amethyst.plist`.
 
 Additionally, `NSUserDefaults` has an interesting method
 `-[NSUserDefaults addSuiteNamed:]`, which takes a single argument called
@@ -47,8 +46,7 @@ There's a whole bunch of data. And if you try
 `[[NSUserDefaults standardUserDefaults] addSuiteNamed:@"com.apple.spaces"]` you
 will indeed have access to all of that data. Progress!
 
-Spaces Preferences
-==================
+#### Spaces Preferences
 
 So let's dig into what's actually in the preferences. There's a list of spaces:
 
@@ -141,8 +139,7 @@ window numbers. That's useful. Maybe we can find the window numbers on the
 current space and use that to match up to a space identifier. So let's take a
 look at windows and window numbers.
 
-Windows Of The Current Space
-============================
+#### Windows Of The Current Space
 
 It turns out there is a public API for accessing all of the windows on the
 current space. It is done using the method
@@ -195,8 +192,7 @@ It gives you a bunch of dictionaries that look like
 
 which conveniently has a window number under the key `kCGWindowNumber`.
 
-Putting It All Together
-=======================
+#### Putting It All Together
 
 Okay, so we can get a list of windows connected to space uuids and we can get a
 list of windows on the current space. We should be able to cross-reference the

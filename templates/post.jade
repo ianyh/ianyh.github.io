@@ -1,13 +1,16 @@
 //- extends main
 extends posts
 
+block posttitle
+	h2.title: a(href="/blog") Bias and Sandwiches
+	h6.subtitle I say things sometimes, I guess
+
 block postscontent
 	section
 		article#article
-			header
-				h1.title= title
-			section
-				.byline
+			header.post-header
+				h2.title= title
+				span
 					time #{moment(publishDate).format('M.D.YYYY')}
 			section
-				.content!= contents
+				.contents!= contents

@@ -20,8 +20,7 @@ them here.
 
 <!--more-->
 
-Spaces API
-==========
+#### Spaces API
 
 It used to be the case that there was a public API for moving windows between
 spaces. They went private in 10.7, I think. There's a couple projects around
@@ -40,8 +39,7 @@ Intriguing! You can test it out if you like. Works like a charm when you do it
 manually. So how do we do it programmatically? Well, we manually post keyboard
 and mouse events!
 
-CGEvents
-========
+#### CGEvents
 
 A quick overview of how `CGEvent` works. My use of it is mostly centered around
 the following method:
@@ -78,8 +76,7 @@ etc. There are a variety of methods that can be used to create `CGEvent`
 objects. The two we care about are `CGEventCreateMouseEvent` and
 `CGEventCreateKeyboardEvent`.
 
-CGEventCreateMouseEvent
------------------------
+##### CGEventCreateMouseEvent
 
 ```objectivec
 CGEventRef CGEventCreateMouseEvent(CGEventSourceRef source, CGEventType mouseType, CGPoint mouseCursorPosition, CGMouseButton mouseButton);
@@ -134,8 +131,7 @@ CFRelease(mouseUpEvent);
 
 to simulate a tap at (0, 0). Cool. Let's look at keyboard events.
 
-CGEventCreateKeyboardEvent
---------------------------
+##### CGEventCreateKeyboardEvent
 
 ```objectivec
 CGEventRef CGEventCreateKeyboardEvent(CGEventSourceRef source, CGKeyCode virtualKey, bool keyDown);
@@ -201,8 +197,7 @@ CFRelease(keyboardDownEvent);
 CFRelease(keyboardUpEvent);
 ```
 
-Putting It All Together
------------------------
+##### Putting It All Together
 
 So let's say you have an accessibility reference to a window and want to move it
 to a different space. There's an important question you need to answer first: at
@@ -221,8 +216,7 @@ as depicted below is grabbing mouse down events for something.
 Okay, so what other point on the x-axis do all windows have in common? That
 little green zoom button!
 
-But Wait, What About Modifiers?
--------------------------------
+##### But Wait, What About Modifiers?
 
 There is one more point to consider. We are going to be executing this operation
 from an event handler triggered by a keyboard shortcut. Let's take an example
@@ -235,8 +229,7 @@ timing we could accidentally create a `ctrl + click` event instead of just a
 does. We need to thus make sure that we clear out any modifier flags on keyboard
 and mouse events that we don't expect to have any modifiers.
 
-The Final Method
-----------------
+##### The Final Method
 
 To avoid unnecessary details of the accessibility API the following code uses an
 `NSObject` wrapper.
@@ -272,5 +265,5 @@ CFRelease(mouseMoveEvent);
 CFRelease(mouseDownEvent);
 CFRelease(mouseUpEvent);
 CFRelease(keyboardEvent);
-CFRelease(keyboardEventUp);							
+CFRelease(keyboardEventUp);
 ```

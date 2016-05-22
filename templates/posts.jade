@@ -1,38 +1,23 @@
 extends main
 
 block main
-	aside.pinned-aside
-		h2.username
-			a(href="/") ianyh
-		.social
-			a(href="mailto:ianynda@gmail.com"): i.fa.fa-envelope.fa-lg
-			a(href="https://twitter.com/ianyh"): i.fa.fa-twitter-square.fa-lg
-			a(href="https://github.com/ianyh"): i.fa.fa-github.fa-lg
-	.row.main
-		.ten.columns
+	.mdl-grid
+		.mdl-cell.mdl-cell--8-col.mdl-cell--6-col-tablet.mdl-cell--2-offset-desktop.mdl-cell--1-offset-tablet
 			header.header
-				h2.title: a(href="/blog") Bias and Sandwiches
-				h6.subtitle I say things sometimes, I guess
-	.row.main.posts
-		.two.columns.u-pull-right
-			aside.relative-aside
-				h2.username
-					a(href="/") ianyh
-				.social
-					a(href="mailto:ianynda@gmail.com"): i.fa.fa-envelope.fa-lg
-					a(href="https://twitter.com/ianyh"): i.fa.fa-twitter-square.fa-lg
-					a(href="https://github.com/ianyh"): i.fa.fa-github.fa-lg
-		.ten.columns
+				block posttitle
+					h2.title Bias and Sandwiches
+					h6.subtitle I say things sometimes, I guess
+	.mdl-grid
+		.mdl-cell.mdl-cell--8-col.mdl-cell--6-col-tablet.mdl-cell--2-offset-desktop.mdl-cell--1-offset-tablet
 			block postscontent
 				section
 					if collections.posts && collections.posts.length > 0
 						.posts
 							each post in collections.posts
 								article
-									header
-										h2.title: a(href="/"+post.path)!= post.title
-									section
-										.byline
+									header.post-header
+										h4.title: a(href="/" + post.path)!= post.title
+										span
 											time #{moment(post.publishDate).format('M.D.YYYY')}
 									section
 										.excerpt!= post.excerpt
