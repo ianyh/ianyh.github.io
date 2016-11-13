@@ -494,5 +494,18 @@
 				type="application/octet-stream"
 				/>
 		</item>
+		<item>
+			<title>Version 0.11.0b4</title>
+			<description></description>
+			<pubDate>Sun, 13 Nov 2016 00:00:00 +0000</pubDate>
+			<sparkle:minimumSystemVersion>10.10.0</sparkle:minimumSystemVersion>
+			<sparkle:releaseNotesLink>https://ianyh.com/amethyst/versions/Amethyst-0.11.0b4.html</sparkle:releaseNotesLink>
+			<enclosure url="https://ianyh.com/amethyst/versions/Amethyst-0.11.0b4.zip"
+				sparkle:version="41"
+				sparkle:shortVersionString="0.11.0b4"
+				length="5715693"
+				type="application/octet-stream"
+				/>
+		</item>
 	</channel>
 </rss>
