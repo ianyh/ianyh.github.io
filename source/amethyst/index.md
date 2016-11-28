@@ -9,9 +9,9 @@ template: amethyst.jade
 [![Join the chat at https://gitter.im/ianyh/Amethyst](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ianyh/Amethyst?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://api.travis-ci.org/ianyh/Amethyst.svg?branch=master)](https://travis-ci.org/ianyh/Amethyst)
 
-Tiling window manager for OS X along the lines of [xmonad](http://xmonad.org/) and [i3](https://i3wm.org/).
+Tiling window manager for macOS along the lines of [xmonad](http://xmonad.org/).
 
-![Example 1](http://ianyh.com/amethyst/images/example-1.gif)
+![Windows](http://ianyh.com/amethyst/images/windows.png)
 
 A quick screencast of basic functionality can be found [here](https://youtu.be/boPilhScpkY). (It's rough, and I'd love to see a better one if someone has the skills and inclination to make one.)
 
@@ -23,7 +23,7 @@ Amethyst is available for direct download [here](http://ianyh.com/amethyst/versi
 brew cask install amethyst
 ```
 
-Note: that Amethyst now is only supported on OS X 10.10+.
+Note: that Amethyst now is only supported on OS X 10.12+.
 
 #### Using Amethyst
 
@@ -49,6 +49,8 @@ And defines the following commands, mostly a mapping to xmonad key combinations.
 * `mod2 + e` - move focused window to 2nd screen
 * `mod2 + r` - move focused window to 3rd screen
 * `mod2 + [n]` - move focused window to nth space
+* `mod2 + left` - move focused window left one space
+* `mod2 + right` - move focused window right one space
 * `mod1 + h` - shrink the main pane
 * `mod1 + l` - expand the main pane
 * `mod1 + ,` - increase the number of windows in the main pane
@@ -57,10 +59,13 @@ And defines the following commands, mostly a mapping to xmonad key combinations.
 * `mod1 + k` - focus the next window clockwise
 * `mod2 + j` - move the focused window one space counterclockwise
 * `mod2 + k` - move the focused window one space clockwise
+* `mod2 + h` - move the focused window one window counterclockwise
+* `mod2 + l` - move the focused window one window clockwise
 * `mod1 + return` - swap the focused window with the main window
 * `mod1 + t` - toggle whether or not the focused window is floating
 * `mod2 + t` - toggle globally whether or not Amethyst tiles windows
 * `mod1 + i` - display the current layout for each screen
+* `mod1 + z` - force windows to be reevalulated
 
 ##### Setting Up Spaces Support
 
@@ -73,7 +78,8 @@ of the Keyboard preferences pane. The shortcuts will be of the form `ctrl +
 
 ![Mission Control keyboard shortcuts](http://ianyh.com/amethyst/images/missioncontrol-shortcuts.png)
 
-#### Contributing
+Contributing
+============
 
 If you would like to see features or particular bugs fixed check out the Trello board [here](https://trello.com/b/cCg3xhlb/amethyst) and vote on things. It'll give me a better sense of what people want so I can prioritize.
 
@@ -88,7 +94,7 @@ In order to build Amethyst locally, you'll need to also perform the following st
 
 #### Contact
 
-If you have questions or feedback you have a plethora of options. You can [email me](mailto:ianynda@gmail.com), [tweet at me](https://twitter.com/ianyh), or get on [gitter](https://gitter.im/ianyh/Amethyst). That last one is new and kind of experimental. You can [drop by #amethyst on Freenode](http://webchat.freenode.net/?channels=amethyst), as well, but I am on there fairly infrequently.
+If you have questions or feedback you have a plethora of options. You can [email me](mailto:ianynda@gmail.com), [tweet at me](https://twitter.com/ianyh), or get on [gitter](https://gitter.im/ianyh/Amethyst).
 
 #### Donating
 
@@ -108,7 +114,6 @@ If you are considering donating to me, you are more than welcome to. You should 
 
 And a bunch of technology-oriented ones:
 
-* [Ada Initiative](https://adainitiative.org/donate/)
 * [National Center for Women & Information Technology](https://www.ncwit.org/donate)
 * [girls who code](http://girlswhocode.com/get-involved/)
 * [MotherCoders](https://www.indiegogo.com/projects/mothercoders-a-giant-hack-for-moms-who-want-in)
