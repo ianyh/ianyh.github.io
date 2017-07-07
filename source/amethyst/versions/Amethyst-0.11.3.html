@@ -1,0 +1,137 @@
+<html>
+	<body>
+		<h1>0.11.3</h1>
+		<ul>
+			<li>Add support for a 10th space (via `ctrl` + `0`).</li>
+			<li>Add main pane adjustment logic to the Tall and Row layouts.</li>
+			<li>Launching the application when it is already running now opens preferences.</li>
+			<li>Clarify some language around needing to relaunch the app for some preference changes.</li>
+			<li>Fix bugs around commands for multiple screens showing up in preferences.</li>
+			<li>Fix a crash when no layouts are specified in preferences.</li>
+			<li>Fix a bug that would prevent any commands from working after the last window in an application was closed.</li>
+		</ul>
+		<h1>v0.11.2</h1>
+		<ul>
+			<li>Fix a bug in determining how many screen-based commands to create preventing 4-screen setups.</li>
+			<li>Fix a bundle of crashes.</li>
+		</ul>
+		<h1>v0.11.1</h1>
+		<ul>
+			<li>Fix a crash when selecting applications in preferences for floating.</li>
+		</ul>
+		<h1>v0.11.0</h1>
+		<ul>
+			<li><strong>Amethyst no longer supports macOS versions earlier than 10.12.</strong></li>
+			<li>Add an experimental first pass at a binary space partitioning layout.</li>
+			<li>Add a shortcut for forcing Amethyst to reevaluate windows.
+				<ul>
+					<li><code>mod1 + z</code> by default</li>
+				</ul>
+			</li>
+			<li>Add the option for crash reporting.
+				<ul>
+					<li>This is opt-in and available in the preferences menu.</li>
+					<li>There is the caveat that Crashlytics also takes analytics data. I have not yet found a way to disable that.</li>
+				</ul>
+			</li>
+			<li>Add wildcards to floating application bundle identifiers.
+				<ul>
+					<li>For example, <code>com.apple.*</code> will match all apple applications.</li>
+				</ul>
+			</li>
+			<li>Add the option for entering a floating application bundle identifier manually in the preferences menu.</li>
+			<li>Add the option for having new windows go to the main pane.</li>
+			<li>Add the option for defining a custom window resize interval when shrinking/expanding main pane.</li>
+			<li>Add a command-line flag for enabling more logging for debugging.</li>
+			<li>Focus the top window on the screen when focusing a screen instead of pulling up a window from the bottom.</li>
+			<li>Fix a bug that was causing Amethyst to lose track of windows, particular when hiding/unhiding, going back and forth from fullscreen, and minimizing and expanding windows.</li>
+			<li>Fix a bug that was causing Chrome to lock up when playing fullscreen video with Amethyst running.</li>
+			<li>Fix a bug that caused default configuration to sometimes override user configuration.</li>
+			<li>Fix a bug that prevented some minimized windows from tiling when brought back up.<li>
+		</ul>
+		<h1>v0.10.1</h1>
+		<ul>
+			<li>Fix a logic error that prevented the Widescreen Tall layout from functioning correctly.</li>
+		</ul>
+		<h1>v0.10</h1>
+		<ul>
+			<li>Experimental: Finally add support for window margins.</li>
+			<li>Fix bugs around setting and displaying shortcut preferences.</li>
+			<li>Fix a crash when trying to move windows clockwise through screens.</li>
+			<li>Fix a crash when focusing an empty screen.</li>
+			<li>Fix a bug preventing decreasing main pane count.</li>
+			<li>Fix a bug that displayed the layout HUD on every screen when switching spaces.</li>
+			<li>Fix a bug preventing display of layouts and floating applications in preferences.</li>
+			<li>No longer supporting OS X 10.9</li>
+		</ul>
+		<h1>v0.9.10</h1>
+		<ul>
+			<li>Fix a bug that prevented anything in dotfiles from being respected in preferences. Hopefully I got it right this time.</li>
+		</ul>
+		<h1>v0.9.9</h1>
+		<ul>
+			<li>Fix a bug that prevented changes in dotfiles from being respected in preferences.</li>
+		</ul>
+		<h1>v0.9.8</h1>
+		<ul>
+			<li>Fix a bunch of bugs around defining shortcuts, particularly around non-US keyboards.</li>
+			<li>Fix a bug that prevented windows from initially tiling correctly when being moved between spaces.</li>
+			<li>Fix a bug that would cut off display of text in preferences making it very hard to read layouts and floating applications.</li>
+		</ul>
+		<h1>v0.9.7</h1>
+		<ul>
+			<li>Fix a crash in the floating layout.</li>
+		</ul>
+		<h1>v0.9.6</h1>
+		<ul>
+			<li>Hopefully fix two very substantial bugs: erroneous reflows of windows when in fullscreen and when switching spaces. Note that these fixes are only available on OS X > 10.11.</li>
+			<li>Performance improvements for switching focus between windows.</li>
+			<li>Move mouse focus to a screen even if there are no windows.</li>
+			<li>Add very simple analytics to roughly track the number of people using the app.</li>
+			<li>Temporarily back support 10.10. This will probably be the last version to support it.</li>
+			<li>Add version to menu.</li>
+			<li>Fix a bug that would prevent users from moving off of the development updates channel.</li>
+		</ul>
+		<h1>v0.9.5</h1>
+		<ul>
+			<li>Increased stability in switching between spaces. Note: there are still issues around OS X fullscreen mode that have yet to be resolved, but the occurrence of spurious reflows when switching between spaces should be reduced.</li>
+			<li>Added two new layouts:
+				<ul>
+					<li>Middle Wide (middle-wide): A single center main window surrounded by a column on the left and right.</li>
+					<li>Tall Right (tall-right): Mirrored version of the tall layout, with the main column on the right.</li>
+				</ul>
+			</li>
+			<li>Present warning when accessing in-app preferences if a `.amethyst` file exists.</li>
+			<li>Fixed a bug in OS X 10.11 that would always cause reflows when in fullscreen.</li>
+			<li>Fixed a bug that would prevent customizations to `mod1` or `mod2` via a `.amethyst` file from being reflected in command shortcuts.</li>
+		</ul>
+		<h1>v0.9.4</h1>
+		<ul>
+			<li><strong>Critical:</strong> Squash a bug that broke tiling when the title bar moves to a different display.</li>
+			<li>Fixed a bug that made the menu bar icon invisible when using dark mode on Yosemite.</li>
+		</ul>
+		<h1>v0.9.3</h1>
+		<ul>
+			<li>Fixed a bug that broke tiling when displays don't have different spaces.</li>
+			<li>Fixed a bug that broke tiling when a screen was plugged in that took the title bar.</li>
+		</ul>
+		<h1>v0.9.2</h1>
+		<ul>
+			<li>Fixed a bug that prevented Amethyst from working on certain configurations of multiple displays.</li>
+			<li>Added a set of woefully undocumented commands to the preference pane.</li>
+		</ul>
+		<h1>v0.9.1</h1>
+		<ul>
+			<li>Fixed a horrible bug that broke window focusing.</li>
+		</ul>
+		<h1>v0.9</h1>
+		<ul>
+			<li>In-app preferences! You can configure the app using the preferences window instead of an `.amethyst` file. Your `.amethyst` configuration will automatically be loaded into the in-app preferences on first launch, but not all configuration options are available in-app yet.</li>
+			<li>You can set your app to get beta builds of the app. They will be released more frequently, but will likely be less stable.</li>
+			<li>Actually prevent fullscreen applications from tiling.</li>
+			<li>Fix an annoying bug that would cause Amethyst to sporadically reset layouts.</li>
+			<li>Added an option for focus following your mouse cursor.</li>
+			<li>Added support for more than three screens.</li>
+		</ul>
+	</body>
+</html>
