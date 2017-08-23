@@ -4,10 +4,11 @@ subtitle: "A tiling window manager for OS X"
 template: amethyst.jade
 ---
 
-#### Overview
+Amethyst
+========
 
 [![Join the chat at https://gitter.im/ianyh/Amethyst](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ianyh/Amethyst?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://api.travis-ci.org/ianyh/Amethyst.svg?branch=master)](https://travis-ci.org/ianyh/Amethyst)
+[![Build Status](https://api.travis-ci.org/ianyh/Amethyst.svg?branch=development)](https://travis-ci.org/ianyh/Amethyst)
 
 Tiling window manager for macOS along the lines of [xmonad](http://xmonad.org/).
 
@@ -15,23 +16,26 @@ Tiling window manager for macOS along the lines of [xmonad](http://xmonad.org/).
 
 A quick screencast of basic functionality can be found [here](https://youtu.be/boPilhScpkY). (It's rough, and I'd love to see a better one if someone has the skills and inclination to make one.)
 
-#### Getting Amethyst
+Getting Amethyst
+================
 
 Amethyst is available for direct download [here](http://ianyh.com/amethyst/versions/Amethyst-latest.zip) or using [homebrew cask](https://github.com/caskroom/homebrew-cask).
 
-```bash
+```
 brew cask install amethyst
 ```
 
 Note: that Amethyst now is only supported on OS X 10.12+.
 
-#### Using Amethyst
+Using Amethyst
+==============
 
 Amethyst must be given permissions to use the accessibility APIs under the Privacy tab of the Security & Privacy preferences pane as shown below.
 
 ![Accessibility permissions](http://ianyh.com/amethyst/images/accessibility-window.png)
 
-##### Keyboard Shortcuts
+Keyboard Shortcuts
+------------------
 
 Amethyst uses two modifier combinations.
 
@@ -67,7 +71,8 @@ And defines the following commands, mostly a mapping to xmonad key combinations.
 * `mod1 + i` - display the current layout for each screen
 * `mod1 + z` - force windows to be reevalulated
 
-##### Setting Up Spaces Support
+Setting Up Spaces Support
+-------------------------
 
 Spaces are, unfortunately, not supported right out of the box. To enable it you
 must activate Mission Control's keyboard shortcuts for switching to specific
@@ -78,25 +83,28 @@ of the Keyboard preferences pane. The shortcuts will be of the form `ctrl +
 
 ![Mission Control keyboard shortcuts](http://ianyh.com/amethyst/images/missioncontrol-shortcuts.png)
 
+Amethyst currently supports sending windows to up to 10 spaces, despite macOS' limit of 16 spaces per display.
+
+_Important note_: You will probably want to disable `Automatically rearrange Spaces based on most recent use` (found under Mission Control in System Preferences). This setting is enabled by default, and will cause your Spaces to swap places based on use. This makes keyboard navigation between Spaces unpredictable.
+
 Contributing
 ============
 
 If you would like to see features or particular bugs fixed check out the Trello board [here](https://trello.com/b/cCg3xhlb/amethyst) and vote on things. It'll give me a better sense of what people want so I can prioritize.
 
-I love pull requests. If you'd like to contribute please branch off of the `development` branch and open pull requests against it rather than master. Otherwise just try to stick to the general style of the code.
+If you'd like to contribute please branch off of the `development` branch and open pull requests against it rather than `master`. Otherwise just try to stick to the general style of the code. There is a setup script to guide you through the process of installing necessary tools and getting dependencies built. To get started run
 
-In order to build Amethyst locally, you'll need to also perform the following steps after cloning the repo:
+```bash
+$ ./bin/setup.sh
+```
 
-- Install `carthage` and `rbenv`.
-  - These are not installed via the setup script so as to not casually pollute your global environment.
-- Run `rake setup`, which installs dependencies from Carthage and CocoaPods.
-  - Note that by default CocoaPods will be installed and run via `bundler`. This restricts the version to get around some bugs in the current CocoaPods beta.
-
-#### Contact
+Contact
+=======
 
 If you have questions or feedback you have a plethora of options. You can [email me](mailto:ianynda@gmail.com), [tweet at me](https://twitter.com/ianyh), or get on [gitter](https://gitter.im/ianyh/Amethyst).
 
-#### Donating
+Donating
+========
 
 Amethyst is free and always will be. That said, a couple of people have expressed their desire to donate money in appreciation. Given the current political climate I would recommend donating to one of these organizations instead:
 
