@@ -793,5 +793,18 @@
 				type="application/octet-stream"
 				/>
 		</item>
+		<item>
+			<title>Version 0.12.2</title>
+			<description></description>
+			<pubDate>Sun, 2 Dec 2018 00:00:00 +0000</pubDate>
+			<sparkle:minimumSystemVersion>10.12.0</sparkle:minimumSystemVersion>
+			<sparkle:releaseNotesLink>https://ianyh.com/amethyst/versions/Amethyst-0.12.2.html</sparkle:releaseNotesLink>
+			<enclosure url="https://github.com/ianyh/Amethyst/releases/download/v0.12.2/Amethyst-0.12.2.zip"
+				sparkle:version="66"
+				sparkle:shortVersionString="0.12.2"
+				length="6951459"
+				type="application/octet-stream"
+				/>
+		</item>
 	</channel>
 </rss>
