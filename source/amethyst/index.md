@@ -4,12 +4,6 @@ subtitle: "A tiling window manager for macOS"
 template: amethyst.jade
 ---
 
-[![Join the chat at https://gitter.im/ianyh/Amethyst](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ianyh/Amethyst?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://travis-ci.com/ianyh/Amethyst.svg?branch=development)](https://travis-ci.com/ianyh/Amethyst)
-[![Open Source Helpers](https://www.codetriage.com/ianyh/amethyst/badges/users.svg)](https://www.codetriage.com/ianyh/amethyst)
-[![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)
-![Twitter Follow](https://img.shields.io/twitter/follow/amethystwm?style=social)
-
 Tiling window manager for macOS along the lines of [xmonad](https://xmonad.org/).
 
 ![Windows](https://ianyh.com/amethyst/images/windows.png)
