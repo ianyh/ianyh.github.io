@@ -494,5 +494,18 @@
 				type="application/octet-stream"
 				/>
 		</item>
+		<item>
+			<title>Version 0.15.0</title>
+			<description></description>
+			<pubDate>Thu, 27 Feb 2020 00:00:00 +0000</pubDate>
+			<sparkle:minimumSystemVersion>10.12.0</sparkle:minimumSystemVersion>
+			<sparkle:releaseNotesLink>https://ianyh.com/amethyst/versions/Amethyst-0.15.0.html</sparkle:releaseNotesLink>
+			<enclosure url="https://github.com/ianyh/Amethyst/releases/download/v0.15.0/Amethyst.zip"
+				sparkle:version="84"
+				sparkle:shortVersionString="0.15.0"
+				length="7514123"
+				type="application/octet-stream"
+				/>
+		</item>
 	</channel>
 </rss>
