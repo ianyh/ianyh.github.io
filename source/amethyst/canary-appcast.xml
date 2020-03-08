@@ -1028,7 +1028,7 @@
 				/>
 		</item>
 		<item>
-			<title>Version 0.15.0 Beta</title>
+			<title>Version 0.15.0</title>
 			<description></description>
 			<pubDate>Fri, 21 Feb 2020 00:00:00 +0000</pubDate>
 			<sparkle:minimumSystemVersion>10.12.0</sparkle:minimumSystemVersion>
@@ -1037,6 +1037,19 @@
 				sparkle:version="84"
 				sparkle:shortVersionString="0.15.0"
 				length="7514123"
+				type="application/octet-stream"
+				/>
+		</item>
+		<item>
+			<title>Version 0.15.1</title>
+			<description></description>
+			<pubDate>Sun, 1 Mar 2020 00:00:00 +0000</pubDate>
+			<sparkle:minimumSystemVersion>10.12.0</sparkle:minimumSystemVersion>
+			<sparkle:releaseNotesLink>https://ianyh.com/amethyst/versions/Amethyst-0.15.1b.html</sparkle:releaseNotesLink>
+			<enclosure url="https://github.com/ianyh/Amethyst/releases/download/v0.15.1b/Amethyst.zip"
+				sparkle:version="85"
+				sparkle:shortVersionString="0.15.1"
+				length="7663124"
 				type="application/octet-stream"
 				/>
 		</item>
