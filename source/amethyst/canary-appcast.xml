@@ -1056,13 +1056,13 @@
 		<item>
 			<title>Version 0.15.2</title>
 			<description></description>
-			<pubDate>Thu, 12 Mar 2020 00:00:00 +0000</pubDate>
+			<pubDate>Sun, 15 Mar 2020 00:00:00 +0000</pubDate>
 			<sparkle:minimumSystemVersion>10.12.0</sparkle:minimumSystemVersion>
-			<sparkle:releaseNotesLink>https://ianyh.com/amethyst/versions/Amethyst-0.15.2b.html</sparkle:releaseNotesLink>
-			<enclosure url="https://github.com/ianyh/Amethyst/releases/download/v0.15.2b/Amethyst.zip"
-				sparkle:version="86"
+			<sparkle:releaseNotesLink>https://ianyh.com/amethyst/versions/Amethyst-0.15.2b2.html</sparkle:releaseNotesLink>
+			<enclosure url="https://github.com/ianyh/Amethyst/releases/download/v0.15.2b2/Amethyst.zip"
+				sparkle:version="87"
 				sparkle:shortVersionString="0.15.2"
-				length="7701677"
+				length="7702102"
 				type="application/octet-stream"
 				/>
 		</item>
