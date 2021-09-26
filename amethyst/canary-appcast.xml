@@ -1102,6 +1102,18 @@
 				sparkle:version="91"
 				sparkle:shortVersionString="0.15.4"
 				length="9718991"
+				/>
+		</item>
+		<item>
+			<title>Version 0.15.5 Beta</title>
+			<description></description>
+			<pubDate>Sun, 26 Sep 2021 00:00:00 +0000</pubDate>
+			<sparkle:minimumSystemVersion>10.12.0</sparkle:minimumSystemVersion>
+			<sparkle:releaseNotesLink>https://ianyh.com/amethyst/versions/Amethyst-0.15.5b.html</sparkle:releaseNotesLink>
+			<enclosure url="https://github.com/ianyh/Amethyst/releases/download/v0.15.5b/Amethyst.zip"
+				sparkle:version="92"
+				sparkle:shortVersionString="0.15.5"
+				length="9729242"
 				type="application/octet-stream"
 				/>
 		</item>
