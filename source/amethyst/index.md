@@ -69,7 +69,7 @@ And defines the following commands, mostly a mapping to xmonad key combinations.
 | `mod2 + j` | Swap focused window counter clockwise |
 | `mod2 + k` | Swap focused window clockwise |
 | `mod1 + enter` | Swap focused window with main window |
-| `mod1 + z` | Force windows to be reevalulated |
+| `mod1 + z` | Force windows to be reevaluated |
 | `mod2 + z` | Relaunch Amethyst |
 | `mod2 + left` | Throw focused window to space left |
 | `mod2 + right` | Throw focused window to space right |
@@ -123,6 +123,16 @@ Exactly the same as *Tall*, but the main pane is on the right, with the other pa
 
 The rotated version of *Tall*, where the main pane is on the _top_ (extending the full width of the screen), and the other pane is on the bottom. If either pane has more than one window, that pane will split into columns instead of rows.
 
+#### Two Pane
+
+This layout has two visible panes - the main and the secondary pane. The window
+in the main pane is pinned, just like in other layouts, and all the remaining
+windows are placed in the other pane with only one window being visible at a
+time, which can be swapped (using the keyboard shortcuts). This layout
+automatically adapts to horizontal/vertical tiling depending on your screen
+orientation. The main pane is on the left in the horizontal orientation and it's
+on the top in the vertical orientation.
+
 #### 3Column-Left
 
 A three-column version of *Tall*, with one main pane on the left (extending the full height of the screen) and two other panes, one in the middle and one on the right. Like *Tall*, if any pane has more than one window, that pane will be split into rows. You can control how many windows are in the main pane as usual; other windows will be assigned as evenly as possible between the other two panes.
@@ -166,6 +176,15 @@ This mode makes all windows "floating", allowing you to move and resize them as 
 #### Binary Space Partitioning (BSP)
 
 This layout does not have a main pane in the way that other layouts do. When adding windows, any given pane can be split evenly into two panes along whatever axis is longer. This is recursive such that pane A can be split in the middle into pane A on the left and pane B on the right; pane B can then be split into pane B on top and pane C on bottom; pane C can then be split into pane C on the left and pane D on the right; and so on.
+
+#### Custom (beta)
+
+Custom layouts can be implemented via JavaScript. See [Custom Layouts](docs/custom-layouts.md).
+
+Configuration
+-------------
+
+Amethyst supports configuration via YAML in the home directory. See [Configuration Files](docs/configuration-files.md).
 
 Contributing
 ============
