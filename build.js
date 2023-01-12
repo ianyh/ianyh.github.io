@@ -57,18 +57,18 @@ metalsmith(__dirname)
 		engine: 'jade',
 		moment: moment
 	}))
-	.use(serve({
-		port: 8080,
-		verbose: true
-	}))
-	.use(watch({
-		paths: {
-			'source/**/*': '**/*',
-			'templates/**/*': '**/*',
-			'styles/**/*': '**/*'
-		},
-		livereload: true
-	}))
+	// .use(serve({
+	// 	port: 8080,
+	// 	verbose: true
+	// }))
+	// .use(watch({
+	// 	paths: {
+	// 		'source/**/*': '**/*',
+	// 		'templates/**/*': '**/*',
+	// 		'styles/**/*': '**/*'
+	// 	},
+	// 	livereload: true
+	// }))
 	.build(function build(err) {
 		if (err) {
 			console.log(err);
