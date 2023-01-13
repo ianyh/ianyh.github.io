@@ -14,7 +14,9 @@ Tiling window manager for macOS along the lines of [xmonad](https://xmonad.org/)
 
 ![Windows](https://ianyh.com/amethyst/images/windows.png)
 
-A quick screencast of basic functionality can be found [here](https://youtu.be/boPilhScpkY). (It's rough, and I'd love to see a better one if someone has the skills and inclination to make one.)
+If you want to learn more about tiling window managers and the features of Amethyst there are some great community resources on YouTube.
+
+[Boost your MacOS PRODUCTIVITY with Amethyst | Tiling Window Manager](https://www.youtube.com/watch?v=7Z9-Ry4yGNc)
 
 Getting Amethyst
 ================
@@ -217,8 +219,7 @@ Amethyst is free and always will be. That said, a couple of people have expresse
 
 And a bunch of technology-oriented ones:
 
-* [National Center for Women & Information Technology](https://www.ncwit.org/donate)
+* [National Center for Women & Information Technology](https://ncwit.org/about-ncwit/donate/)
 * [girls who code](https://girlswhocode.com/get-involved/)
-* [MotherCoders](https://www.indiegogo.com/projects/mothercoders-a-giant-hack-for-moms-who-want-in)
-* [Trans*H4CK](https://www.transhack.org/donate/)
-* [Black Girls CODE](https://www.blackgirlscode.com/)
+* [Trans*H4CK](https://www.transhack.org/sponsorship/)
+* [Black Girls CODE](https://www.blackgirlscode.com/donate/)
