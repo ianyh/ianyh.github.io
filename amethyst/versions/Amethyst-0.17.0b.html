@@ -1,0 +1,249 @@
+<h1 data-view-component="true" class="d-inline mr-3">
+ Amethyst 0.17.0 Beta
+</h1>
+<ul>
+ <li>
+  Support for extending existing layouts with custom layouts.
+  <ul>
+   <li>
+    Note: this includes a fix for encoding of window frames provided to
+    <code>
+     getFrameAssignments
+    </code>
+    that is a potentially breaking change for some custom layouts.
+   </li>
+  </ul>
+ </li>
+ <li>
+  Support for setting a maximum number of displayed windows. Thanks,
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/MutatingFunc/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/MutatingFunc">
+   @MutatingFunc
+  </a>
+  !
+ </li>
+ <li>
+  Support for disabling screen padding on native display. Thanks,
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/anthdono/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/anthdono">
+   @anthdono
+  </a>
+  !
+ </li>
+ <li>
+  Support for XDG config hierarchies. Thanks,
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/cowboy-bebug/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/cowboy-bebug">
+   @cowboy-bebug
+  </a>
+  !
+ </li>
+ <li>
+  Fix for not respecting option to not follow windows through space transitions. Thanks,
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/EvanDorsky/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/EvanDorsky">
+   @EvanDorsky
+  </a>
+  !
+ </li>
+ <li>
+  Fix for incorrectly considering small windows.
+ </li>
+ <li>
+  Fix for an incorrect handling of lack of floating definition.
+ </li>
+</ul>
+<ul>
+ <li>
+  adds rest of layouts to sample config file by
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/dmartzol/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/dmartzol">
+   @dmartzol
+  </a>
+  in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1368415683" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1307" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1307/hovercard" href="https://github.com/ianyh/Amethyst/pull/1307">
+   #1307
+  </a>
+ </li>
+ <li>
+  Fix small typo by
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/max-sixty/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/max-sixty">
+   @max-sixty
+  </a>
+  in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1376866973" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1312" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1312/hovercard" href="https://github.com/ianyh/Amethyst/pull/1312">
+   #1312
+  </a>
+ </li>
+ <li>
+  Add autominimize setting (AKA window limit) by
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/MutatingFunc/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/MutatingFunc">
+   @MutatingFunc
+  </a>
+  in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="772048173" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1083" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1083/hovercard" href="https://github.com/ianyh/Amethyst/pull/1083">
+   #1083
+  </a>
+ </li>
+ <li>
+  Support XDG config by
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/cowboy-bebug/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/cowboy-bebug">
+   @cowboy-bebug
+  </a>
+  in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1412440464" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1324" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1324/hovercard" href="https://github.com/ianyh/Amethyst/pull/1324">
+   #1324
+  </a>
+ </li>
+ <li>
+  Send console.log in custom layouts to syslog by
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/rickythefox/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/rickythefox">
+   @rickythefox
+  </a>
+  in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1408447931" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1322" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1322/hovercard" href="https://github.com/ianyh/Amethyst/pull/1322">
+   #1322
+  </a>
+ </li>
+ <li>
+  Window limit by
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/MutatingFunc/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/MutatingFunc">
+   @MutatingFunc
+  </a>
+  in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1401893195" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1319" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1319/hovercard" href="https://github.com/ianyh/Amethyst/pull/1319">
+   #1319
+  </a>
+ </li>
+ <li>
+  Issue 1306: Fix "Follow thrown windows between spaces" setting not working by
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/EvanDorsky/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/EvanDorsky">
+   @EvanDorsky
+  </a>
+  in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1427520944" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1333" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1333/hovercard" href="https://github.com/ianyh/Amethyst/pull/1333">
+   #1333
+  </a>
+ </li>
+ <li>
+  Added option to disable screen padding on built-in display by
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/anthdono/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/anthdono">
+   @anthdono
+  </a>
+  in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1339905013" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1293" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1293/hovercard" href="https://github.com/ianyh/Amethyst/pull/1293">
+   #1293
+  </a>
+ </li>
+ <li>
+  Always treat quick swapped windows as "tabs" by
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+   @ianyh
+  </a>
+  in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1526652691" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1360" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1360/hovercard" href="https://github.com/ianyh/Amethyst/pull/1360">
+   #1360
+  </a>
+ </li>
+ <li>
+  Fix consideration of small windows by
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+   @ianyh
+  </a>
+  in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1529993750" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1362" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1362/hovercard" href="https://github.com/ianyh/Amethyst/pull/1362">
+   #1362
+  </a>
+ </li>
+ <li>
+  Fix the negative logic of floating list by
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+   @ianyh
+  </a>
+  in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1530005947" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1363" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1363/hovercard" href="https://github.com/ianyh/Amethyst/pull/1363">
+   #1363
+  </a>
+ </li>
+ <li>
+  Allow extending existing layouts by
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+   @ianyh
+  </a>
+  in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1533614688" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1366" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1366/hovercard" href="https://github.com/ianyh/Amethyst/pull/1366">
+   #1366
+  </a>
+ </li>
+ <li>
+  A slew of dependency updates by
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+   @ianyh
+  </a>
+  in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1534179559" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1368" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1368/hovercard" href="https://github.com/ianyh/Amethyst/pull/1368">
+   #1368
+  </a>
+ </li>
+ <li>
+  Update min os version in readme by
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+   @ianyh
+  </a>
+  in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1534197923" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1369" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1369/hovercard" href="https://github.com/ianyh/Amethyst/pull/1369">
+   #1369
+  </a>
+ </li>
+</ul>
+<ul>
+ <li>
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/dmartzol/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/dmartzol">
+   @dmartzol
+  </a>
+  made their first contribution in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1368415683" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1307" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1307/hovercard" href="https://github.com/ianyh/Amethyst/pull/1307">
+   #1307
+  </a>
+ </li>
+ <li>
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/max-sixty/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/max-sixty">
+   @max-sixty
+  </a>
+  made their first contribution in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1376866973" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1312" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1312/hovercard" href="https://github.com/ianyh/Amethyst/pull/1312">
+   #1312
+  </a>
+ </li>
+ <li>
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/MutatingFunc/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/MutatingFunc">
+   @MutatingFunc
+  </a>
+  made their first contribution in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="772048173" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1083" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1083/hovercard" href="https://github.com/ianyh/Amethyst/pull/1083">
+   #1083
+  </a>
+ </li>
+ <li>
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/cowboy-bebug/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/cowboy-bebug">
+   @cowboy-bebug
+  </a>
+  made their first contribution in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1412440464" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1324" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1324/hovercard" href="https://github.com/ianyh/Amethyst/pull/1324">
+   #1324
+  </a>
+ </li>
+ <li>
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/EvanDorsky/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/EvanDorsky">
+   @EvanDorsky
+  </a>
+  made their first contribution in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1427520944" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1333" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1333/hovercard" href="https://github.com/ianyh/Amethyst/pull/1333">
+   #1333
+  </a>
+ </li>
+ <li>
+  <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/anthdono/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/anthdono">
+   @anthdono
+  </a>
+  made their first contribution in
+  <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1339905013" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1293" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1293/hovercard" href="https://github.com/ianyh/Amethyst/pull/1293">
+   #1293
+  </a>
+ </li>
+</ul>
