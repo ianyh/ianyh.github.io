@@ -87,6 +87,8 @@ And defines the following commands, mostly a mapping to xmonad key combinations.
 | `mod2 + 8` | Throw focused window to space 8 |
 | `mod2 + 9` | Throw focused window to space 9 |
 | `mod2 + 0` | Throw focused window to space 10 |
+| `none`     | Throw focused window to space 11 |
+| `none`     | Throw focused window to space 12 |
 | `mod1 + w` | Focus Screen 1 |
 | `mod2 + w` | Throw focused window to screen 1 |
 | `mod1 + e` | Focus Screen 2 |
@@ -190,6 +192,17 @@ Configuration
 
 Amethyst supports configuration via YAML in the home directory. See [Configuration Files](https://github.com/ianyh/Amethyst/tree/development/docs/configuration-files.md).
 
+Troubleshooting
+===============
+
+See [Troubleshooting](docs/troubleshooting.md) for some common issues.
+
+Contact
+=======
+
+If you have questions or feedback your best options are to [tweet](https://twitter.com/amethystwm) or to get on [gitter](https://gitter.im/ianyh/Amethyst).
+
+
 Contributing
 ============
 
@@ -199,10 +212,6 @@ If you'd like to contribute please branch off of the `development` branch and op
 $ ./bin/setup.sh
 ```
 
-Contact
-=======
-
-If you have questions or feedback your best options are to [tweet](https://twitter.com/amethystwm) or to get on [gitter](https://gitter.im/ianyh/Amethyst).
 
 Donating
 ========
@@ -224,4 +233,4 @@ And a bunch of technology-oriented ones:
 * [National Center for Women & Information Technology](https://ncwit.org/about-ncwit/donate/)
 * [girls who code](https://girlswhocode.com/get-involved/)
 * [Trans*H4CK](https://www.transhack.org/sponsorship/)
-* [Black Girls CODE](https://www.blackgirlscode.com/donate/)
+* [Black Girls CODE](https://wearebgc.org/donate/)
