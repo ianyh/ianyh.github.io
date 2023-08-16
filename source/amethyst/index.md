@@ -4,6 +4,9 @@ subtitle: "A tiling window manager for macOS"
 template: amethyst.jade
 ---
 
+Amethyst
+========
+
 [![Discussions](https://img.shields.io/github/discussions/ianyh/Amethyst)](https://github.com/ianyh/Amethyst/discussions)
 [![Build Status](https://travis-ci.com/ianyh/Amethyst.svg?branch=development)](https://travis-ci.com/ianyh/Amethyst)
 [![Open Source Helpers](https://www.codetriage.com/ianyh/amethyst/badges/users.svg)](https://www.codetriage.com/ianyh/amethyst)
@@ -41,6 +44,13 @@ Amethyst must be given permissions to use the accessibility APIs under the Priva
 <p align="center">
   <img style="text-align: center" width="500px" src="https://user-images.githubusercontent.com/11782590/127423014-1faa4a7f-9225-42ea-b400-56b994e2796f.png" />
 </p>
+
+Troubleshooting
+===============
+
+See [Troubleshooting](docs/troubleshooting.md) for some common issues.
+
+# Configuration
 
 Keyboard Shortcuts
 ------------------
@@ -187,15 +197,10 @@ This layout does not have a main pane in the way that other layouts do. When add
 
 Custom layouts can be implemented via JavaScript. See [Custom Layouts](https://github.com/ianyh/Amethyst/tree/development/docs/custom-layouts.md).
 
-Configuration
+Configuration File
 -------------
 
 Amethyst supports configuration via YAML in the home directory. See [Configuration Files](https://github.com/ianyh/Amethyst/tree/development/docs/configuration-files.md).
-
-Troubleshooting
-===============
-
-See [Troubleshooting](docs/troubleshooting.md) for some common issues.
 
 Contact
 =======
@@ -211,7 +216,6 @@ If you'd like to contribute please branch off of the `development` branch and op
 ```bash
 $ ./bin/setup.sh
 ```
-
 
 Donating
 ========
