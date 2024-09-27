@@ -31,23 +31,28 @@ Note: that Amethyst now is only supported on macOS 10.15+.
 Using Amethyst
 ==============
 
-
 Amethyst must be given permissions to use the accessibility APIs in the Privacy & Security tab, Privacy -> Accessibilty.
 
 <p align="center">
-  <img style="text-align: center; border-radius:4px;" width="500px" src="https://raw.githubusercontent.com/ianyh/Amethyst/v0.21.0/docs/images/accessibility-permission.png" alt="Give Accessibility permission to Amethyst under Privicay and Security." />
+  <img style="text-align: center; border-radius:4px;" width="500px" src="https://raw.githubusercontent.com/ianyh/Amethyst/v0.21.2/docs/images/accessibility-permission.png" alt="Give Accessibility permission to Amethyst under Privicay and Security." />
 </p>
 
 **_Important note_**: You will probably want to disable `Automatically rearrange Spaces based on most recent use` (found under Mission Control in System Preferences). This setting is enabled by default, and will cause your Spaces to swap places based on use. This makes keyboard navigation between Spaces unpredictable.
 
 <p align="center">
-  <img style="text-align: center" width="500px" src="https://raw.githubusercontent.com/ianyh/Amethyst/v0.21.0/docs/images/auto-rearranage.png" />
+  <img style="text-align: center" width="500px" src="https://raw.githubusercontent.com/ianyh/Amethyst/v0.21.2/docs/images/auto-rearranage.png" />
 </p>
+
+or run in a terminal:
+```bash
+defaults write com.apple.dock workspaces-auto-swoosh -bool NO
+killall Dock
+```
 
 Troubleshooting
 ===============
 
-See [Troubleshooting](https://github.com/ianyh/Amethyst/blob/v0.21.0/docs/troubleshooting.md) for some common issues.
+See [Troubleshooting](https://github.com/ianyh/Amethyst/blob/v0.21.2/docs/troubleshooting.md) for some common issues.
 
 # Configuration
 
@@ -106,6 +111,8 @@ And defines the following commands, mostly a mapping to xmonad key combinations.
 | `mod2 + r` | Throw focused window to screen 3 |
 | `mod1 + q` | Focus Screen 4 |
 | `mod2 + q` | Throw focused window to screen 4 |
+| `mod1 + g` | Focus Screen 5 |
+| `mod2 + g` | Throw focused window to screen 5 |
 | `mod1 + t` | Toggle float for focused window |
 | `mod1 + i` | Display current layout |
 | `mod2 + t` | Toggle global tiling |
@@ -194,12 +201,12 @@ This layout does not have a main pane in the way that other layouts do. When add
 
 #### Custom (beta)
 
-Custom layouts can be implemented via JavaScript. See [Custom Layouts](https://github.com/ianyh/Amethyst/blob/v0.21.0/docs/custom-layouts.md).
+Custom layouts can be implemented via JavaScript. See [Custom Layouts](https://github.com/ianyh/Amethyst/blob/v0.21.2/docs/custom-layouts.md).
 
 Configuration File
 -------------
 
-Amethyst supports configuration via YAML in the home directory. See [Configuration Files](https://github.com/ianyh/Amethyst/blob/v0.21.0/docs/configuration-files.md).
+Amethyst supports configuration via YAML in the home directory. See [Configuration Files](https://github.com/ianyh/Amethyst/blob/v0.21.2/docs/configuration-files.md).
 
 Contact
 =======
