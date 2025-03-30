@@ -1,0 +1,316 @@
+<h1 data-view-component="true" class="d-inline mr-3">
+ Amethyst 0.23.1
+</h1>
+<div data-pjax="true" data-test-selector="body-content" data-view-component="true" class="markdown-body my-3">
+ <h1>
+  What's New
+ </h1>
+ <ul>
+  <li>
+   Dependency update for security fix.
+  </li>
+ </ul>
+ <h2>
+  What's Changed
+ </h2>
+ <ul>
+  <li>
+   Update version for 0.23.0 by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+    @ianyh
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2844119338" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1745" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1745/hovercard" href="https://github.com/ianyh/Amethyst/pull/1745">
+    #1745
+   </a>
+  </li>
+  <li>
+   fixes sample config to align with README by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/phrabos/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/phrabos">
+    @phrabos
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2943414799" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1756" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1756/hovercard" href="https://github.com/ianyh/Amethyst/pull/1756">
+    #1756
+   </a>
+  </li>
+  <li>
+   Update Sparkle by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+    @ianyh
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2958614702" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1758" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1758/hovercard" href="https://github.com/ianyh/Amethyst/pull/1758">
+    #1758
+   </a>
+  </li>
+ </ul>
+ <h2>
+  New Contributors
+ </h2>
+ <ul>
+  <li>
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/phrabos/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/phrabos">
+    @phrabos
+   </a>
+   made their first contribution in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2943414799" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1756" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1756/hovercard" href="https://github.com/ianyh/Amethyst/pull/1756">
+    #1756
+   </a>
+  </li>
+ </ul>
+ <p>
+  <strong>
+   Full Changelog
+  </strong>
+  :
+  <a class="commit-link" href="https://github.com/ianyh/Amethyst/compare/v0.23.0...v0.23.1">
+   <tt>
+    v0.23.0...v0.23.1
+   </tt>
+  </a>
+ </p>
+</div>
+<h1 data-view-component="true" class="d-inline mr-3">
+ Amethyst 0.23.0
+</h1>
+<div data-pjax="true" data-test-selector="body-content" data-view-component="true" class="markdown-body my-3">
+ <h1>
+  What's New
+ </h1>
+ <ul>
+  <li>
+   Fix a major issue in throwing windows between spaces in a variety of applications.
+  </li>
+  <li>
+   Add custom layout support for using native shortcuts. See
+   <a href="https://github.com/ianyh/Amethyst/blob/development/docs/custom-layouts.md#commands">
+    https://github.com/ianyh/Amethyst/blob/development/docs/custom-layouts.md#commands
+   </a>
+  </li>
+  <li>
+   Add TwoPaneRight layout. Thanks,
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/rgeraskin/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/rgeraskin">
+    @rgeraskin
+   </a>
+   !
+  </li>
+  <li>
+   Add config file support for disabling commands.
+   <ul>
+    <li>
+     Specify it as
+     <code>
+      false
+     </code>
+     ; e.g.,
+     <code>
+      focus-cw: false
+     </code>
+    </li>
+   </ul>
+  </li>
+  <li>
+   Add support for
+   <code>
+    throw-to-space-13
+   </code>
+   through
+   <code>
+    throw-to-space-16
+   </code>
+   . Thanks,
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/attacker99/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/attacker99">
+    @attacker99
+   </a>
+   !
+  </li>
+ </ul>
+ <h2>
+  What's Changed
+ </h2>
+ <ul>
+  <li>
+   Prevent setting default commands to ones intentionally left blank by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+    @ianyh
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2798005946" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1719" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1719/hovercard" href="https://github.com/ianyh/Amethyst/pull/1719">
+    #1719
+   </a>
+  </li>
+  <li>
+   Add section on building locally to README. Fix app version. by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+    @ianyh
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2800522691" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1722" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1722/hovercard" href="https://github.com/ianyh/Amethyst/pull/1722">
+    #1722
+   </a>
+  </li>
+  <li>
+   Various dependency upgrades by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+    @ianyh
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2800529965" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1723" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1723/hovercard" href="https://github.com/ianyh/Amethyst/pull/1723">
+    #1723
+   </a>
+  </li>
+  <li>
+   Minor readme updates by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+    @ianyh
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2800566737" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1724" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1724/hovercard" href="https://github.com/ianyh/Amethyst/pull/1724">
+    #1724
+   </a>
+  </li>
+  <li>
+   0.22.2 by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+    @ianyh
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2801757104" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1728" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1728/hovercard" href="https://github.com/ianyh/Amethyst/pull/1728">
+    #1728
+   </a>
+  </li>
+  <li>
+   Add support for throw-to-space-n for 13 &lt;= n &lt;= 16 (should resolve
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="694318120" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1051" data-hovercard-type="issue" data-hovercard-url="/ianyh/Amethyst/issues/1051/hovercard" href="https://github.com/ianyh/Amethyst/issues/1051">
+    #1051
+   </a>
+   ) by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/attacker99/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/attacker99">
+    @attacker99
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2801458614" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1727" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1727/hovercard" href="https://github.com/ianyh/Amethyst/pull/1727">
+    #1727
+   </a>
+  </li>
+  <li>
+   Use macos-15 builder for most recent Xcode by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+    @ianyh
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2801808857" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1731" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1731/hovercard" href="https://github.com/ianyh/Amethyst/pull/1731">
+    #1731
+   </a>
+  </li>
+  <li>
+   Add TwoPaneRight Layout by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/rgeraskin/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/rgeraskin">
+    @rgeraskin
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2579089330" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1685" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1685/hovercard" href="https://github.com/ianyh/Amethyst/pull/1685">
+    #1685
+   </a>
+  </li>
+  <li>
+   Allow native pane layout commands in custom layouts by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+    @ianyh
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2810703670" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1735" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1735/hovercard" href="https://github.com/ianyh/Amethyst/pull/1735">
+    #1735
+   </a>
+  </li>
+  <li>
+   Treat
+   <code>
+    false
+   </code>
+   as disabling a command in config by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+    @ianyh
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2810715505" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1736" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1736/hovercard" href="https://github.com/ianyh/Amethyst/pull/1736">
+    #1736
+   </a>
+  </li>
+  <li>
+   Allow managing accessory policy apps by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+    @ianyh
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2824713456" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1740" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1740/hovercard" href="https://github.com/ianyh/Amethyst/pull/1740">
+    #1740
+   </a>
+  </li>
+  <li>
+   Extend the backoff for waiting on application launch by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+    @ianyh
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2824768075" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1741" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1741/hovercard" href="https://github.com/ianyh/Amethyst/pull/1741">
+    #1741
+   </a>
+  </li>
+  <li>
+   Clarify disabling as being specifically for tiling by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+    @ianyh
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2825536494" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1742" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1742/hovercard" href="https://github.com/ianyh/Amethyst/pull/1742">
+    #1742
+   </a>
+  </li>
+  <li>
+   Update Silica for mouse drag on space throwing by
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/ianyh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/ianyh">
+    @ianyh
+   </a>
+   in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2837016022" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1743" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1743/hovercard" href="https://github.com/ianyh/Amethyst/pull/1743">
+    #1743
+   </a>
+  </li>
+ </ul>
+ <h2>
+  New Contributors
+ </h2>
+ <ul>
+  <li>
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/attacker99/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/attacker99">
+    @attacker99
+   </a>
+   made their first contribution in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2801458614" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1727" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1727/hovercard" href="https://github.com/ianyh/Amethyst/pull/1727">
+    #1727
+   </a>
+  </li>
+  <li>
+   <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/rgeraskin/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/rgeraskin">
+    @rgeraskin
+   </a>
+   made their first contribution in
+   <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2579089330" data-permission-text="Title is private" data-url="https://github.com/ianyh/Amethyst/issues/1685" data-hovercard-type="pull_request" data-hovercard-url="/ianyh/Amethyst/pull/1685/hovercard" href="https://github.com/ianyh/Amethyst/pull/1685">
+    #1685
+   </a>
+  </li>
+ </ul>
+ <p>
+  <strong>
+   Full Changelog
+  </strong>
+  :
+  <a class="commit-link" href="https://github.com/ianyh/Amethyst/compare/v0.22.2...v0.23.0">
+   <tt>
+    v0.22.2...v0.23.0
+   </tt>
+  </a>
+ </p>
+</div>
