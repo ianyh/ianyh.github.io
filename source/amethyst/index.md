@@ -27,15 +27,15 @@ Amethyst is available for direct download on the [releases page](https://github.
 brew install --cask amethyst
 ```
 
-Note: that Amethyst now is only supported on macOS 10.15+.
+Note: Amethyst now is only supported on macOS 10.15+.
 
 Using Amethyst
 ==============
 
-Amethyst must be given permissions to use the accessibility APIs in the Privacy & Security tab, Privacy -> Accessibilty.
+Amethyst must be given permissions to use the accessibility APIs in the Privacy & Security tab, Privacy -> Accessibility.
 
 <p align="center">
-  <img style="text-align: center; border-radius:4px;" width="500px" src="https://raw.githubusercontent.com/ianyh/Amethyst/v0.24.3/docs/images/accessibility-permission.png" alt="Give Accessibility permission to Amethyst under Privicay and Security." />
+  <img style="text-align: center; border-radius:4px;" width="500px" src="https://raw.githubusercontent.com/ianyh/Amethyst/v0.24.3/docs/images/accessibility-permission.png" alt="Give Accessibility permission to Amethyst under Privacy and Security." />
 </p>
 
 **_Important note_**: You will probably want to disable `Automatically rearrange Spaces based on most recent use` (found under Mission Control in System Preferences). This setting is enabled by default, and will cause your Spaces to swap places based on use. This makes keyboard navigation between Spaces unpredictable.
