@@ -35,13 +35,13 @@ Using Amethyst
 Amethyst must be given permissions to use the accessibility APIs in the Privacy & Security tab, Privacy -> Accessibilty.
 
 <p align="center">
-  <img style="text-align: center; border-radius:4px;" width="500px" src="https://raw.githubusercontent.com/ianyh/Amethyst/v0.22.1/docs/images/accessibility-permission.png" alt="Give Accessibility permission to Amethyst under Privicay and Security." />
+  <img style="text-align: center; border-radius:4px;" width="500px" src="https://raw.githubusercontent.com/ianyh/Amethyst/v0.24.3/docs/images/accessibility-permission.png" alt="Give Accessibility permission to Amethyst under Privicay and Security." />
 </p>
 
 **_Important note_**: You will probably want to disable `Automatically rearrange Spaces based on most recent use` (found under Mission Control in System Preferences). This setting is enabled by default, and will cause your Spaces to swap places based on use. This makes keyboard navigation between Spaces unpredictable.
 
 <p align="center">
-  <img style="text-align: center" width="500px" src="https://raw.githubusercontent.com/ianyh/Amethyst/v0.22.1/docs/images/auto-rearranage.png" />
+  <img style="text-align: center" width="500px" src="https://raw.githubusercontent.com/ianyh/Amethyst/v0.24.3/docs/images/auto-rearranage.png" />
 </p>
 
 or run in a terminal:
@@ -53,7 +53,7 @@ killall Dock
 Troubleshooting
 ===============
 
-See [Troubleshooting](https://github.com/ianyh/Amethyst/blob/v0.22.1/docs/troubleshooting.md) for some common issues.
+See [Troubleshooting](https://github.com/ianyh/Amethyst/blob/v0.24.3/docs/troubleshooting.md) for some common issues.
 
 # Configuration
 
@@ -202,12 +202,12 @@ This layout does not have a main pane in the way that other layouts do. When add
 
 #### Custom (beta)
 
-Custom layouts can be implemented via JavaScript. See [Custom Layouts](https://github.com/ianyh/Amethyst/blob/v0.22.1/docs/custom-layouts.md).
+Custom layouts can be implemented via JavaScript. See [Custom Layouts](https://github.com/ianyh/Amethyst/blob/v0.24.3/docs/custom-layouts.md).
 
 Configuration File
 -------------
 
-Amethyst supports configuration via YAML in the home directory. See [Configuration Files](https://github.com/ianyh/Amethyst/blob/v0.22.1/docs/configuration-files.md).
+Amethyst supports configuration via YAML in the home directory. See [Configuration Files](https://github.com/ianyh/Amethyst/blob/v0.24.3/docs/configuration-files.md).
 
 Contact
 =======
