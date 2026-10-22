@@ -16,7 +16,7 @@ block main
 							each post in collections.posts
 								article
 									header.post-header
-										h4.title: a(href="/" + post.path)!= post.title
+										h4.title: a(href="/" + post.permalink)!= post.title
 										span
 											time #{moment(post.publishDate).format('M.D.YYYY')}
 									section

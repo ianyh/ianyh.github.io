@@ -3,8 +3,8 @@ const branch = require('metalsmith-branch');
 const collections = require('metalsmith-collections');
 const excerpts = require('metalsmith-excerpts');
 const markdown = require('metalsmith-markdown');
-const permalinks = require('metalsmith-permalinks');
-const sass = require('metalsmith-sass');
+const permalinks = require('@metalsmith/permalinks');
+const sass = require('@metalsmith/sass');
 const serve = require('metalsmith-serve');
 const templates = require('metalsmith-templates');
 const watch = require('metalsmith-watch');
@@ -37,21 +37,22 @@ metalsmith(__dirname)
 	.use(branch('blog/**.html')
 		.use(permalinks({
 			pattern: 'blog/:title',
-			relative: false
+			// Match the slugs metalsmith-permalinks used to produce so existing URLs keep working
+			slug: function slug(text) {
+				return text.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().replace(/ /g, '-');
+			}
 		}))
 	)
 	.use(branch('!blog/**.html')
 		.use(branch('!index.md').use(
 			branch('!amethyst/versions/**.html')
-				.use(permalinks({
-					relative: false
-				}))))
+				.use(permalinks())))
 	)
 	.use(sass({
-		includePaths: [
+		loadPaths: [
 			'./styles'
 		].concat(bourbon.includePaths),
-		outputStyle: 'expanded'
+		style: 'expanded'
 	}))
 	.use(templates({
 		engine: 'jade',
