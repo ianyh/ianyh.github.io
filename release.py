@@ -3,8 +3,10 @@
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
+import tempfile
 from datetime import datetime, timezone
 
 import requests
@@ -19,6 +21,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Generate a new release of Amethyst.")
     parser.add_argument("--version", required=True, help="Version string, e.g. 0.24.1 (suffix with b for canary-only, e.g. 0.24.1b)")
     parser.add_argument("--build", required=True, help="Sparkle build number (CFBundleVersion), e.g. 125")
+    parser.add_argument("--sign-update", required=True, help="Path to Sparkle's sign_update binary")
     parser.add_argument("--min-os", default="11.0.0", help="Minimum macOS version (default: 11.0.0)")
     parser.add_argument("--channel", choices=["prod", "canary", "both"], help="Which appcast(s) to update (default: canary for beta versions, both for stable)")
     return parser.parse_args()
@@ -46,6 +49,25 @@ def fetch_release(tag):
         sys.exit(1)
 
 
+def sign_release(tag, sign_update):
+    print(f"Signing Amethyst.zip from {tag}...")
+    with tempfile.TemporaryDirectory() as tmp:
+        subprocess.run(
+            ["gh", "release", "download", tag, "--repo", REPO,
+             "--pattern", "Amethyst.zip", "--dir", tmp],
+            check=True,
+        )
+        result = subprocess.run(
+            [sign_update, os.path.join(tmp, "Amethyst.zip")],
+            capture_output=True, text=True, check=True,
+        )
+    match = re.search(r'sparkle:edSignature="([^"]+)"\s+length="(\d+)"', result.stdout)
+    if match is None:
+        print(f"Unexpected sign_update output: {result.stdout}", file=sys.stderr)
+        sys.exit(1)
+    return match.group(1), int(match.group(2))
+
+
 def fetch_release_notes(tag, notes_file):
     print(f"Fetching release notes → {os.path.relpath(notes_file, SCRIPT_DIR)}")
     release_url = f"https://github.com/{REPO}/releases/tag/{tag}"
@@ -62,7 +84,7 @@ def fetch_release_notes(tag, notes_file):
             f.write(str(body) + "\n")
 
 
-def build_item(short_version, build_number, pub_date, min_os, version, file_size, tag):
+def build_item(short_version, build_number, pub_date, min_os, version, file_size, signature, tag):
     download_url = f"https://github.com/{REPO}/releases/download/{tag}/Amethyst.zip"
     release_notes_url = f"{SITE_BASE_URL}/Amethyst-{version}.html"
     return (
@@ -75,6 +97,7 @@ def build_item(short_version, build_number, pub_date, min_os, version, file_size
         f"\t\t\t<enclosure url=\"{download_url}\"\n"
         f"\t\t\t\tsparkle:version=\"{build_number}\"\n"
         f"\t\t\t\tsparkle:shortVersionString=\"{short_version}\"\n"
+        f"\t\t\t\tsparkle:edSignature=\"{signature}\"\n"
         f"\t\t\t\tlength=\"{file_size}\"\n"
         f"\t\t\t\ttype=\"application/octet-stream\"\n"
         f"\t\t\t\t/>\n"
@@ -117,7 +140,11 @@ def main():
     if asset is None:
         print("Could not find Amethyst.zip in the release assets.", file=sys.stderr)
         sys.exit(1)
-    file_size = asset["size"]
+
+    signature, file_size = sign_release(tag, args.sign_update)
+    if file_size != asset["size"]:
+        print("Signed file size does not match the release asset.", file=sys.stderr)
+        sys.exit(1)
 
     print(f"  Date:      {pub_date}")
     print(f"  File size: {file_size} bytes")
@@ -127,7 +154,7 @@ def main():
     fetch_release_notes(tag, notes_file)
     print()
 
-    item = build_item(short_version, build_number, pub_date, min_os, version, file_size, tag)
+    item = build_item(short_version, build_number, pub_date, min_os, version, file_size, signature, tag)
 
     print("Updating appcasts...")
     if channel in ("canary", "both"):
