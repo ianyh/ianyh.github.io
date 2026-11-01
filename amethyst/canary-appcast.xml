@@ -1468,5 +1468,19 @@
 				type="application/octet-stream"
 				/>
 		</item>
+		<item>
+			<title>Version 0.25.0</title>
+			<description></description>
+			<pubDate>Sun, 01 Nov 2026 00:00:00 +0000</pubDate>
+			<sparkle:minimumSystemVersion>12.0.0</sparkle:minimumSystemVersion>
+			<sparkle:releaseNotesLink>https://ianyh.com/amethyst/versions/Amethyst-0.25.0b.html</sparkle:releaseNotesLink>
+			<enclosure url="https://github.com/ianyh/Amethyst/releases/download/v0.25.0b/Amethyst.zip"
+				sparkle:version="130"
+				sparkle:shortVersionString="0.25.0"
+				sparkle:edSignature="yNuwBO+7oW/1lsa871+v2SmNV9qdc5Ivj4uK0WweQOCpbTymUeMgXtjDBMhJquw8aHOdJ9Nl1uql/ZP/7gNzCw=="
+				length="7480074"
+				type="application/octet-stream"
+				/>
+		</item>
 	</channel>
 </rss>
